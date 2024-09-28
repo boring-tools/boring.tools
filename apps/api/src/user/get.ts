@@ -11,7 +11,7 @@ export const route = createRoute({
       content: {
         'application/json': { schema: UserOutput },
       },
-      description: 'Return created commit',
+      description: 'Return user',
     },
     400: {
       description: 'Bad Request',

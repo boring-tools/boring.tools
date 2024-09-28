@@ -18,7 +18,7 @@ export const route = createRoute({
       content: {
         'application/json': { schema: UserOutput },
       },
-      description: 'Return updated changelog',
+      description: 'Return success',
     },
     400: {
       description: 'Bad Request',
