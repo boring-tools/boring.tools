@@ -1,4 +1,4 @@
-import { db, user as userDb } from '@boring.tools/database'
+import { db, user } from '@boring.tools/database'
 import { UserOutput, UserWebhookInput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
@@ -41,12 +41,12 @@ const userCreate = async ({
   }
   try {
     await db
-      .insert(userDb)
+      .insert(user)
       .values({
         ...data,
       })
       .onConflictDoUpdate({
-        target: userDb.id,
+        target: user.id,
         set: data,
       })
 
