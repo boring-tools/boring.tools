@@ -24,6 +24,8 @@ jobs:
 
       - name: Build
         run: bun run build
+        env:
+          NODE_ENV: production
 
       - name: Set docker chmod (temp solution)
         run: sudo chmod 666 /var/run/docker.sock

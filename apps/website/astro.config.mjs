@@ -38,7 +38,10 @@ export default defineConfig({
           {
             base: 'api',
             label: 'API',
-            schema: 'https://api.boring.tools/openapi.json',
+            schema:
+              import.meta.env.NODE_ENV !== 'production'
+                ? 'http://localhost:3000/openapi.json'
+                : 'https://api.boring.tools/openapi.json',
           },
         ]),
       ],
