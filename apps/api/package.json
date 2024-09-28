@@ -1,9 +1,15 @@
 {
   "name": "@boring.tools/api",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "build": "bun build --entrypoints ./src/index.ts --outdir ../../build/api --target bun --splitting --sourcemap=linked",
+    "test": "bun test --preload ./src/index.ts"
   },
   "dependencies": {
+    "@boring.tools/database": "workspace:*",
+    "@boring.tools/schema": "workspace:*",
+    "@hono/clerk-auth": "^2.0.0",
+    "@hono/zod-openapi": "^0.16.2",
     "hono": "^4.6.3"
   },
   "devDependencies": {
