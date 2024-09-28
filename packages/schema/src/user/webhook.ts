@@ -27,4 +27,4 @@ export const UserWebhookInput = z
       examples: ['user.created', 'user.updated'],
     }),
   })
-  .openapi('User')
+  .openapi('User Webhook')

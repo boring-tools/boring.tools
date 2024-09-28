@@ -1,6 +1,5 @@
 import starlight from '@astrojs/starlight'
 import { defineConfig } from 'astro/config'
-import starlightOpenAPI, { openAPISidebarGroups } from 'starlight-openapi'
 
 export default defineConfig({
   outDir: '../../build/website',
@@ -20,30 +19,17 @@ export default defineConfig({
       social: {
         github: 'https://github.com/boring-tools/boring.tools',
       },
-      favicon: '/public/favicon.svg',
+      favicon: '/favicon.svg',
       sidebar: [
         {
           label: 'Guides',
           items: [{ label: 'Getting started', slug: 'guides/getting-started' }],
         },
-        ...openAPISidebarGroups,
+        { label: 'API', link: 'https://api.boring.tools' },
         // {
         // 	label: 'Reference',
         // 	autogenerate: { directory: 'reference' },
         // },
-      ],
-      plugins: [
-        // Generate the OpenAPI documentation pages.
-        starlightOpenAPI([
-          {
-            base: 'api',
-            label: 'API',
-            schema:
-              import.meta.env.NODE_ENV !== 'production'
-                ? 'http://localhost:3000/openapi.json'
-                : 'https://api.boring.tools/openapi.json',
-          },
-        ]),
       ],
     }),
   ],
