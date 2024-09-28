@@ -9,7 +9,10 @@
     "build": "bun --filter '*' build",
     "docker:website:build": "docker build -t git.hashdot.co/boring.tools/boring.tools/website -f ci/docker/website/Dockerfile .",
     "docker:website:push": "docker push git.hashdot.co/boring.tools/boring.tools/website",
-    "docker:website": "bun docker:website:build && bun docker:website:push"
+    "docker:website": "bun docker:website:build && bun docker:website:push",
+    "docker:api:build": "docker build -t git.hashdot.co/boring.tools/boring.tools/api -f ci/docker/api/Dockerfile .",
+    "docker:api:push": "docker push git.hashdot.co/boring.tools/boring.tools/api",
+    "docker:api": "bun docker:api:build && bun docker:api:push"
   },
   "packageManager": "bun@1.1.29",
   "workspaces": [
