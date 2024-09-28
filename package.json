@@ -1,0 +1,20 @@
+{
+  "name": "boring.tools",
+  "scripts": {
+    "lint:apps": "bunx biome lint --write ./apps",
+    "lint:packages": "bunx biome lint --write ./packages",
+    "check:apps": "bunx biome check --write --config-path ./biome.json ./apps",
+    "check:packages": "bunx biome check --write --config-path ./biome.json ./packages",
+    "dev": "bun --filter '*' dev",
+    "build": "bun --filter '*' build"
+  },
+  "packageManager": "bun@1.1.29",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3",
+    "lefthook": "^1.7.15"
+  }
+}
