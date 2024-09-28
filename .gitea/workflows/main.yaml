@@ -37,3 +37,6 @@ jobs:
 
       - name: Build and Push Website
         run: bun docker:website
+
+      - name: Build and Push API
+        run: bun docker:api
