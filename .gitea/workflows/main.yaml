@@ -34,3 +34,6 @@ jobs:
           registry: git.hashdot.co
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Website
+        uses: bun docker:website
