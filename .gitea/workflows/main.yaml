@@ -42,3 +42,6 @@ jobs:
 
       - name: Build and Push API
         run: bun docker:api
+
+      - name: Build and Push App
+        run: bun docker:app
