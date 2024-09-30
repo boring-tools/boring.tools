@@ -2,6 +2,7 @@ import { ThemeToggle } from '@boring.tools/ui'
 import { SignIn, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
 import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { Layout } from '../components/Layout'
 
 export const Route = createRootRoute({
   component: () => (
@@ -12,21 +13,10 @@ export const Route = createRootRoute({
         </div>
       </SignedOut>
       <SignedIn>
-        <>
-          <div className="p-2 flex gap-2">
-            <Link to="/" className="[&.active]:font-bold">
-              Home
-            </Link>{' '}
-            <Link to="/about" className="[&.active]:font-bold">
-              About
-            </Link>
-            <ThemeToggle />
-            <UserButton />
-          </div>
-          <hr />
+        <Layout>
           <Outlet />
           {!import.meta.env.PROD && <TanStackRouterDevtools />}
-        </>
+        </Layout>
       </SignedIn>
     </>
   ),
