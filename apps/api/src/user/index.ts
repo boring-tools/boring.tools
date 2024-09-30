@@ -1,5 +1,6 @@
-import { OpenAPIHono, type z } from '@hono/zod-openapi'
+import { OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
+import { Webhook } from 'svix'
 import type { Variables } from '..'
 import get from './get'
 import webhook from './webhook'
@@ -21,7 +22,11 @@ app.openapi(get.route, async (c) => {
 
 app.openapi(webhook.route, async (c) => {
   try {
-    const result = await webhook.func({ payload: await c.req.json() })
+    const wh = new Webhook(import.meta.env.CLERK_WEBHOOK_SECRET as string)
+    const payload = await c.req.json()
+    const headers = c.req.header()
+    const verifiedPayload = wh.verify(JSON.stringify(payload), headers)
+    const result = await webhook.func({ payload: verifiedPayload })
     return c.json(result, 200)
   } catch (error) {
     if (error instanceof HTTPException) {
