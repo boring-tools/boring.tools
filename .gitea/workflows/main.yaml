@@ -26,6 +26,7 @@ jobs:
         run: bun run build
         env:
           NODE_ENV: production
+          VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.CLERK_KEY }}
 
       - name: Set docker chmod (temp solution)
         run: sudo chmod 666 /var/run/docker.sock
