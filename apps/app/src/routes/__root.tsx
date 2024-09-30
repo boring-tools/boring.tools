@@ -1,6 +1,5 @@
-import { ThemeToggle } from '@boring.tools/ui'
-import { SignIn, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
-import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
+import { SignIn, SignedIn, SignedOut } from '@clerk/clerk-react'
+import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Layout } from '../components/Layout'
 

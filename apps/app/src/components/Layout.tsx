@@ -1,5 +1,3 @@
-import { CircleUser } from 'lucide-react'
-
 import {
   Button,
   DropdownMenu,
@@ -25,7 +23,7 @@ export const Layout = ({ children }: { children: ReactNode | ReactNode[] }) => {
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <NavigationMobile />
-          <div className="w-full flex-1"></div>
+          {/* <div className="w-full flex-1"></div> */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
