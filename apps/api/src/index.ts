@@ -6,6 +6,7 @@ import { cors } from 'hono/cors'
 import user from './user'
 
 import { authentication } from './utils/authentication'
+import { startup } from './utils/startup'
 
 type User = z.infer<typeof UserOutput>
 
@@ -39,6 +40,7 @@ app.get(
   }),
 )
 
+startup()
 export default {
   port: 3000,
   fetch: app.fetch,
