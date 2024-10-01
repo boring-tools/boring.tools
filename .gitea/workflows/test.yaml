@@ -3,7 +3,7 @@ run-name: ${{ gitea.actor }}
 on: [workflow_call]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -38,7 +38,9 @@ jobs:
       - name: Push Database
         run: bun run db:push
         env:
-          POSTGRES_URL: postgres://postgres:postgres@localhost:5432/postgres
+          POSTGRES_URL: postgres://postgres:postgres@postgres:5432/postgres
       
       - name: Test API
         run: bun test:api
+        env:
+          POSTGRES_URL: postgres://postgres:postgres@postgres:5432/postgres
