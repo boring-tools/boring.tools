@@ -7,7 +7,8 @@ import {
   CardTitle,
 } from '@boring.tools/ui'
 import { Link } from '@tanstack/react-router'
-import { BellIcon, HomeIcon } from 'lucide-react'
+import { BellIcon } from 'lucide-react'
+import { NavigationRoutes } from '../utils/navigation-routes'
 
 export const Navigation = () => {
   return (
@@ -24,14 +25,17 @@ export const Navigation = () => {
         </div>
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            <Link
-              to="/"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
-              activeProps={{ className: 'bg-muted text-primary' }}
-            >
-              <HomeIcon className="h-4 w-4" />
-              Dashboard
-            </Link>
+            {NavigationRoutes.map((route) => (
+              <Link
+                key={route.to}
+                to={route.to}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
+                activeProps={{ className: 'bg-muted text-primary' }}
+              >
+                <route.icon className="h-4 w-4" />
+                {route.name}
+              </Link>
+            ))}
           </nav>
         </div>
         <div className="mt-auto p-4">
@@ -39,8 +43,8 @@ export const Navigation = () => {
             <CardHeader className="p-2 pt-0 md:p-4">
               <CardTitle>More Infos</CardTitle>
               <CardDescription>
-                If you want more informations about boring.tools, visit our
-                documenation!
+                If you want more information about boring.tools, visit our
+                documentation!
               </CardDescription>
             </CardHeader>
             <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
