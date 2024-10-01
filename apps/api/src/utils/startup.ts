@@ -1,3 +1,5 @@
+import { migrateDatabase } from '@boring.tools/database'
+
 declare module 'bun' {
   interface Env {
     POSTGRES_URL: string
@@ -27,4 +29,6 @@ export const startup = () => {
       process.exit(0)
     }
   })
+
+  migrateDatabase()
 }

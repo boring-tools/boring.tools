@@ -17,7 +17,7 @@ export const changelog = pgTable('changelog', {
   createdAt: timestamp('createdAt').defaultNow(),
   updatedAt: timestamp('updatedAt'),
 
-  userId: text('userId').references(() => user.id, {
+  userId: varchar('userId', { length: 32 }).references(() => user.id, {
     onDelete: 'cascade',
   }),
 
@@ -26,9 +26,13 @@ export const changelog = pgTable('changelog', {
   isSemver: boolean('isSemver').default(true),
 })
 
-export const changelog_relation = relations(changelog, ({ many }) => ({
+export const changelog_relation = relations(changelog, ({ many, one }) => ({
   versions: many(changelog_version),
   commits: many(changelog_commit),
+  user: one(user, {
+    fields: [changelog.userId],
+    references: [user.id],
+  }),
 }))
 
 export const changelog_version_status = pgEnum('status', [
