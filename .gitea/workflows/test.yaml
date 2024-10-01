@@ -1,0 +1,44 @@
+name: Test
+run-name: ${{ gitea.actor }}
+on: [workflow_call]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Use Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.1.29
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Push Database
+        run: bun run db:push
+        env:
+          POSTGRES_URL: postgres://postgres:postgres@localhost:5432/postgres
+      
+      - name: Test API
+        run: bun test:api
