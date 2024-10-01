@@ -3,7 +3,6 @@ run-name: ${{ gitea.actor }}
 on:
   push:
     branches:
-      - *
 
 jobs:
   build:
