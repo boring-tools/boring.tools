@@ -5,7 +5,6 @@ on: [workflow_call]
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: node:20-bookworm-slim
     services:
       postgres:
         image: postgres:17-alpine
@@ -23,6 +22,9 @@ jobs:
         ports:
           - 5432:5432
     steps:
+      - name: Test Print
+        run: docker ps
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -39,9 +41,9 @@ jobs:
       - name: Push Database
         run: bun run db:push
         env:
-          POSTGRES_URL: postgres://postgres:postgres@postgres:5432/postgres
+          POSTGRES_URL: postgres://postgres:postgres@localhost:5432/postgres
       
       - name: Test API
         run: bun test:api
         env:
-          POSTGRES_URL: postgres://postgres:postgres@postgres:5432/postgres
+          POSTGRES_URL: postgres://postgres:postgres@localhost:5432/postgres
