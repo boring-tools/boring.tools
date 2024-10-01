@@ -3,6 +3,7 @@ import { OpenAPIHono, type z } from '@hono/zod-openapi'
 import { apiReference } from '@scalar/hono-api-reference'
 import { cors } from 'hono/cors'
 
+import changelog from './changelog'
 import user from './user'
 
 import { authentication } from './utils/authentication'
@@ -17,9 +18,10 @@ export type Variables = {
 export const app = new OpenAPIHono<{ Variables: Variables }>()
 
 app.use('*', cors())
-app.use('/api/*', authentication)
+app.use('/v1/*', authentication)
 
-app.route('/api/user', user)
+app.route('/v1/user', user)
+app.route('/v1/changelog', changelog)
 
 app.doc('/openapi.json', {
   openapi: '3.0.0',

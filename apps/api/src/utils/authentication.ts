@@ -13,7 +13,7 @@ const generatedToken = async (c: Context, next: Next) => {
 
   const token = authHeader.replace('Bearer ', '')
 
-  const accessTokenResult = await db.query.accessToken.findFirst({
+  const accessTokenResult = await db.query.access_token.findFirst({
     where: eq(access_token.token, token),
     with: {
       user: true,
