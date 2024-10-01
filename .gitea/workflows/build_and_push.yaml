@@ -41,12 +41,12 @@ jobs:
       - name: Push Database - Test
         run: bun run db:push
         env:
-          POSTGRES_URL: postgres://postgres:postgres@postgres:5432/postgres
+          POSTGRES_URL: postgres://postgres:postgres@10.0.0.145:5432/postgres
       
       - name: Test API
         run: bun test:api
         env:
-          POSTGRES_URL: postgres://postgres:postgres@postgres:5432/postgres
+          POSTGRES_URL: postgres://postgres:postgres@10.0.0.145:5432/postgres
 
       - name: Build
         run: bun run build
