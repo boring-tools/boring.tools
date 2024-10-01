@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@boring.tools/ui'
 import { SignOutButton, useUser } from '@clerk/clerk-react'
+import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { Navigation } from './Navigation'
 import { NavigationMobile } from './NavigationMobile'
@@ -23,7 +24,7 @@ export const Layout = ({ children }: { children: ReactNode | ReactNode[] }) => {
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <NavigationMobile />
-          {/* <div className="w-full flex-1"></div> */}
+          <div className="w-full flex-1" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -35,7 +36,10 @@ export const Layout = ({ children }: { children: ReactNode | ReactNode[] }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>Settings</DropdownMenuLabel>
+              <DropdownMenuItem asChild>
+                <Link to="/user">Profile</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <SignOutButton>
