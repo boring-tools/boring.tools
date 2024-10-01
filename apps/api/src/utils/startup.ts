@@ -9,7 +9,7 @@ declare module 'bun' {
   }
 }
 
-export const startup = () => {
+export const startup = async () => {
   if (import.meta.env.NODE_ENV === 'test') {
     if (!import.meta.env.POSTGRES_URL) {
       console.error('Env Var POSTGRES_URL is missing!')
@@ -30,5 +30,5 @@ export const startup = () => {
     }
   })
 
-  migrateDatabase()
+  await migrateDatabase()
 }

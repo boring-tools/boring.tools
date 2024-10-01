@@ -42,7 +42,7 @@ app.get(
   }),
 )
 
-startup()
+await startup()
 export default {
   port: 3000,
   fetch: app.fetch,
