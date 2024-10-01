@@ -1,4 +1,8 @@
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   Button,
   Card,
   CardContent,
@@ -24,18 +28,50 @@ export const Navigation = () => {
           </Button>
         </div>
         <div className="flex-1">
-          <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            {NavigationRoutes.map((route) => (
-              <Link
-                key={route.to}
-                to={route.to}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
-                activeProps={{ className: 'bg-muted text-primary' }}
-              >
-                <route.icon className="h-4 w-4" />
-                {route.name}
-              </Link>
-            ))}
+          <nav className="grid items-start px-2 text-sm font-medium lg:px-4 gap-2">
+            {NavigationRoutes.map((route) => {
+              if (!route.childrens) {
+                return (
+                  <Link
+                    key={route.name}
+                    to={route.to}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
+                    activeProps={{ className: 'bg-muted text-primary' }}
+                    activeOptions={{ exact: true }}
+                  >
+                    <route.icon className="h-4 w-4" />
+                    {route.name}
+                  </Link>
+                )
+              }
+
+              return (
+                <Accordion
+                  type="single"
+                  collapsible
+                  key={route.name}
+                  defaultValue="changelog"
+                >
+                  <AccordionItem value="changelog">
+                    <AccordionTrigger>Changelog</AccordionTrigger>
+                    <AccordionContent className="gap-2 flex flex-col">
+                      {route.childrens.map((childRoute) => (
+                        <Link
+                          key={childRoute.name}
+                          to={childRoute.to}
+                          className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
+                          activeProps={{ className: 'bg-muted text-primary' }}
+                          activeOptions={{ exact: true }}
+                        >
+                          <childRoute.icon className="h-4 w-4" />
+                          {childRoute.name}
+                        </Link>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              )
+            })}
           </nav>
         </div>
         <div className="mt-auto p-4">
