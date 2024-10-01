@@ -8,6 +8,13 @@ declare module 'bun' {
 }
 
 export const startup = () => {
+  if (import.meta.env.NODE_ENV === 'test') {
+    if (!import.meta.env.POSTGRES_URL) {
+      console.error('Env Var POSTGRES_URL is missing!')
+      process.exit(0)
+    }
+    return
+  }
   const keys = [
     'POSTGRES_URL',
     'CLERK_WEBHOOK_SECRET',

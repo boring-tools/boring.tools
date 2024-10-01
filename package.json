@@ -10,6 +10,7 @@
     "db:generate": "bun --filter '@boring.tools/database' db:generate",
     "db:migrate": "bun --filter '@boring.tools/database' db:migrate",
     "db:push": "bun --filter '@boring.tools/database' db:push",
+    "db:push:force": "bun --filter '@boring.tools/database' db:push:force",
     "test:api": "bun --filter '@boring.tools/api' test",
     "docker:website:build": "docker build -t git.hashdot.co/boring.tools/boring.tools/website -f ci/docker/website/Dockerfile .",
     "docker:website:push": "docker push git.hashdot.co/boring.tools/boring.tools/website",

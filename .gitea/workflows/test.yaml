@@ -1,8 +1,6 @@
 name: Test
 run-name: ${{ gitea.actor }}
-on:
-  push:
-    branches:
+on: [workflow_call]
 
 jobs:
   build:
@@ -38,11 +36,12 @@ jobs:
         run: bun install
 
       - name: Push Database - Test
-        run: bun run db:push
+        run: bun db:push:force
         env:
-          POSTGRES_URL: postgres://postgres:postgres@10.0.0.145:5432/postgres
+          POSTGRES_URL: postgres://postgres:postgres@postgres:5432/postgres
       
       - name: Test API
         run: bun test:api
         env:
-          POSTGRES_URL: postgres://postgres:postgres@10.0.0.145:5432/postgres
+          NODE_ENV: test
+          POSTGRES_URL: postgres://postgres:postgres@postgres:5432/postgres

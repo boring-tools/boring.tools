@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "db:push": "drizzle-kit push",
+    "db:push:force": "drizzle-kit push --config=drizzle.ci.config.ts",
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
