@@ -1,5 +1,5 @@
 import type { ReactNode } from '@tanstack/react-router'
-import { FileStackIcon, HouseIcon, LayoutDashboardIcon } from 'lucide-react'
+import { FileStackIcon, LayoutDashboardIcon } from 'lucide-react'
 
 type Route = {
   name: string
@@ -16,17 +16,7 @@ export const NavigationRoutes: Route[] = [
   },
   {
     name: 'Changelog',
-    childrens: [
-      {
-        name: 'Overview',
-        to: '/changelog',
-        icon: HouseIcon,
-      },
-      {
-        name: 'Versions',
-        to: '/changelog/version',
-        icon: FileStackIcon,
-      },
-    ],
+    to: '/changelog',
+    icon: FileStackIcon,
   },
 ]
