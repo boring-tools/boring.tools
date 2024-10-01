@@ -1,6 +1,7 @@
 FROM oven/bun:1
 
 COPY ./build/api .
+COPY ./packages/database/src/migrations ./migrations
 
 ENV HOST=0.0.0.0
 ENV PORT=3000
