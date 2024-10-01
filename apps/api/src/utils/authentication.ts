@@ -1,4 +1,4 @@
-import { accessToken, db } from '@boring.tools/database'
+import { access_token, db } from '@boring.tools/database'
 import { clerkMiddleware, getAuth } from '@hono/clerk-auth'
 import { eq } from 'drizzle-orm'
 import type { Context, Next } from 'hono'
@@ -14,7 +14,7 @@ const generatedToken = async (c: Context, next: Next) => {
   const token = authHeader.replace('Bearer ', '')
 
   const accessTokenResult = await db.query.accessToken.findFirst({
-    where: eq(accessToken.token, token),
+    where: eq(access_token.token, token),
     with: {
       user: true,
     },

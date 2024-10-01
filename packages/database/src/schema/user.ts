@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm'
-import { pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core'
-import { accessToken } from '.'
+import { pgTable, text, varchar } from 'drizzle-orm/pg-core'
+import { access_token } from '.'
+import { changelog } from './changelog'
 
 export const user = pgTable('user', {
   id: varchar('id', { length: 32 }).primaryKey(), // Clerk User Id
@@ -9,7 +10,8 @@ export const user = pgTable('user', {
 })
 
 export const userRelation = relations(user, ({ many }) => ({
-  accessTokens: many(accessToken),
+  access_tokens: many(access_token),
+  changelogs: many(changelog),
 }))
 
 export type UserSelect = typeof user.$inferSelect

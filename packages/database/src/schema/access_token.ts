@@ -2,7 +2,7 @@ import { relations } from 'drizzle-orm'
 import { pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 import { user } from '.'
 
-export const accessToken = pgTable('accessToken', {
+export const access_token = pgTable('access_token', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: varchar('userId', { length: 32 }).references(() => user.id, {
     onDelete: 'cascade',
@@ -13,12 +13,9 @@ export const accessToken = pgTable('accessToken', {
   lastUsedOn: timestamp('lastUsedOn'),
 })
 
-export const accessTokenRelation = relations(accessToken, ({ one }) => ({
+export const access_token_relation = relations(access_token, ({ one }) => ({
   user: one(user, {
-    fields: [accessToken.userId],
+    fields: [access_token.userId],
     references: [user.id],
   }),
 }))
-
-export type AccessTokenSelect = typeof accessToken.$inferSelect
-export type AccessTokenInsert = typeof accessToken.$inferInsert
