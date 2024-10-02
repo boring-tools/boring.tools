@@ -1,3 +1,4 @@
+import { logger } from '@boring.tools/logger'
 import { migrate } from 'drizzle-orm/postgres-js/migrator'
 import { client, db } from './'
 
@@ -5,9 +6,9 @@ export const migrateDatabase = async (dir: string) => {
   try {
     await migrate(db, { migrationsFolder: dir })
     await client.end()
-    console.log('Migrations: Ok')
+    logger.log('Migrations: Ok')
   } catch (error) {
-    console.error('Migrations: Failed')
-    console.error(error)
+    logger.error('Migrations: Failed')
+    logger.error(error)
   }
 }
