@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { migrateDatabase } from '@boring.tools/database'
 import { logger } from '@boring.tools/logger'
 
@@ -34,6 +35,12 @@ export const startup = async () => {
 
   if (import.meta.env.NODE_ENV === 'production') {
     await migrateDatabase('migrations')
+  }
+
+  if (import.meta.env.NODE_ENV === 'development') {
+    await migrateDatabase(
+      path.join(__dirname, '../../../../packages/database/src/migrations'),
+    )
   }
 
   logger.info('API started')

@@ -4,11 +4,20 @@ import winston from 'winston'
 
 // Create a Winston logger - passing in the Logtail transport
 export const logger = winston.createLogger({
+  format: winston.format.json(),
   transports: [],
 })
 
-if (import.meta.env.NODE_ENV !== 'test') {
+if (import.meta.env.NODE_ENV === 'production') {
   // Create a Logtail client
   const logtail = new Logtail(process.env.BETTERSTACK_LOG_TOKEN as string)
   logger.add(new LogtailTransport(logtail))
+}
+
+if (import.meta.env.NODE_ENV === 'development') {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.json(),
+    }),
+  )
 }
