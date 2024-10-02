@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { migrateDatabase } from '@boring.tools/database'
 
 declare module 'bun' {
@@ -11,7 +10,6 @@ declare module 'bun' {
 }
 
 export const startup = async () => {
-  console.log(__dirname)
   if (import.meta.env.NODE_ENV === 'test') {
     if (!import.meta.env.POSTGRES_URL) {
       console.error('Env Var POSTGRES_URL is missing!')
@@ -33,6 +31,6 @@ export const startup = async () => {
   })
 
   if (import.meta.env.NODE_ENV === 'production') {
-    await migrateDatabase(path.join(__dirname, 'migrations'))
+    await migrateDatabase('migrations')
   }
 }
