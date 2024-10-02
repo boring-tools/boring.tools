@@ -1,4 +1,5 @@
 import { migrateDatabase } from '@boring.tools/database'
+import { logger } from '@boring.tools/logger'
 
 declare module 'bun' {
   interface Env {
@@ -12,7 +13,7 @@ declare module 'bun' {
 export const startup = async () => {
   if (import.meta.env.NODE_ENV === 'test') {
     if (!import.meta.env.POSTGRES_URL) {
-      console.error('Env Var POSTGRES_URL is missing!')
+      logger.error('Env Var POSTGRES_URL is missing!')
       process.exit(0)
     }
     return
@@ -25,7 +26,7 @@ export const startup = async () => {
   ]
   keys.map((key) => {
     if (!import.meta.env[key]) {
-      console.error(`Env Var ${key} is missing!`)
+      logger.error(`Env Var ${key} is missing!`)
       process.exit(0)
     }
   })
@@ -33,4 +34,6 @@ export const startup = async () => {
   if (import.meta.env.NODE_ENV === 'production') {
     await migrateDatabase('migrations')
   }
+
+  logger.info('API started')
 }

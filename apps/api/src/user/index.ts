@@ -1,3 +1,4 @@
+import { logger } from '@boring.tools/logger'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
 import { Webhook } from 'svix'
@@ -27,8 +28,10 @@ app.openapi(webhook.route, async (c) => {
     const headers = c.req.header()
     const verifiedPayload = wh.verify(JSON.stringify(payload), headers)
     const result = await webhook.func({ payload: verifiedPayload })
+    logger.info('Clerk Webhook', result)
     return c.json(result, 200)
   } catch (error) {
+    logger.error('Clert Webhook', error)
     if (error instanceof HTTPException) {
       return c.json({ message: error.message }, error.status)
     }
