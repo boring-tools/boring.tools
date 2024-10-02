@@ -1,4 +1,5 @@
 import { db, user } from '@boring.tools/database'
+import { logger } from '@boring.tools/logger'
 import { UserOutput, UserWebhookInput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
@@ -50,8 +51,10 @@ const userCreate = async ({
         set: data,
       })
 
+    logger.info('Clerk webhook user created', payload.data)
     return true
   } catch (error) {
+    logger.error('Clerk webhook user create failed', error)
     return false
   }
 }
