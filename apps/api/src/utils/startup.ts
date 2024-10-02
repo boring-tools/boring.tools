@@ -23,6 +23,7 @@ export const startup = async () => {
     'CLERK_WEBHOOK_SECRET',
     'CLERK_SECRET_KEY',
     'CLERK_PUBLISHABLE_KEY',
+    'BETTERSTACK_LOG_TOKEN',
   ]
   keys.map((key) => {
     if (!import.meta.env[key]) {

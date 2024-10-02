@@ -7,5 +7,9 @@ const logtail = new Logtail(process.env.BETTERSTACK_LOG_TOKEN as string)
 
 // Create a Winston logger - passing in the Logtail transport
 export const logger = winston.createLogger({
-  transports: [new LogtailTransport(logtail)],
+  transports: [],
 })
+
+if (import.meta.env.NODE_ENV !== 'test') {
+  logger.add(new LogtailTransport(logtail))
+}
