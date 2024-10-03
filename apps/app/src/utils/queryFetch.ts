@@ -7,10 +7,9 @@ type Fetch = {
   token?: string | null
 }
 
-const url =
-  import.meta.env.NODE_ENV === 'production'
-    ? 'https://api.boring.tools'
-    : 'http://localhost:3000'
+const url = import.meta.env.PROD
+  ? 'https://api.boring.tools'
+  : 'http://localhost:3000'
 
 export const queryFetch = async ({ path, method, data, token }: Fetch) => {
   const response = await axios({
