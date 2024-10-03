@@ -28,7 +28,7 @@ export const useChangelogById = ({ id }: { id: string }) => {
 
   return useQuery({
     queryKey: ['changelogById', id],
-    queryFn: async (): Promise<ReadOnlyDict<Changelog>> =>
+    queryFn: async (): Promise<Readonly<Changelog>> =>
       await queryFetch({
         path: `changelog/${id}`,
         method: 'get',
@@ -44,7 +44,7 @@ export const useChangelogCreate = () => {
   return useMutation({
     mutationFn: async (
       payload: ChangelogCreate,
-    ): Promise<ReadonlySet<Changelog>> =>
+    ): Promise<Readonly<Changelog>> =>
       await queryFetch({
         path: 'changelog',
         data: payload,
@@ -62,9 +62,7 @@ export const useChangelogRemove = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({
-      id,
-    }: { id: string }): Promise<ReadOnlyDict<Changelog>> =>
+    mutationFn: async ({ id }: { id: string }): Promise<Readonly<Changelog>> =>
       await queryFetch({
         path: `changelog/${id}`,
         method: 'delete',
