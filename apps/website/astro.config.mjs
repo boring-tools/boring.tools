@@ -26,6 +26,7 @@ export default defineConfig({
           items: [{ label: 'Getting started', slug: 'guides/getting-started' }],
         },
         { label: 'API', link: 'https://api.boring.tools' },
+        { label: 'Status', link: 'https://status.boring.tools' },
         // {
         // 	label: 'Reference',
         // 	autogenerate: { directory: 'reference' },
