@@ -1,6 +1,7 @@
 {
   "name": "@boring.tools/schema",
-  "module": "src/index.ts",
+  "private": true,
+  "main": "./src/index.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
