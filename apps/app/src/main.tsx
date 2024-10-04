@@ -37,6 +37,13 @@ if (!rootElement.innerHTML) {
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
           <QueryClientProvider client={queryClient}>
+            {import.meta.env.PROD && (
+              <script
+                defer
+                src="https://umami.hashdot.co/script.js"
+                data-website-id="446678cc-e2d8-4b6f-8e8f-389cd7f6db28"
+              />
+            )}
             <RouterProvider router={router} />
           </QueryClientProvider>
         </ThemeProvider>
