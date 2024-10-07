@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@boring.tools/ui'
+import { ThemeProvider, TooltipProvider } from '@boring.tools/ui'
 import { ClerkProvider } from '@clerk/clerk-react'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { StrictMode } from 'react'
@@ -36,16 +36,18 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
-          <QueryClientProvider client={queryClient}>
-            {import.meta.env.PROD && (
-              <script
-                defer
-                src="https://umami.hashdot.co/script.js"
-                data-website-id="446678cc-e2d8-4b6f-8e8f-389cd7f6db28"
-              />
-            )}
-            <RouterProvider router={router} />
-          </QueryClientProvider>
+          <TooltipProvider delayDuration={350}>
+            <QueryClientProvider client={queryClient}>
+              {import.meta.env.PROD && (
+                <script
+                  defer
+                  src="https://umami.hashdot.co/script.js"
+                  data-website-id="446678cc-e2d8-4b6f-8e8f-389cd7f6db28"
+                />
+              )}
+              <RouterProvider router={router} />
+            </QueryClientProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </ClerkProvider>
     </StrictMode>,
