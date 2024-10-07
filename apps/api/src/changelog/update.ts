@@ -42,7 +42,7 @@ export const func = async ({
   payload: z.infer<typeof ChangelogUpdateInput>
   id: string
 }) => {
-  const result = await db
+  const [result] = await db
     .update(changelog)
     .set({
       ...payload,
