@@ -21,6 +21,7 @@ const UserIndexLazyImport = createFileRoute('/user/')()
 const ChangelogIndexLazyImport = createFileRoute('/changelog/')()
 const ChangelogCreateLazyImport = createFileRoute('/changelog/create')()
 const ChangelogIdLazyImport = createFileRoute('/changelog/$id')()
+const ChangelogIdEditLazyImport = createFileRoute('/changelog/$id/edit')()
 
 // Create/Update Routes
 
@@ -38,20 +39,27 @@ const ChangelogIndexLazyRoute = ChangelogIndexLazyImport.update({
   path: '/changelog/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/changelog/index.lazy').then((d) => d.Route),
+  import('./routes/changelog.index.lazy').then((d) => d.Route),
 )
 
 const ChangelogCreateLazyRoute = ChangelogCreateLazyImport.update({
   path: '/changelog/create',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/changelog/create.lazy').then((d) => d.Route),
+  import('./routes/changelog.create.lazy').then((d) => d.Route),
 )
 
 const ChangelogIdLazyRoute = ChangelogIdLazyImport.update({
   path: '/changelog/$id',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/changelog/$id.lazy').then((d) => d.Route))
+} as any).lazy(() => import('./routes/changelog.$id.lazy').then((d) => d.Route))
+
+const ChangelogIdEditLazyRoute = ChangelogIdEditLazyImport.update({
+  path: '/edit',
+  getParentRoute: () => ChangelogIdLazyRoute,
+} as any).lazy(() =>
+  import('./routes/changelog.$id.edit.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -92,34 +100,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/changelog/$id/edit': {
+      id: '/changelog/$id/edit'
+      path: '/edit'
+      fullPath: '/changelog/$id/edit'
+      preLoaderRoute: typeof ChangelogIdEditLazyImport
+      parentRoute: typeof ChangelogIdLazyImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface ChangelogIdLazyRouteChildren {
+  ChangelogIdEditLazyRoute: typeof ChangelogIdEditLazyRoute
+}
+
+const ChangelogIdLazyRouteChildren: ChangelogIdLazyRouteChildren = {
+  ChangelogIdEditLazyRoute: ChangelogIdEditLazyRoute,
+}
+
+const ChangelogIdLazyRouteWithChildren = ChangelogIdLazyRoute._addFileChildren(
+  ChangelogIdLazyRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/changelog/$id': typeof ChangelogIdLazyRoute
+  '/changelog/$id': typeof ChangelogIdLazyRouteWithChildren
   '/changelog/create': typeof ChangelogCreateLazyRoute
   '/changelog': typeof ChangelogIndexLazyRoute
   '/user': typeof UserIndexLazyRoute
+  '/changelog/$id/edit': typeof ChangelogIdEditLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/changelog/$id': typeof ChangelogIdLazyRoute
+  '/changelog/$id': typeof ChangelogIdLazyRouteWithChildren
   '/changelog/create': typeof ChangelogCreateLazyRoute
   '/changelog': typeof ChangelogIndexLazyRoute
   '/user': typeof UserIndexLazyRoute
+  '/changelog/$id/edit': typeof ChangelogIdEditLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/changelog/$id': typeof ChangelogIdLazyRoute
+  '/changelog/$id': typeof ChangelogIdLazyRouteWithChildren
   '/changelog/create': typeof ChangelogCreateLazyRoute
   '/changelog/': typeof ChangelogIndexLazyRoute
   '/user/': typeof UserIndexLazyRoute
+  '/changelog/$id/edit': typeof ChangelogIdEditLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -130,8 +160,15 @@ export interface FileRouteTypes {
     | '/changelog/create'
     | '/changelog'
     | '/user'
+    | '/changelog/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/changelog/$id' | '/changelog/create' | '/changelog' | '/user'
+  to:
+    | '/'
+    | '/changelog/$id'
+    | '/changelog/create'
+    | '/changelog'
+    | '/user'
+    | '/changelog/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -139,12 +176,13 @@ export interface FileRouteTypes {
     | '/changelog/create'
     | '/changelog/'
     | '/user/'
+    | '/changelog/$id/edit'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  ChangelogIdLazyRoute: typeof ChangelogIdLazyRoute
+  ChangelogIdLazyRoute: typeof ChangelogIdLazyRouteWithChildren
   ChangelogCreateLazyRoute: typeof ChangelogCreateLazyRoute
   ChangelogIndexLazyRoute: typeof ChangelogIndexLazyRoute
   UserIndexLazyRoute: typeof UserIndexLazyRoute
@@ -152,7 +190,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  ChangelogIdLazyRoute: ChangelogIdLazyRoute,
+  ChangelogIdLazyRoute: ChangelogIdLazyRouteWithChildren,
   ChangelogCreateLazyRoute: ChangelogCreateLazyRoute,
   ChangelogIndexLazyRoute: ChangelogIndexLazyRoute,
   UserIndexLazyRoute: UserIndexLazyRoute,
@@ -181,16 +219,23 @@ export const routeTree = rootRoute
       "filePath": "index.lazy.tsx"
     },
     "/changelog/$id": {
-      "filePath": "changelog/$id.lazy.tsx"
+      "filePath": "changelog.$id.lazy.tsx",
+      "children": [
+        "/changelog/$id/edit"
+      ]
     },
     "/changelog/create": {
-      "filePath": "changelog/create.lazy.tsx"
+      "filePath": "changelog.create.lazy.tsx"
     },
     "/changelog/": {
-      "filePath": "changelog/index.lazy.tsx"
+      "filePath": "changelog.index.lazy.tsx"
     },
     "/user/": {
       "filePath": "user/index.lazy.tsx"
+    },
+    "/changelog/$id/edit": {
+      "filePath": "changelog.$id.edit.lazy.tsx",
+      "parent": "/changelog/$id"
     }
   }
 }

@@ -4,16 +4,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@boring.tools/ui'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router'
 import {
   FileStackIcon,
   Globe2Icon,
   PencilIcon,
   TerminalSquareIcon,
-  Trash2Icon,
 } from 'lucide-react'
-import { ChangelogDelete } from '../../components/Changelog/Delete'
-import { useChangelogById } from '../../hooks/useChangelog'
+import { ChangelogDelete } from '../components/Changelog/Delete'
+import { useChangelogById } from '../hooks/useChangelog'
 
 const Component = () => {
   const { id } = Route.useParams()
@@ -72,9 +71,11 @@ const Component = () => {
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant={'ghost'}>
-                    <PencilIcon strokeWidth={1.5} />
-                  </Button>
+                  <Link to={'/changelog/$id/edit'} params={{ id }}>
+                    <Button variant={'ghost'}>
+                      <PencilIcon strokeWidth={1.5} />
+                    </Button>
+                  </Link>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Edit</p>
@@ -84,6 +85,8 @@ const Component = () => {
               <ChangelogDelete id={id} />
             </div>
           </div>
+
+          <Outlet />
         </div>
       )}
     </div>

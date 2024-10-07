@@ -7,7 +7,7 @@ import {
 } from '@boring.tools/ui'
 import { Link, createLazyFileRoute } from '@tanstack/react-router'
 import { PlusCircleIcon } from 'lucide-react'
-import { useChangelogList } from '../../hooks/useChangelog'
+import { useChangelogList } from '../hooks/useChangelog'
 
 const Component = () => {
   const { data, error, isPending, refetch } = useChangelogList()

@@ -17,7 +17,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
-import { useChangelogCreate } from '../../hooks/useChangelog'
+import { useChangelogCreate } from '../hooks/useChangelog'
 
 const Component = () => {
   const navigate = useNavigate({ from: '/changelog/create' })
