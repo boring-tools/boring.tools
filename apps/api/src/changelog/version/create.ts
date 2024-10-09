@@ -61,7 +61,7 @@ export const createFunc = async ({
   }
 
   // Check if a version with the same version already exists
-  const versionResult = await db.query.version.findFirst({
+  const versionResult = await db.query.changelog_version.findFirst({
     where: and(
       eq(changelog_version.changelogId, payload.changelogId),
       eq(changelog_version.version, validVersion),
