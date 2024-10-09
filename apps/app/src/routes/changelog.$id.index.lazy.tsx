@@ -4,13 +4,23 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
 } from '@boring.tools/ui'
-import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router'
+import { Link, createLazyFileRoute } from '@tanstack/react-router'
 import { PlusCircleIcon } from 'lucide-react'
 import { useChangelogById } from '../hooks/useChangelog'
+
+const VersionStatus = ({ status }: { status: string }) => {
+  switch (status) {
+    case 'draft':
+      return <div className="w-3 h-3 rounded-full bg-amber-600" />
+    case 'published':
+      return <div className="w-3 h-3 rounded-full bg-emerald-600" />
+    case 'review':
+      return <div className="w-3 h-3 rounded-full bg-sky-600" />
+    default:
+      return <div className="w-3 h-3 rounded-full bg-neutral-600" />
+  }
+}
 
 const Component = () => {
   const { id } = Route.useParams()
@@ -33,9 +43,24 @@ const Component = () => {
               </div>
             </CardHeader>
             <CardContent>
-              {data.versions?.map((version) => {
-                return <div key={version.id}>{version.version}</div>
-              })}
+              <div className="flex flex-col gap-1">
+                {data.versions?.map((version) => {
+                  return (
+                    <Link
+                      className="hover:bg-muted py-1 px-2 rounded transition flex gap-2 items-center"
+                      to="/changelog/$id/version/$versionId"
+                      params={{
+                        id,
+                        versionId: version.id,
+                      }}
+                      key={version.id}
+                    >
+                      <VersionStatus status={version.status} />
+                      {version.version}
+                    </Link>
+                  )
+                })}
+              </div>
             </CardContent>
           </Card>
         </div>
