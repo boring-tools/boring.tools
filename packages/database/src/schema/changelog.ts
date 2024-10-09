@@ -56,7 +56,6 @@ export const changelog_version = pgTable('changelog_version', {
   version: varchar('version', { length: 32 }).notNull(),
   markdown: text('markdown').notNull(),
   status: changelog_version_status('status').default('draft').notNull(),
-  shortHash: varchar('shortHash', { length: 8 }).notNull(),
 })
 
 export const changelog_commit = pgTable(
