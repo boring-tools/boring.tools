@@ -47,7 +47,7 @@ const Component = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <Tooltip>
+              {/* <Tooltip>
                 <TooltipTrigger asChild>
                   <Button variant={'ghost'}>
                     <TerminalSquareIcon strokeWidth={1.5} />
@@ -67,7 +67,7 @@ const Component = () => {
                 <TooltipContent>
                   <p>Public Page</p>
                 </TooltipContent>
-              </Tooltip>
+              </Tooltip> */}
 
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -85,8 +85,9 @@ const Component = () => {
               <ChangelogDelete id={id} />
             </div>
           </div>
-
-          <Outlet />
+          <div className="mt-5">
+            <Outlet />
+          </div>
         </div>
       )}
     </div>

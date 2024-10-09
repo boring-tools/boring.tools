@@ -2,6 +2,9 @@ import type {
   ChangelogCreateInput,
   ChangelogOutput,
   ChangelogUpdateInput,
+  VersionCreateInput,
+  VersionOutput,
+  VersionUpdateInput,
 } from '@boring.tools/schema'
 import { useAuth } from '@clerk/clerk-react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -11,6 +14,10 @@ import { queryFetch } from '../utils/queryFetch'
 type Changelog = z.infer<typeof ChangelogOutput>
 type ChangelogCreate = z.infer<typeof ChangelogCreateInput>
 type ChangelogUpdate = z.infer<typeof ChangelogUpdateInput>
+
+type Version = z.infer<typeof VersionOutput>
+type VersionCreate = z.infer<typeof VersionCreateInput>
+type VersionUpdate = z.infer<typeof VersionUpdateInput>
 
 export const useChangelogList = () => {
   const { getToken } = useAuth()
@@ -99,6 +106,27 @@ export const useChangelogRemove = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ['changelogList', 'changelogById', data.id],
+      })
+    },
+  })
+}
+
+export const useChangelogVersionCreate = () => {
+  const { getToken } = useAuth()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (payload: VersionCreate): Promise<Readonly<Version>> =>
+      await queryFetch({
+        path: 'changelog/version',
+        data: payload,
+        method: 'post',
+        token: await getToken(),
+      }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['changelogList'] })
+      queryClient.invalidateQueries({
+        queryKey: ['changelogById', data.changelogId],
       })
     },
   })
