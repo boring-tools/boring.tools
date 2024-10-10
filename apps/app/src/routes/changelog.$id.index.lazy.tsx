@@ -7,20 +7,8 @@ import {
 } from '@boring.tools/ui'
 import { Link, createLazyFileRoute } from '@tanstack/react-router'
 import { PlusCircleIcon } from 'lucide-react'
+import { VersionStatus } from '../components/Changelog/VersionStatus'
 import { useChangelogById } from '../hooks/useChangelog'
-
-const VersionStatus = ({ status }: { status: string }) => {
-  switch (status) {
-    case 'draft':
-      return <div className="w-3 h-3 rounded-full bg-amber-600" />
-    case 'published':
-      return <div className="w-3 h-3 rounded-full bg-emerald-600" />
-    case 'review':
-      return <div className="w-3 h-3 rounded-full bg-sky-600" />
-    default:
-      return <div className="w-3 h-3 rounded-full bg-neutral-600" />
-  }
-}
 
 const Component = () => {
   const { id } = Route.useParams()

@@ -131,3 +131,43 @@ export const useChangelogVersionCreate = () => {
     },
   })
 }
+
+export const useChangelogVersionById = ({ id }: { id: string }) => {
+  const { getToken } = useAuth()
+
+  return useQuery({
+    queryKey: ['changelogVersionById', id],
+    queryFn: async (): Promise<Readonly<Version>> =>
+      await queryFetch({
+        path: `changelog/version/${id}`,
+        method: 'get',
+        token: await getToken(),
+      }),
+  })
+}
+
+export const useChangelogVersionUpdate = () => {
+  const { getToken } = useAuth()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: string
+      payload: VersionUpdate
+    }): Promise<Readonly<Version>> =>
+      await queryFetch({
+        path: `changelog/version/${id}`,
+        data: payload,
+        method: 'put',
+        token: await getToken(),
+      }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['changelogById', data.id],
+      })
+    },
+  })
+}
