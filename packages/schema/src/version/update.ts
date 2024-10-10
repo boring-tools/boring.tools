@@ -9,6 +9,7 @@ export const VersionUpdateInput = z
       .enum(['draft', 'review', 'published'])
       .default('draft')
       .optional(),
+    releasedAt: z.date().or(z.string()).optional(),
   })
   .openapi({})
 export const VersionUpdateParams = z
