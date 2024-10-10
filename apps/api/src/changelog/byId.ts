@@ -34,7 +34,7 @@ export const func = async ({ userId, id }: { userId: string; id: string }) => {
     with: {
       versions: {
         orderBy: (changelog_version, { desc }) => [
-          desc(changelog_version.releasedAt),
+          desc(changelog_version.createdAt),
         ],
       },
     },
