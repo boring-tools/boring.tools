@@ -63,7 +63,7 @@ export const updateFunc = async ({
     .set({
       status: payload.status,
       markdown: payload.markdown,
-      releasedAt: payload.status === 'published' ? new Date() : null,
+      releasedAt: payload.releasedAt ? new Date(payload.releasedAt) : null,
     })
     .where(and(eq(changelog_version.id, id)))
     .returning()
