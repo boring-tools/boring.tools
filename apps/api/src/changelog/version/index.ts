@@ -46,9 +46,7 @@ app.openapi(byId, async (c) => {
         changelogId: result.changelogId || '',
         version: result.version || '',
         status: result.status || 'draft',
-        releasedAt: result.releasedAt
-          ? result.releasedAt.toISOString()
-          : new Date().toISOString(),
+        releasedAt: result.releasedAt,
         commits: result.commits || [],
         markdown: result.markdown || '',
       },
