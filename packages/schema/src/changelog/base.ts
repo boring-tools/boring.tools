@@ -1,4 +1,5 @@
 import { z } from '@hono/zod-openapi'
+import { VersionOutput } from '../version'
 
 export const ChangelogOutput = z
   .object({
@@ -11,7 +12,7 @@ export const ChangelogOutput = z
     description: z.string().openapi({
       example: 'This is a changelog',
     }),
-    versions: z.array(z.object({})).optional(),
+    versions: z.array(VersionOutput).optional(),
     computed: z.object({
       versionCount: z.number().openapi({
         example: 5,

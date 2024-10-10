@@ -5,12 +5,7 @@ import {
   TooltipTrigger,
 } from '@boring.tools/ui'
 import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router'
-import {
-  FileStackIcon,
-  Globe2Icon,
-  PencilIcon,
-  TerminalSquareIcon,
-} from 'lucide-react'
+import { FileStackIcon, PencilIcon } from 'lucide-react'
 import { ChangelogDelete } from '../components/Changelog/Delete'
 import { useChangelogById } from '../hooks/useChangelog'
 
