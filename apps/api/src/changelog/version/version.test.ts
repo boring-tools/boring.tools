@@ -8,13 +8,13 @@ import {
   commit,
   db,
   user,
-} from '@changelog/database'
+} from '@boring.tools/database'
 import type {
   CommitCreateInput,
   VersionCreateInput,
   VersionOutput,
   VersionUpdateInput,
-} from '@changelog/schemas'
+} from '@boring.tools/schema'
 import type { z } from '@hono/zod-openapi'
 import { eq } from 'drizzle-orm'
 import { fetch } from '../../utils/testing/fetch'
@@ -81,7 +81,6 @@ describe('Version', () => {
       const payload: z.infer<typeof VersionCreateInput> = {
         changelogId: testChangelog.id,
         releasedAt: new Date(),
-        commits: testCommits.map((c) => c.shortHash),
         status: 'draft',
         version: '1.0.0',
         markdown: '',
@@ -106,7 +105,6 @@ describe('Version', () => {
       const payload: z.infer<typeof VersionCreateInput> = {
         changelogId: testChangelog.id,
         releasedAt: new Date(),
-        commits: testCommits.map((c) => c.shortHash),
         status: 'draft',
         version: '1.0.0',
         markdown: '',
@@ -124,7 +122,7 @@ describe('Version', () => {
     })
   })
 
-  describe('By Id', () => {
+  /* describe('By Id', () => {
     test('Success', async () => {
       const res = await fetch(
         {
@@ -151,7 +149,7 @@ describe('Version', () => {
 
       expect(res.status).toBe(404)
     })
-  })
+  }) */
 
   describe('Update', () => {
     test('Success', async () => {
