@@ -1,0 +1,1 @@
+ALTER TABLE "changelog_version" DROP COLUMN IF EXISTS "shortHash";
