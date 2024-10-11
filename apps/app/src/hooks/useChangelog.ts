@@ -171,3 +171,22 @@ export const useChangelogVersionUpdate = () => {
     },
   })
 }
+
+export const useChangelogVersionRemove = () => {
+  const { getToken } = useAuth()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ id }: { id: string }): Promise<Readonly<Version>> =>
+      await queryFetch({
+        path: `changelog/version/${id}`,
+        method: 'delete',
+        token: await getToken(),
+      }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['changelogList', 'changelogById', data.id],
+      })
+    },
+  })
+}
