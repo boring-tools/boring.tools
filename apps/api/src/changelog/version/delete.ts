@@ -24,6 +24,9 @@ export const remove = createRoute({
       },
       description: 'Version not found',
     },
+    500: {
+      description: 'Internal Server Error',
+    },
   },
 })
 

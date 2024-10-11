@@ -1,5 +1,5 @@
+import { logger } from '@boring.tools/logger'
 import { OpenAPIHono } from '@hono/zod-openapi'
-
 import { HTTPException } from 'hono/http-exception'
 import type { Variables } from '../..'
 import { verifyAuthentication } from '../../utils/authentication'
@@ -9,6 +9,8 @@ import { remove, removeFunc } from './delete'
 import { update, updateFunc } from './update'
 
 const app = new OpenAPIHono<{ Variables: Variables }>()
+
+const version_logger = logger.child({ name: 'changelog_version' })
 
 app.openapi(create, async (c) => {
   const userId = verifyAuthentication(c)
@@ -22,6 +24,7 @@ app.openapi(create, async (c) => {
 
     return c.json(result, 201)
   } catch (error) {
+    version_logger.error(error)
     if (error instanceof HTTPException) {
       return c.json({ message: error.message }, error.status)
     }
@@ -53,6 +56,7 @@ app.openapi(byId, async (c) => {
       200,
     )
   } catch (error) {
+    version_logger.error(error)
     if (error instanceof HTTPException) {
       return c.json({ message: error.message }, error.status)
     }
@@ -77,6 +81,7 @@ app.openapi(update, async (c) => {
 
     return c.json(result)
   } catch (error) {
+    version_logger.error(error)
     if (error instanceof HTTPException) {
       return c.json({ message: error.message }, error.status)
     }
@@ -85,15 +90,23 @@ app.openapi(update, async (c) => {
 })
 
 app.openapi(remove, async (c) => {
-  const userId = verifyAuthentication(c)
-  const id = c.req.param('id')
-  const result = await removeFunc({ userId, id })
+  try {
+    const userId = verifyAuthentication(c)
+    const id = c.req.param('id')
+    const result = await removeFunc({ userId, id })
 
-  if (result.length === 0) {
-    return c.json({ message: 'Version not found' }, 404)
+    if (result.length === 0) {
+      return c.json({ message: 'Version not found' }, 404)
+    }
+
+    return c.json({ message: 'Version removed' })
+  } catch (error) {
+    version_logger.error(error)
+    if (error instanceof HTTPException) {
+      return c.json({ message: error.message }, error.status)
+    }
+    return c.json({ message: 'An unexpected error occurred' }, 500)
   }
-
-  return c.json({ message: 'Version removed' })
 })
 
 export default app
