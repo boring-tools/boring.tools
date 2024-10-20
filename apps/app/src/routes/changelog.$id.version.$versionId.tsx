@@ -1,8 +1,5 @@
 import { VersionUpdateInput } from '@boring.tools/schema'
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
   Button,
   Calendar,
   Form,
@@ -44,7 +41,7 @@ import {
 } from '../hooks/useChangelog'
 import '@mdxeditor/editor/style.css'
 import { format } from 'date-fns'
-import { CalendarIcon, TriangleAlertIcon } from 'lucide-react'
+import { CalendarIcon } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { ChangelogVersionDelete } from '../components/Changelog/VersionDelete'
 import { VersionStatus } from '../components/Changelog/VersionStatus'

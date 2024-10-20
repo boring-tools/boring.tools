@@ -1,4 +1,8 @@
-import { ThemeProvider, TooltipProvider } from '@boring.tools/ui'
+import {
+  SidebarProvider,
+  ThemeProvider,
+  TooltipProvider,
+} from '@boring.tools/ui'
 import { ClerkProvider } from '@clerk/clerk-react'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { StrictMode } from 'react'
@@ -34,22 +38,24 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-        <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
-          <TooltipProvider delayDuration={350}>
-            <QueryClientProvider client={queryClient}>
-              {import.meta.env.PROD && (
-                <script
-                  defer
-                  src="https://umami.hashdot.co/script.js"
-                  data-website-id="446678cc-e2d8-4b6f-8e8f-389cd7f6db28"
-                />
-              )}
-              <RouterProvider router={router} />
-            </QueryClientProvider>
-          </TooltipProvider>
-        </ThemeProvider>
-      </ClerkProvider>
+      <SidebarProvider>
+        <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+          <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
+            <TooltipProvider delayDuration={350}>
+              <QueryClientProvider client={queryClient}>
+                {import.meta.env.PROD && (
+                  <script
+                    defer
+                    src="https://umami.hashdot.co/script.js"
+                    data-website-id="446678cc-e2d8-4b6f-8e8f-389cd7f6db28"
+                  />
+                )}
+                <RouterProvider router={router} />
+              </QueryClientProvider>
+            </TooltipProvider>
+          </ThemeProvider>
+        </ClerkProvider>
+      </SidebarProvider>
     </StrictMode>,
   )
 }
