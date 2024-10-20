@@ -1,4 +1,4 @@
-import { SidebarInset, SidebarTrigger } from '@boring.tools/ui'
+import { Separator, SidebarInset, SidebarTrigger } from '@boring.tools/ui'
 import type { ReactNode } from 'react'
 import { Sidebar } from './Sidebar'
 
@@ -30,6 +30,7 @@ export const Layout = ({ children }: { children: ReactNode | ReactNode[] }) => {
             </Breadcrumb> */}
           </div>
         </header>
+        <Separator />
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="flex flex-col">
             <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">

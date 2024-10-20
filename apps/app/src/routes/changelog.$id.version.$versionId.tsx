@@ -16,6 +16,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Separator,
   cn,
 } from '@boring.tools/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -90,7 +91,7 @@ const Component = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <hr />
+      <Separator />
       {!isPending && data && (
         <div>
           <h1 className="text-xl mb-2">Version: {data.version}</h1>
