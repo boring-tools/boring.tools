@@ -16,10 +16,6 @@ export default defineConfig({
     sentryVitePlugin({
       org: 'boringtools',
       project: 'app',
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      sourcemaps: {
-        filesToDeleteAfterUpload: '**/*.map.*',
-      },
     }),
   ],
 })
