@@ -1,17 +1,25 @@
-import { FileStackIcon } from 'lucide-react'
+import { ChevronRightIcon, FileStackIcon } from 'lucide-react'
 
 import {
   Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   Sidebar as SidebarComp,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from '@boring.tools/ui'
 import { Link } from '@tanstack/react-router'
+import { useChangelogList } from '../hooks/useChangelog'
 import { SidebarUser } from './SidebarUser'
 
 const items = [
@@ -24,6 +32,7 @@ const items = [
 ]
 
 export function Sidebar() {
+  const { data, error } = useChangelogList()
   return (
     <SidebarComp>
       <SidebarHeader>
@@ -49,34 +58,40 @@ export function Sidebar() {
               <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild tooltip={item.title}>
-                    <Link to={item.url}>
+                    <Link
+                      to={item.url}
+                      activeProps={{ className: 'bg-sidebar-accent' }}
+                    >
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
-                  {/* {item.items?.length ? (
-                    <>
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuAction className="data-[state=open]:rotate-90">
-                          <ChevronRightIcon />
-                          <span className="sr-only">Toggle</span>
-                        </SidebarMenuAction>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {item.items?.map((subItem) => (
-                            <SidebarMenuSubItem key={subItem.title}>
-                              <SidebarMenuSubButton asChild>
-                                <Link to={subItem.url}>
-                                  <span>{subItem.title}</span>
-                                </Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    </>
-                  ) : null} */}
+
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuAction className="data-[state=open]:rotate-90">
+                      <ChevronRightIcon />
+                      <span className="sr-only">Toggle</span>
+                    </SidebarMenuAction>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {!error &&
+                        data?.map((changelog) => (
+                          <SidebarMenuSubItem key={changelog.id}>
+                            <SidebarMenuSubButton asChild>
+                              <Link
+                                to={`/changelog/${changelog.id}`}
+                                activeProps={{
+                                  className: 'bg-sidebar-primary',
+                                }}
+                              >
+                                <span>{changelog.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
                 </SidebarMenuItem>
               </Collapsible>
             ))}

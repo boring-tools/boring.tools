@@ -14,7 +14,9 @@ export const Route = createRootRoute({
       <SignedIn>
         <Layout>
           <Outlet />
-          {!import.meta.env.PROD && <TanStackRouterDevtools />}
+          {!import.meta.env.PROD && (
+            <TanStackRouterDevtools position="bottom-right" />
+          )}
         </Layout>
       </SignedIn>
     </>

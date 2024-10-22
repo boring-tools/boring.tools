@@ -88,6 +88,9 @@ export const useChangelogUpdate = () => {
       queryClient.invalidateQueries({
         queryKey: ['changelogById', data.id],
       })
+      queryClient.invalidateQueries({
+        queryKey: ['changelogList'],
+      })
     },
   })
 }
