@@ -1,8 +1,7 @@
-import { logger } from '@boring.tools/logger'
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { HTTPException } from 'hono/http-exception'
 import type { Variables } from '..'
 import { verifyAuthentication } from '../utils/authentication'
+import { type ContextModule, captureSentry } from '../utils/sentry'
 import ById from './byId'
 import Create from './create'
 import Delete from './delete'
@@ -11,7 +10,9 @@ import Update from './update'
 
 const app = new OpenAPIHono<{ Variables: Variables }>()
 
-const changelog_logger = logger.child({ name: 'changelog' })
+const module: ContextModule = {
+  name: 'changelog',
+}
 
 app.openapi(ById.route, async (c) => {
   const userId = verifyAuthentication(c)
@@ -20,11 +21,14 @@ app.openapi(ById.route, async (c) => {
     const result = await ById.func({ userId, id })
     return c.json(result, 200)
   } catch (error) {
-    changelog_logger.error(error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user: {
+        id: userId,
+      },
+    })
   }
 })
 
@@ -34,11 +38,14 @@ app.openapi(List.route, async (c) => {
     const result = await List.func({ userId })
     return c.json(result, 200)
   } catch (error) {
-    changelog_logger.error(error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user: {
+        id: userId,
+      },
+    })
   }
 })
 
@@ -52,11 +59,14 @@ app.openapi(Create.route, async (c) => {
     })
     return c.json(result, 201)
   } catch (error) {
-    changelog_logger.error(error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user: {
+        id: userId,
+      },
+    })
   }
 })
 
@@ -73,11 +83,14 @@ app.openapi(Delete.route, async (c) => {
 
     return c.json({ message: 'Changelog removed' })
   } catch (error) {
-    changelog_logger.error(error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user: {
+        id: userId,
+      },
+    })
   }
 })
 
@@ -103,11 +116,14 @@ app.openapi(Update.route, async (c) => {
 
     return c.json(result)
   } catch (error) {
-    changelog_logger.error(error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user: {
+        id: userId,
+      },
+    })
   }
 })
 

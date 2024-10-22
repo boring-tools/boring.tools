@@ -1,8 +1,7 @@
-import { logger } from '@boring.tools/logger'
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { HTTPException } from 'hono/http-exception'
 import type { Variables } from '../..'
 import { verifyAuthentication } from '../../utils/authentication'
+import { type ContextModule, captureSentry } from '../../utils/sentry'
 import { byId, byIdFunc } from './byId'
 import { create, createFunc } from './create'
 import { remove, removeFunc } from './delete'
@@ -10,7 +9,10 @@ import { update, updateFunc } from './update'
 
 const app = new OpenAPIHono<{ Variables: Variables }>()
 
-const version_logger = logger.child({ name: 'changelog_version' })
+const module: ContextModule = {
+  name: 'changelog',
+  sub_module: 'version',
+}
 
 app.openapi(create, async (c) => {
   const userId = verifyAuthentication(c)
@@ -24,11 +26,14 @@ app.openapi(create, async (c) => {
 
     return c.json(result, 201)
   } catch (error) {
-    version_logger.error(error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user: {
+        id: userId,
+      },
+    })
   }
 })
 
@@ -56,11 +61,14 @@ app.openapi(byId, async (c) => {
       200,
     )
   } catch (error) {
-    version_logger.error(error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user: {
+        id: userId,
+      },
+    })
   }
 })
 
@@ -81,17 +89,20 @@ app.openapi(update, async (c) => {
 
     return c.json(result)
   } catch (error) {
-    version_logger.error(error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user: {
+        id: userId,
+      },
+    })
   }
 })
 
 app.openapi(remove, async (c) => {
+  const userId = verifyAuthentication(c)
   try {
-    const userId = verifyAuthentication(c)
     const id = c.req.param('id')
     const result = await removeFunc({ userId, id })
 
@@ -101,11 +112,14 @@ app.openapi(remove, async (c) => {
 
     return c.json({ message: 'Version removed' })
   } catch (error) {
-    version_logger.error(error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user: {
+        id: userId,
+      },
+    })
   }
 })
 

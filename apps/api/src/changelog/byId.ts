@@ -43,7 +43,6 @@ export const func = async ({ userId, id }: { userId: string; id: string }) => {
   if (!result) {
     throw new HTTPException(404, { message: 'Not found' })
   }
-
   return result
 }
 

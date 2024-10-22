@@ -1,23 +1,29 @@
 import { logger } from '@boring.tools/logger'
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { HTTPException } from 'hono/http-exception'
 import { Webhook } from 'svix'
 import type { Variables } from '..'
+import { type ContextModule, captureSentry } from '../utils/sentry'
 import get from './get'
 import webhook from './webhook'
 
 const app = new OpenAPIHono<{ Variables: Variables }>()
 
+const module: ContextModule = {
+  name: 'user',
+}
+
 app.openapi(get.route, async (c) => {
+  const user = c.get('user')
   try {
-    const user = c.get('user')
     const result = await get.func({ user })
     return c.json(result, 201)
   } catch (error) {
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+      user,
+    })
   }
 })
 
@@ -31,11 +37,11 @@ app.openapi(webhook.route, async (c) => {
     logger.info('Clerk Webhook', result)
     return c.json(result, 200)
   } catch (error) {
-    logger.error('Clert Webhook', error)
-    if (error instanceof HTTPException) {
-      return c.json({ message: error.message }, error.status)
-    }
-    return c.json({ message: 'An unexpected error occurred' }, 500)
+    return captureSentry({
+      c,
+      error,
+      module,
+    })
   }
 })
 
