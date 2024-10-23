@@ -1,4 +1,4 @@
-import { changelog, db } from '@boring.tools/database'
+import { changelog, changelog_version, db } from '@boring.tools/database'
 import { ChangelogByIdParams, ChangelogOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
@@ -33,6 +33,7 @@ export const func = async ({ id }: { id: string }) => {
     where: and(eq(changelog.id, id)),
     with: {
       versions: {
+        where: eq(changelog_version.status, 'published'),
         orderBy: (changelog_version, { desc }) => [
           desc(changelog_version.createdAt),
         ],
