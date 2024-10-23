@@ -1,0 +1,49 @@
+---
+import { Button } from '@boring.tools/ui'
+import { format } from 'date-fns'
+
+const { id } = Astro.params
+const response = await fetch(`http://localhost:3000/v1/changelog/public/${id}`)
+const data = await response.json()
+console.log(data)
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{data.title} | boring.tools</title>
+	</head>
+	<body>
+		<div class="w-full flex items-center justify-center">
+			<div class="w-full max-w-screen-sm flex my-6 flex-col gap-8">
+
+				<div class="flex flex-col">
+					<h1 class="prose prose-2xl">{data.title}</h1>
+					<p class="prose">{data.description}</p>
+				</div>
+
+				{data.versions.map((version) => {
+					return (
+						<div class="flex gap-10">
+							<div>
+								<h2 class="prose text-3xl font-bold">
+									{version.version}
+								</h2>
+								<p class="prose prose-sm">
+									{format(new Date(version.releasedAt), "dd-MM-yy")}
+								</p>
+							</div>
+
+							<p>
+								{version.markdown}
+							</p>
+						</div>
+					)
+				})}
+			</div>
+		</div>
+	</body>
+</html>
