@@ -74,7 +74,10 @@ export const usePageDelete = () => {
       }),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ['pageList', 'pageById', data.id],
+        queryKey: ['pageList'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['pageById', data.id],
       })
     },
   })
