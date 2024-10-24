@@ -1,16 +1,16 @@
 import { db, page } from '@boring.tools/database'
+import { PageByIdParams, PageOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
-
-import { PageByIdParams, PageOutput } from '@boring.tools/schema'
 import { HTTPException } from 'hono/http-exception'
+
 import { verifyAuthentication } from '../utils/authentication'
 import type { pageApi } from './index'
 
-const getRoute = createRoute({
+const route = createRoute({
   method: 'get',
   tags: ['page'],
-  description: 'Get a page',
+  description: 'Get a page by id',
   path: '/:id',
   request: {
     params: PageByIdParams,
@@ -33,8 +33,8 @@ const getRoute = createRoute({
   },
 })
 
-export function registerPageById(api: typeof pageApi) {
-  return api.openapi(getRoute, async (c) => {
+export const registerPageById = (api: typeof pageApi) => {
+  return api.openapi(route, async (c) => {
     const userId = verifyAuthentication(c)
     const { id } = c.req.valid('param')
 

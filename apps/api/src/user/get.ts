@@ -1,11 +1,13 @@
-import { type UserSelect, db, user as userDb } from '@boring.tools/database'
+import { db, user as userDb } from '@boring.tools/database'
 import { UserOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { eq } from 'drizzle-orm'
+import type { userApi } from '.'
 
-export const route = createRoute({
+const route = createRoute({
   method: 'get',
   path: '/',
+  tags: ['user'],
   responses: {
     200: {
       content: {
@@ -22,19 +24,17 @@ export const route = createRoute({
   },
 })
 
-export const func = async ({ user }: { user: UserSelect }) => {
-  const result = await db.query.user.findFirst({
-    where: eq(userDb.id, user.id),
+export const registerUserGet = (api: typeof userApi) => {
+  return api.openapi(route, async (c) => {
+    const user = c.get('user')
+    const result = await db.query.user.findFirst({
+      where: eq(userDb.id, user.id),
+    })
+
+    if (!result) {
+      throw new Error('User not found')
+    }
+
+    return c.json(result, 200)
   })
-
-  if (!result) {
-    throw new Error('User not found')
-  }
-
-  return result
-}
-
-export default {
-  route,
-  func,
 }

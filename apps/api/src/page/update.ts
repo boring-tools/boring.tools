@@ -11,7 +11,7 @@ import { HTTPException } from 'hono/http-exception'
 import { verifyAuthentication } from '../utils/authentication'
 import type { pageApi } from './index'
 
-const getRoute = createRoute({
+const route = createRoute({
   method: 'put',
   tags: ['page'],
   description: 'Update a page',
@@ -42,8 +42,8 @@ const getRoute = createRoute({
   },
 })
 
-export function registerPageUpdate(api: typeof pageApi) {
-  return api.openapi(getRoute, async (c) => {
+export const registerPageUpdate = (api: typeof pageApi) => {
+  return api.openapi(route, async (c) => {
     const userId = verifyAuthentication(c)
     const { id } = c.req.valid('param')
 

@@ -3,10 +3,13 @@ import { logger } from '@boring.tools/logger'
 import { UserOutput, UserWebhookInput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
+import { Webhook } from 'svix'
+import type userApi from '.'
 
-export const route = createRoute({
+const route = createRoute({
   method: 'post',
   path: '/webhook',
+  tags: ['user'],
   request: {
     body: {
       content: {
@@ -59,20 +62,20 @@ const userCreate = async ({
   }
 }
 
-export const func = async ({
-  payload,
-}: {
-  payload: z.infer<typeof UserWebhookInput>
-}) => {
-  switch (payload.type) {
-    case 'user.created':
-      return userCreate({ payload })
-    default:
-      throw new HTTPException(404, { message: 'Webhook type not supported' })
-  }
-}
-
-export default {
-  route,
-  func,
+export const registerUserWebhook = (api: typeof userApi) => {
+  return api.openapi(route, async (c) => {
+    const wh = new Webhook(import.meta.env.CLERK_WEBHOOK_SECRET as string)
+    const payload = await c.req.json()
+    const headers = c.req.header()
+    const verifiedPayload = wh.verify(JSON.stringify(payload), headers)
+    switch (verifiedPayload.type) {
+      case 'user.created': {
+        const result = await userCreate({ payload: verifiedPayload })
+        logger.info('Clerk Webhook', result)
+        return c.json(result, 200)
+      }
+      default:
+        throw new HTTPException(404, { message: 'Webhook type not supported' })
+    }
+  })
 }

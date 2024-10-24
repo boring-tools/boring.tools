@@ -1,12 +1,12 @@
 import { changelogs_to_pages, db, page } from '@boring.tools/database'
-import { createRoute, type z } from '@hono/zod-openapi'
-
 import { PageCreateInput, PageOutput } from '@boring.tools/schema'
+import { createRoute, type z } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
+
 import { verifyAuthentication } from '../utils/authentication'
 import type { pageApi } from './index'
 
-const getRoute = createRoute({
+const route = createRoute({
   method: 'post',
   tags: ['page'],
   description: 'Create a page',
@@ -36,8 +36,8 @@ const getRoute = createRoute({
   },
 })
 
-export function registerPageCreate(api: typeof pageApi) {
-  return api.openapi(getRoute, async (c) => {
+export const registerPageCreate = (api: typeof pageApi) => {
+  return api.openapi(route, async (c) => {
     const userId = verifyAuthentication(c)
 
     const { changelogIds, ...rest }: z.infer<typeof PageCreateInput> =

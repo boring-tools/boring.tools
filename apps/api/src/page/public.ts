@@ -6,7 +6,7 @@ import { PagePublicOutput, PagePublicParams } from '@boring.tools/schema'
 import { HTTPException } from 'hono/http-exception'
 import type { pageApi } from './index'
 
-const getRoute = createRoute({
+const route = createRoute({
   method: 'get',
   tags: ['page'],
   description: 'Get a page',
@@ -32,8 +32,8 @@ const getRoute = createRoute({
   },
 })
 
-export function registerPagePublic(api: typeof pageApi) {
-  return api.openapi(getRoute, async (c) => {
+export const registerPagePublic = (api: typeof pageApi) => {
+  return api.openapi(route, async (c) => {
     const { id } = c.req.valid('param')
 
     const result = await db.query.page.findFirst({

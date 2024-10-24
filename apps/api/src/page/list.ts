@@ -1,5 +1,5 @@
 import { db, page } from '@boring.tools/database'
-import { createRoute, z } from '@hono/zod-openapi'
+import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 
 import { PageListOutput } from '@boring.tools/schema'
@@ -30,7 +30,7 @@ const route = createRoute({
   },
 })
 
-export function registerPageList(api: typeof pageApi) {
+export const registerPageList = (api: typeof pageApi) => {
   return api.openapi(route, async (c) => {
     const userId = verifyAuthentication(c)
 
