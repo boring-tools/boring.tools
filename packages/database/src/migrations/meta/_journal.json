@@ -15,6 +15,13 @@
       "when": 1728640705376,
       "tag": "0001_daffy_rattler",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1729804659796,
+      "tag": "0002_fantastic_sleeper",
+      "breakpoints": true
     }
   ]
 }
