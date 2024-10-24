@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from '@boring.tools/ui'
 import { Link, createLazyFileRoute } from '@tanstack/react-router'
-import { CircleMinusIcon, PlusCircleIcon } from 'lucide-react'
+import { CircleMinusIcon } from 'lucide-react'
 import { usePageById, usePageUpdate } from '../hooks/usePage'
 
 const Component = () => {

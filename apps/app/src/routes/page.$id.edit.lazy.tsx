@@ -112,13 +112,16 @@ const Component = () => {
                             !field.value && 'text-muted-foreground',
                           )}
                         >
-                          {field.value.length === 1 &&
+                          {field?.value?.length === 1 &&
                             changelogList.data?.find((changelog) =>
                               field.value?.includes(changelog.id),
                             )?.title}
-                          {field.value.length <= 0 && 'No changelog selected'}
-                          {field.value.length > 1 &&
-                            `${field.value.length} selected`}
+                          {field?.value &&
+                            field.value.length <= 0 &&
+                            'No changelog selected'}
+                          {field?.value &&
+                            field.value.length > 1 &&
+                            `${field?.value?.length} selected`}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -135,14 +138,16 @@ const Component = () => {
                                 key={changelog.id}
                                 onSelect={() => {
                                   const getIds = () => {
-                                    if (field.value.includes(changelog.id)) {
-                                      const asd = field.value.filter(
+                                    if (field.value?.includes(changelog.id)) {
+                                      return field.value.filter(
                                         (id) => id !== changelog.id,
                                       )
-                                      return asd
                                     }
 
-                                    return [...field.value, changelog.id]
+                                    return [
+                                      ...(field?.value as string[]),
+                                      changelog.id,
+                                    ]
                                   }
                                   form.setValue('changelogIds', getIds())
                                 }}
@@ -150,7 +155,7 @@ const Component = () => {
                                 <Check
                                   className={cn(
                                     'mr-2 h-4 w-4',
-                                    field.value.includes(changelog.id)
+                                    field.value?.includes(changelog.id)
                                       ? 'opacity-100'
                                       : 'opacity-0',
                                   )}

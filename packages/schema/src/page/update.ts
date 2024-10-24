@@ -1,6 +1,5 @@
 import { z } from '@hono/zod-openapi'
 import { PageOutput } from './base'
-import { PageCreateInput } from './create'
 
 export const PageUpdateOutput = PageOutput
 export const PageUpdateInput = z
