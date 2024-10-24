@@ -54,23 +54,31 @@ export const registerPageUpdate = (api: typeof pageApi) => {
       .update(page)
       .set({
         ...rest,
-        userId: userId,
+        userId,
       })
       .where(and(eq(page.userId, userId), eq(page.id, id)))
       .returning()
 
     // TODO: implement transaction
     if (changelogIds) {
-      await db
-        .delete(changelogs_to_pages)
-        .where(eq(changelogs_to_pages.pageId, result.id))
-      await db.insert(changelogs_to_pages).values(
-        changelogIds.map((changelogId) => ({
-          changelogId,
-          pageId: result.id,
-        })),
-      )
+      if (changelogIds.length === 0) {
+        await db
+          .delete(changelogs_to_pages)
+          .where(eq(changelogs_to_pages.pageId, result.id))
+      }
+      if (changelogIds?.length >= 1) {
+        await db
+          .delete(changelogs_to_pages)
+          .where(eq(changelogs_to_pages.pageId, result.id))
+        await db.insert(changelogs_to_pages).values(
+          changelogIds.map((changelogId) => ({
+            changelogId,
+            pageId: result.id,
+          })),
+        )
+      }
     }
+
     if (!result) {
       throw new HTTPException(404, { message: 'Not Found' })
     }

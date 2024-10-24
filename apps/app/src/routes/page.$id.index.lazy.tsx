@@ -13,12 +13,12 @@ const Component = () => {
   const { id } = Route.useParams()
   const { data, isPending } = usePageById({ id })
   const pageUpdate = usePageUpdate()
-  const removeChangelog = (id: string) => {
+  const removeChangelog = (idToRemove: string) => {
     const payload = {
       title: data?.title,
       description: data?.description,
       changelogIds: data?.changelogs
-        .filter((log) => log.id !== id)
+        .filter((log) => log.id !== idToRemove)
         .map((l) => l.id),
     }
     pageUpdate.mutate({ id, payload })
@@ -32,12 +32,6 @@ const Component = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Changelogs ({data.changelogs?.length})</CardTitle>
-
-                <Link to="/changelog/$id/versionCreate" params={{ id }}>
-                  <Button variant={'ghost'} size={'icon'}>
-                    <PlusCircleIcon strokeWidth={1.5} className="w-5 h-5" />
-                  </Button>
-                </Link>
               </div>
             </CardHeader>
             <CardContent>
@@ -57,7 +51,7 @@ const Component = () => {
 
                       <Button
                         size={'icon'}
-                        variant={'destructive'}
+                        variant={'ghost-destructive'}
                         onClick={() => removeChangelog(changelog.id)}
                       >
                         <CircleMinusIcon className="w-4 h-4" />
