@@ -1,5 +1,4 @@
 import { z } from '@hono/zod-openapi'
-import { ChangelogOutput } from '../changelog'
 
 export const PageOutput = z
   .object({

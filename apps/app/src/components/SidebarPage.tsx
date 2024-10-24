@@ -39,7 +39,7 @@ export const SidebarPage = () => {
                 <SidebarMenuSubItem key={page.id}>
                   <SidebarMenuSubButton asChild>
                     <Link
-                      to={`/page/${page.id}`}
+                      to={`/page/${page?.id}`}
                       activeProps={{
                         className: 'bg-sidebar-primary',
                       }}

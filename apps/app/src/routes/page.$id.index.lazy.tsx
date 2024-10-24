@@ -7,8 +7,6 @@ import {
 } from '@boring.tools/ui'
 import { Link, createLazyFileRoute } from '@tanstack/react-router'
 import { PlusCircleIcon } from 'lucide-react'
-import { VersionStatus } from '../components/Changelog/VersionStatus'
-import { useChangelogById } from '../hooks/useChangelog'
 import { usePageById } from '../hooks/usePage'
 
 const Component = () => {

@@ -10,12 +10,7 @@ import {
   SidebarMenuSubItem,
 } from '@boring.tools/ui'
 import { Link } from '@tanstack/react-router'
-import {
-  ChevronRightIcon,
-  FileStackIcon,
-  PlusCircleIcon,
-  PlusIcon,
-} from 'lucide-react'
+import { ChevronRightIcon, FileStackIcon, PlusIcon } from 'lucide-react'
 import { useChangelogList } from '../hooks/useChangelog'
 
 export const SidebarChangelog = () => {

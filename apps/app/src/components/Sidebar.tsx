@@ -1,5 +1,3 @@
-import { FileStackIcon, NotebookTextIcon } from 'lucide-react'
-
 import {
   Sidebar as SidebarComp,
   SidebarContent,
@@ -11,7 +9,6 @@ import {
   SidebarMenuItem,
 } from '@boring.tools/ui'
 import { Link } from '@tanstack/react-router'
-import { useChangelogList } from '../hooks/useChangelog'
 import { SidebarChangelog } from './SidebarChangelog'
 import { SidebarPage } from './SidebarPage'
 import { SidebarUser } from './SidebarUser'

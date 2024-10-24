@@ -1,4 +1,4 @@
-import { ChangelogCreateInput, PageCreateInput } from '@boring.tools/schema'
+import { PageCreateInput } from '@boring.tools/schema'
 import {
   Button,
   Command,
@@ -28,19 +28,9 @@ import { Check, ChevronsUpDown } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
 import { PageWrapper } from '../components/PageWrapper'
-import { useChangelogCreate, useChangelogList } from '../hooks/useChangelog'
+import { useChangelogList } from '../hooks/useChangelog'
 import { usePageCreate } from '../hooks/usePage'
-const languages = [
-  { label: 'English', value: 'en' },
-  { label: 'French', value: 'fr' },
-  { label: 'German', value: 'de' },
-  { label: 'Spanish', value: 'es' },
-  { label: 'Portuguese', value: 'pt' },
-  { label: 'Russian', value: 'ru' },
-  { label: 'Japanese', value: 'ja' },
-  { label: 'Korean', value: 'ko' },
-  { label: 'Chinese', value: 'zh' },
-] as const
+
 const Component = () => {
   const navigate = useNavigate({ from: '/page/create' })
   const changelogList = useChangelogList()

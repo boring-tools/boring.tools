@@ -20,7 +20,7 @@ export const usePageList = () => {
   const { getToken } = useAuth()
   return useQuery({
     queryKey: ['pageList'],
-    queryFn: async (): Promise<ReadonlyArray<PageList>> =>
+    queryFn: async (): Promise<Readonly<PageList>> =>
       await queryFetch({
         path: 'page',
         method: 'get',

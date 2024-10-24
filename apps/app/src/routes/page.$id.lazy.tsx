@@ -8,13 +8,11 @@ import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router'
 import { FileStackIcon, PencilIcon } from 'lucide-react'
 import { PageDelete } from '../components/Page/Delete'
 import { PageWrapper } from '../components/PageWrapper'
-import { useChangelogById } from '../hooks/useChangelog'
 import { usePageById } from '../hooks/usePage'
 
 const Component = () => {
   const { id } = Route.useParams()
   const { data, error, isPending, refetch } = usePageById({ id })
-  console.log(data)
   if (error) {
     return (
       <div className="flex items-center justify-center mt-32 flex-col">

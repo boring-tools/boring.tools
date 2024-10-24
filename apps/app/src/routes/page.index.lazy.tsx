@@ -1,10 +1,8 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { usePageById, usePageList } from '../hooks/usePage'
+//import { usePageById, usePageList } from '../hooks/usePage'
 
 const Component = () => {
-  const { data, error } = usePageList()
-
-  console.log(data)
+  //const { data, error } = usePageList()
 
   return <div>some</div>
 }

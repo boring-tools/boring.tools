@@ -1,6 +1,4 @@
 import { z } from '@hono/zod-openapi'
-import { ChangelogOutput } from '../changelog'
-import { PageOutput } from './base'
 
 export const PagePublicOutput = z.object({
   title: z.string(),
