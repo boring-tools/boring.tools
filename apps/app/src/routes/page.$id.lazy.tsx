@@ -6,13 +6,14 @@ import {
 } from '@boring.tools/ui'
 import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router'
 import { FileStackIcon, PencilIcon } from 'lucide-react'
-import { ChangelogDelete } from '../components/Changelog/Delete'
+import { PageDelete } from '../components/Page/Delete'
 import { PageWrapper } from '../components/PageWrapper'
 import { useChangelogById } from '../hooks/useChangelog'
+import { usePageById } from '../hooks/usePage'
 
 const Component = () => {
   const { id } = Route.useParams()
-  const { data, error, isPending, refetch } = useChangelogById({ id })
+  const { data, error, isPending, refetch } = usePageById({ id })
   console.log(data)
   if (error) {
     return (
@@ -29,10 +30,10 @@ const Component = () => {
     <PageWrapper
       breadcrumbs={[
         {
-          name: 'Changelog',
-          to: '/changelog',
+          name: 'Page',
+          to: '/page',
         },
-        { name: data?.title ?? '', to: `/changelog/${data?.id}` },
+        { name: data?.title ?? '', to: `/page/${data?.id}` },
       ]}
     >
       <div className="flex flex-col gap-5">
@@ -78,7 +79,7 @@ const Component = () => {
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to={'/changelog/$id/edit'} params={{ id }}>
+                    <Link to={'/page/$id/edit'} params={{ id }}>
                       <Button variant={'ghost'}>
                         <PencilIcon strokeWidth={1.5} />
                       </Button>
@@ -89,7 +90,7 @@ const Component = () => {
                   </TooltipContent>
                 </Tooltip>
 
-                <ChangelogDelete id={id} />
+                <PageDelete id={id} />
               </div>
             </div>
             <div className="mt-5">
@@ -102,6 +103,6 @@ const Component = () => {
   )
 }
 
-export const Route = createLazyFileRoute('/changelog/$id')({
+export const Route = createLazyFileRoute('/page/$id')({
   component: Component,
 })

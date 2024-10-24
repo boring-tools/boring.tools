@@ -32,6 +32,11 @@ export const func = async ({ userId, id }: { userId: string; id: string }) => {
   const result = await db.query.changelog.findFirst({
     where: and(eq(changelog.userId, userId), eq(changelog.id, id)),
     with: {
+      pages: {
+        with: {
+          page: true,
+        },
+      },
       versions: {
         orderBy: (changelog_version, { desc }) => [
           desc(changelog_version.createdAt),

@@ -19,10 +19,15 @@ import { Route as ChangelogIdVersionVersionIdImport } from './routes/changelog.$
 
 const IndexLazyImport = createFileRoute('/')()
 const UserIndexLazyImport = createFileRoute('/user/')()
+const PageIndexLazyImport = createFileRoute('/page/')()
 const ChangelogIndexLazyImport = createFileRoute('/changelog/')()
+const PageCreateLazyImport = createFileRoute('/page/create')()
+const PageIdLazyImport = createFileRoute('/page/$id')()
 const ChangelogCreateLazyImport = createFileRoute('/changelog/create')()
 const ChangelogIdLazyImport = createFileRoute('/changelog/$id')()
+const PageIdIndexLazyImport = createFileRoute('/page/$id/')()
 const ChangelogIdIndexLazyImport = createFileRoute('/changelog/$id/')()
+const PageIdEditLazyImport = createFileRoute('/page/$id/edit')()
 const ChangelogIdVersionCreateLazyImport = createFileRoute(
   '/changelog/$id/versionCreate',
 )()
@@ -40,12 +45,27 @@ const UserIndexLazyRoute = UserIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/user/index.lazy').then((d) => d.Route))
 
+const PageIndexLazyRoute = PageIndexLazyImport.update({
+  path: '/page/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/page.index.lazy').then((d) => d.Route))
+
 const ChangelogIndexLazyRoute = ChangelogIndexLazyImport.update({
   path: '/changelog/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
   import('./routes/changelog.index.lazy').then((d) => d.Route),
 )
+
+const PageCreateLazyRoute = PageCreateLazyImport.update({
+  path: '/page/create',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/page.create.lazy').then((d) => d.Route))
+
+const PageIdLazyRoute = PageIdLazyImport.update({
+  path: '/page/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/page.$id.lazy').then((d) => d.Route))
 
 const ChangelogCreateLazyRoute = ChangelogCreateLazyImport.update({
   path: '/changelog/create',
@@ -59,12 +79,24 @@ const ChangelogIdLazyRoute = ChangelogIdLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/changelog.$id.lazy').then((d) => d.Route))
 
+const PageIdIndexLazyRoute = PageIdIndexLazyImport.update({
+  path: '/',
+  getParentRoute: () => PageIdLazyRoute,
+} as any).lazy(() =>
+  import('./routes/page.$id.index.lazy').then((d) => d.Route),
+)
+
 const ChangelogIdIndexLazyRoute = ChangelogIdIndexLazyImport.update({
   path: '/',
   getParentRoute: () => ChangelogIdLazyRoute,
 } as any).lazy(() =>
   import('./routes/changelog.$id.index.lazy').then((d) => d.Route),
 )
+
+const PageIdEditLazyRoute = PageIdEditLazyImport.update({
+  path: '/edit',
+  getParentRoute: () => PageIdLazyRoute,
+} as any).lazy(() => import('./routes/page.$id.edit.lazy').then((d) => d.Route))
 
 const ChangelogIdVersionCreateLazyRoute =
   ChangelogIdVersionCreateLazyImport.update({
@@ -112,11 +144,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChangelogCreateLazyImport
       parentRoute: typeof rootRoute
     }
+    '/page/$id': {
+      id: '/page/$id'
+      path: '/page/$id'
+      fullPath: '/page/$id'
+      preLoaderRoute: typeof PageIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/page/create': {
+      id: '/page/create'
+      path: '/page/create'
+      fullPath: '/page/create'
+      preLoaderRoute: typeof PageCreateLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/changelog/': {
       id: '/changelog/'
       path: '/changelog'
       fullPath: '/changelog'
       preLoaderRoute: typeof ChangelogIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/page/': {
+      id: '/page/'
+      path: '/page'
+      fullPath: '/page'
+      preLoaderRoute: typeof PageIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/user/': {
@@ -140,12 +193,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChangelogIdVersionCreateLazyImport
       parentRoute: typeof ChangelogIdLazyImport
     }
+    '/page/$id/edit': {
+      id: '/page/$id/edit'
+      path: '/edit'
+      fullPath: '/page/$id/edit'
+      preLoaderRoute: typeof PageIdEditLazyImport
+      parentRoute: typeof PageIdLazyImport
+    }
     '/changelog/$id/': {
       id: '/changelog/$id/'
       path: '/'
       fullPath: '/changelog/$id/'
       preLoaderRoute: typeof ChangelogIdIndexLazyImport
       parentRoute: typeof ChangelogIdLazyImport
+    }
+    '/page/$id/': {
+      id: '/page/$id/'
+      path: '/'
+      fullPath: '/page/$id/'
+      preLoaderRoute: typeof PageIdIndexLazyImport
+      parentRoute: typeof PageIdLazyImport
     }
     '/changelog/$id/version/$versionId': {
       id: '/changelog/$id/version/$versionId'
@@ -177,26 +244,49 @@ const ChangelogIdLazyRouteWithChildren = ChangelogIdLazyRoute._addFileChildren(
   ChangelogIdLazyRouteChildren,
 )
 
+interface PageIdLazyRouteChildren {
+  PageIdEditLazyRoute: typeof PageIdEditLazyRoute
+  PageIdIndexLazyRoute: typeof PageIdIndexLazyRoute
+}
+
+const PageIdLazyRouteChildren: PageIdLazyRouteChildren = {
+  PageIdEditLazyRoute: PageIdEditLazyRoute,
+  PageIdIndexLazyRoute: PageIdIndexLazyRoute,
+}
+
+const PageIdLazyRouteWithChildren = PageIdLazyRoute._addFileChildren(
+  PageIdLazyRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/changelog/$id': typeof ChangelogIdLazyRouteWithChildren
   '/changelog/create': typeof ChangelogCreateLazyRoute
+  '/page/$id': typeof PageIdLazyRouteWithChildren
+  '/page/create': typeof PageCreateLazyRoute
   '/changelog': typeof ChangelogIndexLazyRoute
+  '/page': typeof PageIndexLazyRoute
   '/user': typeof UserIndexLazyRoute
   '/changelog/$id/edit': typeof ChangelogIdEditLazyRoute
   '/changelog/$id/versionCreate': typeof ChangelogIdVersionCreateLazyRoute
+  '/page/$id/edit': typeof PageIdEditLazyRoute
   '/changelog/$id/': typeof ChangelogIdIndexLazyRoute
+  '/page/$id/': typeof PageIdIndexLazyRoute
   '/changelog/$id/version/$versionId': typeof ChangelogIdVersionVersionIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/changelog/create': typeof ChangelogCreateLazyRoute
+  '/page/create': typeof PageCreateLazyRoute
   '/changelog': typeof ChangelogIndexLazyRoute
+  '/page': typeof PageIndexLazyRoute
   '/user': typeof UserIndexLazyRoute
   '/changelog/$id/edit': typeof ChangelogIdEditLazyRoute
   '/changelog/$id/versionCreate': typeof ChangelogIdVersionCreateLazyRoute
+  '/page/$id/edit': typeof PageIdEditLazyRoute
   '/changelog/$id': typeof ChangelogIdIndexLazyRoute
+  '/page/$id': typeof PageIdIndexLazyRoute
   '/changelog/$id/version/$versionId': typeof ChangelogIdVersionVersionIdRoute
 }
 
@@ -205,11 +295,16 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/changelog/$id': typeof ChangelogIdLazyRouteWithChildren
   '/changelog/create': typeof ChangelogCreateLazyRoute
+  '/page/$id': typeof PageIdLazyRouteWithChildren
+  '/page/create': typeof PageCreateLazyRoute
   '/changelog/': typeof ChangelogIndexLazyRoute
+  '/page/': typeof PageIndexLazyRoute
   '/user/': typeof UserIndexLazyRoute
   '/changelog/$id/edit': typeof ChangelogIdEditLazyRoute
   '/changelog/$id/versionCreate': typeof ChangelogIdVersionCreateLazyRoute
+  '/page/$id/edit': typeof PageIdEditLazyRoute
   '/changelog/$id/': typeof ChangelogIdIndexLazyRoute
+  '/page/$id/': typeof PageIdIndexLazyRoute
   '/changelog/$id/version/$versionId': typeof ChangelogIdVersionVersionIdRoute
 }
 
@@ -219,32 +314,46 @@ export interface FileRouteTypes {
     | '/'
     | '/changelog/$id'
     | '/changelog/create'
+    | '/page/$id'
+    | '/page/create'
     | '/changelog'
+    | '/page'
     | '/user'
     | '/changelog/$id/edit'
     | '/changelog/$id/versionCreate'
+    | '/page/$id/edit'
     | '/changelog/$id/'
+    | '/page/$id/'
     | '/changelog/$id/version/$versionId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/changelog/create'
+    | '/page/create'
     | '/changelog'
+    | '/page'
     | '/user'
     | '/changelog/$id/edit'
     | '/changelog/$id/versionCreate'
+    | '/page/$id/edit'
     | '/changelog/$id'
+    | '/page/$id'
     | '/changelog/$id/version/$versionId'
   id:
     | '__root__'
     | '/'
     | '/changelog/$id'
     | '/changelog/create'
+    | '/page/$id'
+    | '/page/create'
     | '/changelog/'
+    | '/page/'
     | '/user/'
     | '/changelog/$id/edit'
     | '/changelog/$id/versionCreate'
+    | '/page/$id/edit'
     | '/changelog/$id/'
+    | '/page/$id/'
     | '/changelog/$id/version/$versionId'
   fileRoutesById: FileRoutesById
 }
@@ -253,7 +362,10 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   ChangelogIdLazyRoute: typeof ChangelogIdLazyRouteWithChildren
   ChangelogCreateLazyRoute: typeof ChangelogCreateLazyRoute
+  PageIdLazyRoute: typeof PageIdLazyRouteWithChildren
+  PageCreateLazyRoute: typeof PageCreateLazyRoute
   ChangelogIndexLazyRoute: typeof ChangelogIndexLazyRoute
+  PageIndexLazyRoute: typeof PageIndexLazyRoute
   UserIndexLazyRoute: typeof UserIndexLazyRoute
 }
 
@@ -261,7 +373,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   ChangelogIdLazyRoute: ChangelogIdLazyRouteWithChildren,
   ChangelogCreateLazyRoute: ChangelogCreateLazyRoute,
+  PageIdLazyRoute: PageIdLazyRouteWithChildren,
+  PageCreateLazyRoute: PageCreateLazyRoute,
   ChangelogIndexLazyRoute: ChangelogIndexLazyRoute,
+  PageIndexLazyRoute: PageIndexLazyRoute,
   UserIndexLazyRoute: UserIndexLazyRoute,
 }
 
@@ -280,7 +395,10 @@ export const routeTree = rootRoute
         "/",
         "/changelog/$id",
         "/changelog/create",
+        "/page/$id",
+        "/page/create",
         "/changelog/",
+        "/page/",
         "/user/"
       ]
     },
@@ -299,8 +417,21 @@ export const routeTree = rootRoute
     "/changelog/create": {
       "filePath": "changelog.create.lazy.tsx"
     },
+    "/page/$id": {
+      "filePath": "page.$id.lazy.tsx",
+      "children": [
+        "/page/$id/edit",
+        "/page/$id/"
+      ]
+    },
+    "/page/create": {
+      "filePath": "page.create.lazy.tsx"
+    },
     "/changelog/": {
       "filePath": "changelog.index.lazy.tsx"
+    },
+    "/page/": {
+      "filePath": "page.index.lazy.tsx"
     },
     "/user/": {
       "filePath": "user/index.lazy.tsx"
@@ -313,9 +444,17 @@ export const routeTree = rootRoute
       "filePath": "changelog.$id.versionCreate.lazy.tsx",
       "parent": "/changelog/$id"
     },
+    "/page/$id/edit": {
+      "filePath": "page.$id.edit.lazy.tsx",
+      "parent": "/page/$id"
+    },
     "/changelog/$id/": {
       "filePath": "changelog.$id.index.lazy.tsx",
       "parent": "/changelog/$id"
+    },
+    "/page/$id/": {
+      "filePath": "page.$id.index.lazy.tsx",
+      "parent": "/page/$id"
     },
     "/changelog/$id/version/$versionId": {
       "filePath": "changelog.$id.version.$versionId.tsx",

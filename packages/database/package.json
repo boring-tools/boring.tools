@@ -1,6 +1,6 @@
 {
   "name": "@boring.tools/database",
-  "module": "src/index.ts",
+  "main": "./src/index.ts",
   "type": "module",
   "scripts": {
     "db:push": "drizzle-kit push",

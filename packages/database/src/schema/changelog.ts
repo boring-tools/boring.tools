@@ -3,6 +3,7 @@ import {
   boolean,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uuid,
@@ -10,6 +11,7 @@ import {
 } from 'drizzle-orm/pg-core'
 import { json } from 'drizzle-orm/pg-core'
 import { uniqueIndex } from 'drizzle-orm/pg-core'
+import { page } from './page'
 import { user } from './user'
 
 export const changelog = pgTable('changelog', {
@@ -21,10 +23,41 @@ export const changelog = pgTable('changelog', {
     onDelete: 'cascade',
   }),
 
+  pageId: uuid('pageId').references(() => page.id),
+
   title: varchar('title', { length: 256 }),
   description: text('description'),
   isSemver: boolean('isSemver').default(true),
 })
+
+export const changelogs_to_pages = pgTable(
+  'changelogs_to_pages',
+  {
+    changelogId: uuid('changelogId')
+      .notNull()
+      .references(() => changelog.id, { onDelete: 'cascade' }),
+    pageId: uuid('pageId')
+      .notNull()
+      .references(() => page.id, { onDelete: 'cascade' }),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.changelogId, t.pageId] }),
+  }),
+)
+
+export const changelogs_to_pages_relations = relations(
+  changelogs_to_pages,
+  ({ one }) => ({
+    changelog: one(changelog, {
+      fields: [changelogs_to_pages.changelogId],
+      references: [changelog.id],
+    }),
+    page: one(page, {
+      fields: [changelogs_to_pages.pageId],
+      references: [page.id],
+    }),
+  }),
+)
 
 export const changelog_relation = relations(changelog, ({ many, one }) => ({
   versions: many(changelog_version),
@@ -33,6 +66,7 @@ export const changelog_relation = relations(changelog, ({ many, one }) => ({
     fields: [changelog.userId],
     references: [user.id],
   }),
+  pages: many(changelogs_to_pages),
 }))
 
 export const changelog_version_status = pgEnum('status', [

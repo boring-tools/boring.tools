@@ -10,6 +10,7 @@ import { HTTPException } from 'hono/http-exception'
 export const route = createRoute({
   method: 'put',
   path: '/:id',
+  tags: ['changelog'],
   request: {
     body: {
       content: {
