@@ -12,7 +12,9 @@ export default defineConfig({
   output: 'server',
   outDir: '../../build/page',
   integrations: [react(), tailwind({ nesting: true })],
-
+  server: {
+    port: 4020,
+  },
   adapter: node({
     mode: 'standalone',
   }),

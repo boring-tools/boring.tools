@@ -2,6 +2,9 @@ import starlight from '@astrojs/starlight'
 import { defineConfig } from 'astro/config'
 
 export default defineConfig({
+  server: {
+    port: 4010,
+  },
   outDir: '../../build/website',
   integrations: [
     starlight({

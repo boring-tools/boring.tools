@@ -71,3 +71,6 @@ jobs:
 
       - name: Build and Push App
         run: bun docker:app
+
+      - name: Build and Push Page
+        run: bun docker:page
