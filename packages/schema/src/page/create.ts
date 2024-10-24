@@ -5,7 +5,7 @@ export const PageCreateInput = z
     title: z.string().min(3).openapi({
       example: 'My page',
     }),
-    description: z.string().openapi({
+    description: z.string().optional().openapi({
       example: '',
     }),
     icon: z.string().optional().openapi({

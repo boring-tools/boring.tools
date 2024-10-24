@@ -3,7 +3,20 @@ import { PageOutput } from './base'
 import { PageCreateInput } from './create'
 
 export const PageUpdateOutput = PageOutput
-export const PageUpdateInput = PageCreateInput
+export const PageUpdateInput = z
+  .object({
+    title: z.string().min(3).optional().openapi({
+      example: 'My page',
+    }),
+    description: z.string().optional().openapi({
+      example: '',
+    }),
+    icon: z.string().optional().openapi({
+      example: 'base64...',
+    }),
+    changelogIds: z.array(z.string().uuid()).optional(),
+  })
+  .openapi('Page')
 export const PageUpdateParams = z
   .object({
     id: z.string().uuid(),

@@ -6,12 +6,23 @@ import {
   CardTitle,
 } from '@boring.tools/ui'
 import { Link, createLazyFileRoute } from '@tanstack/react-router'
-import { PlusCircleIcon } from 'lucide-react'
-import { usePageById } from '../hooks/usePage'
+import { CircleMinusIcon, PlusCircleIcon } from 'lucide-react'
+import { usePageById, usePageUpdate } from '../hooks/usePage'
 
 const Component = () => {
   const { id } = Route.useParams()
   const { data, isPending } = usePageById({ id })
+  const pageUpdate = usePageUpdate()
+  const removeChangelog = (id: string) => {
+    const payload = {
+      title: data?.title,
+      description: data?.description,
+      changelogIds: data?.changelogs
+        .filter((log) => log.id !== id)
+        .map((l) => l.id),
+    }
+    pageUpdate.mutate({ id, payload })
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -33,16 +44,25 @@ const Component = () => {
               <div className="flex flex-col gap-1">
                 {data.changelogs.map((changelog) => {
                   return (
-                    <Link
-                      className="hover:bg-muted py-1 px-2 rounded transition flex gap-2 items-center"
-                      to="/changelog/$id"
-                      params={{
-                        id: changelog.id,
-                      }}
-                      key={changelog.id}
-                    >
-                      {changelog.title}
-                    </Link>
+                    <div className="flex gap-3" key={changelog.id}>
+                      <Link
+                        className="hover:bg-muted py-1 px-2 rounded transition flex gap-2 items-center w-full"
+                        to="/changelog/$id"
+                        params={{
+                          id: changelog.id,
+                        }}
+                      >
+                        {changelog.title}
+                      </Link>
+
+                      <Button
+                        size={'icon'}
+                        variant={'destructive'}
+                        onClick={() => removeChangelog(changelog.id)}
+                      >
+                        <CircleMinusIcon className="w-4 h-4" />
+                      </Button>
+                    </div>
                   )
                 })}
               </div>

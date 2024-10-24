@@ -23,12 +23,12 @@ export const app = new OpenAPIHono<{ Variables: Variables }>({
   defaultHook: handleZodError,
 })
 
-app.use(
-  '*',
-  sentry({
-    dsn: 'https://1d7428bbab0a305078cf4aa380721aa2@o4508167321354240.ingest.de.sentry.io/4508167323648080',
-  }),
-)
+// app.use(
+//   '*',
+//   sentry({
+//     dsn: 'https://1d7428bbab0a305078cf4aa380721aa2@o4508167321354240.ingest.de.sentry.io/4508167323648080',
+//   }),
+// )
 app.onError(handleError)
 app.use('*', cors())
 app.use('/v1/*', authentication)

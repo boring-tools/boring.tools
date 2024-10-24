@@ -1,6 +1,6 @@
 {
   "name": "@boring.tools/logger",
-  "module": "src/index.ts",
+  "main": "./src/index.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"

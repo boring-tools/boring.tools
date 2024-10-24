@@ -6,7 +6,7 @@ export const PageOutput = z
       example: '',
     }),
     title: z.string(),
-    description: z.string(),
+    description: z.string().optional(),
     icon: z.string(),
   })
   .openapi('Page')
