@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from '@boring.tools/ui'
 import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router'
-import { FileStackIcon, PencilIcon } from 'lucide-react'
+import { FileStackIcon, Globe2Icon, PencilIcon } from 'lucide-react'
 import { PageDelete } from '../components/Page/Delete'
 import { PageWrapper } from '../components/PageWrapper'
 import { usePageById } from '../hooks/usePage'
@@ -64,16 +64,24 @@ const Component = () => {
                 </TooltipContent>
               </Tooltip>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant={'ghost'}>
-                    <Globe2Icon strokeWidth={1.5} />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Public Page</p>
-                </TooltipContent>
-              </Tooltip> */}
+               */}
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant={'ghost'} asChild>
+                      <a
+                        href={`${import.meta.env.DEV ? 'http://localhost:4020' : 'https://page.boring.tools'}/${id}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Globe2Icon strokeWidth={1.5} />
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Public Page</p>
+                  </TooltipContent>
+                </Tooltip>
 
                 <Tooltip>
                   <TooltipTrigger asChild>
