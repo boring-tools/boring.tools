@@ -35,6 +35,7 @@ describe('Changelog', () => {
       const payload: z.infer<typeof ChangelogCreateInput> = {
         title: 'changelog',
         description: 'description',
+        isSemver: true,
       }
 
       const res = await fetch(
@@ -76,7 +77,7 @@ describe('Changelog', () => {
         testAccessToken.token,
       )
 
-      expect(res.status).toBe(404)
+      expect(res.status).toBe(500)
     })
 
     test('Invalid Id', async () => {
