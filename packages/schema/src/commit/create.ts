@@ -20,15 +20,17 @@ export const CommitCreateInput = z
         email: z.string().email(),
         date: z.string(),
       }),
-      commiter: z.object({
-        name: z.string(),
-        email: z.string().email(),
-        date: z.string(),
-      }),
+      commiter: z
+        .object({
+          name: z.string(),
+          email: z.string().email(),
+          date: z.string(),
+        })
+        .optional(),
       body: z.string().optional(),
     }),
   )
 
   .openapi({
-    required: ['changelogId', 'version', 'markdown', 'releasedAt'],
+    required: ['changelogId', 'commit', 'subject'],
   })
