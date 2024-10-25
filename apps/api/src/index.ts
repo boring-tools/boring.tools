@@ -5,6 +5,7 @@ import { apiReference } from '@scalar/hono-api-reference'
 import { cors } from 'hono/cors'
 
 import changelog from './changelog'
+import { changelogCommitApi } from './changelog/commit'
 import version from './changelog/version'
 import user from './user'
 
@@ -36,6 +37,7 @@ app.use('/v1/*', authentication)
 app.route('/v1/user', user)
 app.route('/v1/changelog', changelog)
 app.route('/v1/changelog/version', version)
+app.route('/v1/changelog/commit', changelogCommitApi)
 app.route('/v1/page', pageApi)
 
 app.doc('/openapi.json', {

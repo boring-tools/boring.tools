@@ -13,7 +13,6 @@ import { useChangelogById } from '../hooks/useChangelog'
 const Component = () => {
   const { id } = Route.useParams()
   const { data, error, isPending, refetch } = useChangelogById({ id })
-  console.log(data)
   if (error) {
     return (
       <div className="flex items-center justify-center mt-32 flex-col">
@@ -65,16 +64,7 @@ const Component = () => {
                 </TooltipContent>
               </Tooltip>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant={'ghost'}>
-                    <Globe2Icon strokeWidth={1.5} />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Public Page</p>
-                </TooltipContent>
-              </Tooltip> */}
+               */}
 
                 <Tooltip>
                   <TooltipTrigger asChild>

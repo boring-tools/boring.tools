@@ -9,15 +9,26 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@boring.tools/ui'
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import { ChevronRightIcon, FileStackIcon, PlusIcon } from 'lucide-react'
+import { useEffect } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
 import { useChangelogList } from '../hooks/useChangelog'
 
 export const SidebarChangelog = () => {
+  const location = useLocation()
+  const [value, setValue] = useLocalStorage('sidebar-changelog-open', false)
   const { data, error } = useChangelogList()
 
+  useEffect(() => {
+    const firstElement = location.href.split('/')[1]
+    if (firstElement === 'changelog') {
+      setValue(true)
+    }
+  }, [location, setValue])
+
   return (
-    <Collapsible asChild>
+    <Collapsible asChild open={value} onOpenChange={() => setValue(!value)}>
       <SidebarMenuItem>
         <SidebarMenuButton asChild tooltip="Changelog">
           <Link

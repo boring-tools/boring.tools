@@ -9,15 +9,26 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@boring.tools/ui'
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import { ChevronRightIcon, NotebookTextIcon, PlusIcon } from 'lucide-react'
+import { useEffect } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
 import { usePageList } from '../hooks/usePage'
 
 export const SidebarPage = () => {
+  const location = useLocation()
+  const [value, setValue] = useLocalStorage('sidebar-page-open', false)
   const { data, error } = usePageList()
 
+  useEffect(() => {
+    const firstElement = location.href.split('/')[1]
+    if (firstElement === 'page') {
+      setValue(true)
+    }
+  }, [location, setValue])
+
   return (
-    <Collapsible asChild>
+    <Collapsible asChild open={value} onOpenChange={() => setValue(!value)}>
       <SidebarMenuItem>
         <SidebarMenuButton asChild tooltip="Page">
           <Link to="/page" activeProps={{ className: 'bg-sidebar-accent' }}>

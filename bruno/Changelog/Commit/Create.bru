@@ -1,0 +1,28 @@
+meta {
+  name: Create
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{API_URL}}/v1/changelog/commit
+  body: json
+  auth: none
+}
+
+body:json {
+  [
+    {
+      "changelogId": "aad2c981-e1cc-4de0-8185-8d1c117886b9",
+      "commit": "abc123",
+      "parent": "abc122",
+      "subject": "some",
+      "author": {
+        "name": "asd",
+        "email": "hello@hashdot.co",
+        "date": "somedate"
+      },
+      "body": ""
+    }
+  ]
+}

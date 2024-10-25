@@ -105,13 +105,24 @@ export const changelog_commit = pgTable(
       onDelete: 'cascade',
     }),
 
-    shortHash: varchar('shortHash', { length: 8 }).notNull(),
-    author: json('author').$type<{ name: string; email: string }>(),
+    commit: varchar('commit', { length: 8 }).notNull(),
+    parent: varchar('parent', { length: 8 }),
+    subject: text('subject').notNull(),
+    author: json('author').$type<{
+      name: string
+      email: string
+      date: string
+    }>(),
+    commiter: json('comitter').$type<{
+      name: string
+      email: string
+      date: string
+    }>(),
+
     body: text('body'),
-    message: text('message').notNull(),
   },
   (table) => ({
-    unique: uniqueIndex('unique').on(table.changelogId, table.shortHash),
+    unique: uniqueIndex('unique').on(table.changelogId, table.commit),
   }),
 )
 
