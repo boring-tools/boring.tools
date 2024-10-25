@@ -4,16 +4,20 @@ meta {
   seq: 1
 }
 
-get {
+post {
   url: {{API_URL}}/v1/changelog/commit
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: abc123
 }
 
 body:json {
   [
     {
-      "changelogId": "aad2c981-e1cc-4de0-8185-8d1c117886b9",
+      "changelogId": "6a14f436-6596-474b-b615-f6e923582c1b",
       "commit": "abc123",
       "parent": "abc122",
       "subject": "some",
