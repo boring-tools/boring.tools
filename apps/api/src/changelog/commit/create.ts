@@ -32,7 +32,7 @@ export const route = createRoute({
   },
 })
 
-export const regsiterCommitCreate = (api: typeof changelogCommitApi) => {
+export const registerCommitCreate = (api: typeof changelogCommitApi) => {
   return api.openapi(route, async (c) => {
     const userId = verifyAuthentication(c)
 
@@ -49,7 +49,14 @@ export const regsiterCommitCreate = (api: typeof changelogCommitApi) => {
       throw new HTTPException(404, { message: 'Not Found' })
     }
 
-    const [result] = await db.insert(changelog_commit).values(data).returning()
+    const mappedData = data.map((entry) => ({
+      ...entry,
+      createdAt: new Date(entry.author.date),
+    }))
+    const [result] = await db
+      .insert(changelog_commit)
+      .values(mappedData)
+      .returning()
 
     if (!result) {
       throw new HTTPException(404, { message: 'Not Found' })

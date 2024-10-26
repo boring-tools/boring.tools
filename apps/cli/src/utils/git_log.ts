@@ -1,21 +1,19 @@
-const GITFORMAT = `--pretty=format:{%n "commit": "%h",%n "parent": "%p",%n "refs": "%D",%n "subject": "%s",%n "notes": "%N",%n "body": "%b",%n "author": { "name": "%aN", "email": "%aE", "date": "%ad" },%n "commiter": { "name": "%cN", "email": "%cE", "date": "%cd" }%n},`
+const GITFORMAT =
+  '--pretty=format:{"commit": "%h", "parent": "%p", "refs": "%D", "subject": "%s", "author": { "name": "%aN", "email": "%aE", "date": "%ad" }, "commiter": { "name": "%cN", "email": "%cE", "date": "%cd" }},'
 export const git_log = async (
   from: string | undefined,
   to = 'HEAD',
-): Promise<boolean> => {
+): Promise<Array<Record<string, unknown>>> => {
   // https://git-scm.com/docs/pretty-formats
-  const r = await Bun.spawn([
+  const process = Bun.spawn([
     'git',
-    '--no-pager',
     'log',
     `${from ? `${from}...` : ''}${to}`,
     GITFORMAT,
-    //'--name-status',
     '--date=iso',
   ])
-  const text = await new Response(r.stdout).text()
-  // console.log(JSON.parse('[' + text.slice(0, -1) + ']'))
-  // const str = JSON.stringify(`[${text.slice(0, -1)}]`)
-  // console.log(JSON.parse(str))
-  return false
+
+  const output = await new Response(process.stdout).text()
+  const jsonString = `[${output.slice(0, -1)}]`
+  return JSON.parse(jsonString)
 }

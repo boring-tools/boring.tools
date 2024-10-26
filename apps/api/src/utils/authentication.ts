@@ -20,6 +20,8 @@ const generatedToken = async (c: Context, next: Next) => {
     },
   })
 
+  console.log(accessTokenResult)
+
   if (!accessTokenResult) {
     throw new HTTPException(401, { message: 'Unauthorized' })
   }

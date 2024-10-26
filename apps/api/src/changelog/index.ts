@@ -3,17 +3,20 @@ import type { Variables } from '..'
 import { verifyAuthentication } from '../utils/authentication'
 import { type ContextModule, captureSentry } from '../utils/sentry'
 import ById from './byId'
+import { changelogCommitApi } from './commit'
 import Create from './create'
 import Delete from './delete'
 import List from './list'
 import Update from './update'
+import version from './version'
 
 const app = new OpenAPIHono<{ Variables: Variables }>()
 
 const module: ContextModule = {
   name: 'changelog',
 }
-
+app.route('/commit', changelogCommitApi)
+app.route('/version', version)
 app.openapi(ById.route, async (c) => {
   const userId = verifyAuthentication(c)
   try {

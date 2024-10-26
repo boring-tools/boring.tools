@@ -21,7 +21,7 @@ export type Variables = {
 }
 
 export const app = new OpenAPIHono<{ Variables: Variables }>({
-  defaultHook: handleZodError,
+  // defaultHook: handleZodError,
 })
 
 // app.use(
@@ -36,8 +36,6 @@ app.use('/v1/*', authentication)
 
 app.route('/v1/user', user)
 app.route('/v1/changelog', changelog)
-app.route('/v1/changelog/version', version)
-app.route('/v1/changelog/commit', changelogCommitApi)
 app.route('/v1/page', pageApi)
 
 app.doc('/openapi.json', {

@@ -106,6 +106,7 @@ export function handleZodError(
       },
   c: Context,
 ) {
+  console.log('asdasasdas')
   if (!result.success) {
     const error = SchemaError.fromZod(result.error, c)
     return c.json<z.infer<ReturnType<typeof createErrorSchema>>>(
