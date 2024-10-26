@@ -30,7 +30,6 @@ export const CommitCreateInput = z
       body: z.string().optional(),
     }),
   )
-
   .openapi({
     required: ['changelogId', 'commit', 'subject'],
   })
