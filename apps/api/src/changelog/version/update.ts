@@ -7,6 +7,7 @@ import { HTTPException } from 'hono/http-exception'
 export const update = createRoute({
   method: 'put',
   path: '/:id',
+  tags: ['version'],
   request: {
     body: {
       content: {

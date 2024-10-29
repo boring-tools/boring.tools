@@ -10,6 +10,7 @@ import { verifyAuthentication } from '../../utils/authentication'
 const route = createRoute({
   method: 'get',
   path: '/',
+  tags: ['commit'],
   request: {
     query: CommitListParams,
   },

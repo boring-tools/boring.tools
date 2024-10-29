@@ -7,6 +7,7 @@ import { HTTPException } from 'hono/http-exception'
 export const remove = createRoute({
   method: 'delete',
   path: '/:id',
+  tags: ['version'],
   responses: {
     200: {
       content: {

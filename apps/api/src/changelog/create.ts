@@ -8,6 +8,7 @@ import { createRoute, type z } from '@hono/zod-openapi'
 export const route = createRoute({
   method: 'post',
   path: '/',
+  tags: ['changelog'],
   request: {
     body: {
       content: {

@@ -6,6 +6,7 @@ import { eq } from 'drizzle-orm'
 export const route = createRoute({
   method: 'get',
   path: '/',
+  tags: ['changelog'],
   responses: {
     200: {
       content: {

@@ -6,6 +6,7 @@ import { and, eq } from 'drizzle-orm'
 export const byId = createRoute({
   method: 'get',
   path: '/:id',
+  tags: ['version'],
   request: {
     params: VersionByIdParams,
   },

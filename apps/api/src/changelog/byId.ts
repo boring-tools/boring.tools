@@ -7,6 +7,7 @@ import { HTTPException } from 'hono/http-exception'
 export const route = createRoute({
   method: 'get',
   path: '/:id',
+  tags: ['changelog'],
   request: {
     params: ChangelogByIdParams,
   },

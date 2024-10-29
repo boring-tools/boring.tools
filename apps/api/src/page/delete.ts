@@ -8,6 +8,7 @@ import { verifyAuthentication } from '../utils/authentication'
 
 const route = createRoute({
   method: 'delete',
+  tags: ['page'],
   path: '/:id',
   request: {
     params: PageByIdParams,

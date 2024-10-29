@@ -9,6 +9,7 @@ import { verifyAuthentication } from '../../utils/authentication'
 export const route = createRoute({
   method: 'post',
   path: '/',
+  tags: ['commit'],
   request: {
     body: {
       content: {

@@ -13,6 +13,7 @@ import semver from 'semver'
 export const create = createRoute({
   method: 'post',
   path: '/',
+  tags: ['version'],
   request: {
     body: {
       content: {
