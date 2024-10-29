@@ -9,6 +9,7 @@ export const VersionCreateInput = z
     releasedAt: z.date().or(z.string()).optional(),
     status: z.enum(['draft', 'review', 'published']).default('draft'),
     markdown: z.string(),
+    commitIds: z.array(z.string()),
   })
   .openapi({
     required: ['changelogId', 'version', 'markdown', 'releasedAt'],

@@ -1,7 +1,12 @@
-import { changelog, changelog_version, db } from '@boring.tools/database'
+import {
+  changelog,
+  changelog_commit,
+  changelog_version,
+  db,
+} from '@boring.tools/database'
 import { VersionCreateInput, VersionCreateOutput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, inArray } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 import semver from 'semver'
 
@@ -83,6 +88,11 @@ export const createFunc = async ({
       markdown: payload.markdown,
     })
     .returning()
+
+  await db
+    .update(changelog_commit)
+    .set({ versionId: versionCreateResult.id })
+    .where(inArray(changelog_commit.id, payload.commitIds))
 
   return versionCreateResult
 }

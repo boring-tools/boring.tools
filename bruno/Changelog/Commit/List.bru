@@ -1,13 +1,18 @@
 meta {
-  name: Create
+  name: List
   type: http
-  seq: 1
+  seq: 2
 }
 
-post {
-  url: {{API_URL}}/v1/changelog/commit
-  body: json
+get {
+  url: {{API_URL}}/v1/changelog/commit?changelogId=d83fe688-3331-4e64-9af6-318f82e511d4&limit=1
+  body: none
   auth: bearer
+}
+
+params:query {
+  changelogId: d83fe688-3331-4e64-9af6-318f82e511d4
+  limit: 1
 }
 
 auth:bearer {

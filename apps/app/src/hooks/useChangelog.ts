@@ -2,6 +2,7 @@ import type {
   ChangelogCreateInput,
   ChangelogOutput,
   ChangelogUpdateInput,
+  CommitOutput,
   VersionCreateInput,
   VersionOutput,
   VersionUpdateInput,
@@ -19,6 +20,8 @@ type Version = z.infer<typeof VersionOutput>
 type VersionCreate = z.infer<typeof VersionCreateInput>
 type VersionUpdate = z.infer<typeof VersionUpdateInput>
 
+type Commit = z.infer<typeof CommitOutput>
+
 export const useChangelogList = () => {
   const { getToken } = useAuth()
   return useQuery({
@@ -26,6 +29,23 @@ export const useChangelogList = () => {
     queryFn: async (): Promise<ReadonlyArray<Changelog>> =>
       await queryFetch({
         path: 'changelog',
+        method: 'get',
+        token: await getToken(),
+      }),
+  })
+}
+
+export const useChangelogCommitList = ({
+  id,
+  limit,
+  offset,
+}: { id: string; limit?: number; offset?: number }) => {
+  const { getToken } = useAuth()
+  return useQuery({
+    queryKey: ['changelogCommitList'],
+    queryFn: async (): Promise<ReadonlyArray<Commit>> =>
+      await queryFetch({
+        path: `changelog/commit?changelogId=${id}&limit=${limit}&offset=${offset}`,
         method: 'get',
         token: await getToken(),
       }),
