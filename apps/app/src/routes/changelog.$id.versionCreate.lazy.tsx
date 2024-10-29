@@ -9,7 +9,6 @@ import {
   Checkbox,
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,7 +23,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Separator,
   cn,
 } from '@boring.tools/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
