@@ -29,7 +29,8 @@ export const AccessTokenColumns: ColumnDef<
   {
     accessorKey: 'id',
     header: '',
-    size: 10,
+    size: 20,
+    maxSize: 20,
     cell: (props) => <AccessTokenDelete id={props.row.original.id} />,
   },
 ]

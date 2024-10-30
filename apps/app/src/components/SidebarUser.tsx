@@ -1,4 +1,4 @@
-import { ChevronsUpDown, KeyRoundIcon } from 'lucide-react'
+import { ChevronsUpDown, KeyRoundIcon, TerminalIcon } from 'lucide-react'
 
 import {
   Avatar,
@@ -34,6 +34,14 @@ export function SidebarUser() {
           >
             <KeyRoundIcon />
             <span>Access Tokens</span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+      <SidebarMenuItem>
+        <SidebarMenuButton asChild tooltip="Access Tokens">
+          <Link to="/cli" activeProps={{ className: 'bg-sidebar-accent' }}>
+            <TerminalIcon />
+            <span>CLI</span>
           </Link>
         </SidebarMenuButton>
       </SidebarMenuItem>

@@ -1,8 +1,8 @@
 import { parseArgs } from 'node:util'
 import { z } from 'zod'
 
-const ENV_ID = Bun.env.CHANGELOG_ID
-const ENV_TOKEN = Bun.env.AUTH_TOKEN
+const ENV_ID = Bun.env.BT_CHANGELOG_ID
+const ENV_TOKEN = Bun.env.BT_AUTH_TOKEN
 
 const schema = z.object({
   token: z.string(),
