@@ -20,11 +20,14 @@ const generatedToken = async (c: Context, next: Next) => {
     },
   })
 
-  console.log(accessTokenResult)
-
   if (!accessTokenResult) {
     throw new HTTPException(401, { message: 'Unauthorized' })
   }
+
+  await db
+    .update(access_token)
+    .set({ lastUsedOn: new Date() })
+    .where(eq(access_token.id, accessTokenResult.id))
 
   c.set('user', accessTokenResult.user)
 

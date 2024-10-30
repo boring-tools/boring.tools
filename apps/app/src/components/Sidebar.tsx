@@ -34,10 +34,8 @@ export function Sidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu>
-            <SidebarChangelog />
-            <SidebarPage />
-          </SidebarMenu>
+          <SidebarChangelog />
+          <SidebarPage />
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>

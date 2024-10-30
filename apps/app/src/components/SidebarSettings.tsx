@@ -1,4 +1,4 @@
-import { ChevronsUpDown, KeyRoundIcon } from 'lucide-react'
+import { ChevronsUpDown } from 'lucide-react'
 
 import {
   Avatar,
@@ -14,7 +14,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
   useSidebar,
 } from '@boring.tools/ui'
 import { SignOutButton, useUser } from '@clerk/clerk-react'
@@ -26,18 +25,6 @@ export function SidebarUser() {
 
   return (
     <SidebarMenu>
-      <SidebarMenuItem>
-        <SidebarMenuButton asChild tooltip="Access Tokens">
-          <Link
-            to="/access-tokens"
-            activeProps={{ className: 'bg-sidebar-accent' }}
-          >
-            <KeyRoundIcon />
-            <span>Access Tokens</span>
-          </Link>
-        </SidebarMenuButton>
-      </SidebarMenuItem>
-      <SidebarSeparator />
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

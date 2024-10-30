@@ -5,10 +5,9 @@ import { apiReference } from '@scalar/hono-api-reference'
 import { cors } from 'hono/cors'
 
 import changelog from './changelog'
-import { changelogCommitApi } from './changelog/commit'
-import version from './changelog/version'
 import user from './user'
 
+import { accessTokenApi } from './access-token'
 import pageApi from './page'
 import { authentication } from './utils/authentication'
 import { handleError, handleZodError } from './utils/errors'
@@ -21,7 +20,7 @@ export type Variables = {
 }
 
 export const app = new OpenAPIHono<{ Variables: Variables }>({
-  // defaultHook: handleZodError,
+  defaultHook: handleZodError,
 })
 
 // app.use(
@@ -37,6 +36,7 @@ app.use('/v1/*', authentication)
 app.route('/v1/user', user)
 app.route('/v1/changelog', changelog)
 app.route('/v1/page', pageApi)
+app.route('/v1/access-token', accessTokenApi)
 
 app.doc('/openapi.json', {
   openapi: '3.0.0',

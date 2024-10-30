@@ -21,10 +21,12 @@ const IndexLazyImport = createFileRoute('/')()
 const UserIndexLazyImport = createFileRoute('/user/')()
 const PageIndexLazyImport = createFileRoute('/page/')()
 const ChangelogIndexLazyImport = createFileRoute('/changelog/')()
+const AccessTokensIndexLazyImport = createFileRoute('/access-tokens/')()
 const PageCreateLazyImport = createFileRoute('/page/create')()
 const PageIdLazyImport = createFileRoute('/page/$id')()
 const ChangelogCreateLazyImport = createFileRoute('/changelog/create')()
 const ChangelogIdLazyImport = createFileRoute('/changelog/$id')()
+const AccessTokensNewLazyImport = createFileRoute('/access-tokens/new')()
 const PageIdIndexLazyImport = createFileRoute('/page/$id/')()
 const ChangelogIdIndexLazyImport = createFileRoute('/changelog/$id/')()
 const PageIdEditLazyImport = createFileRoute('/page/$id/edit')()
@@ -57,6 +59,13 @@ const ChangelogIndexLazyRoute = ChangelogIndexLazyImport.update({
   import('./routes/changelog.index.lazy').then((d) => d.Route),
 )
 
+const AccessTokensIndexLazyRoute = AccessTokensIndexLazyImport.update({
+  path: '/access-tokens/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/access-tokens.index.lazy').then((d) => d.Route),
+)
+
 const PageCreateLazyRoute = PageCreateLazyImport.update({
   path: '/page/create',
   getParentRoute: () => rootRoute,
@@ -78,6 +87,13 @@ const ChangelogIdLazyRoute = ChangelogIdLazyImport.update({
   path: '/changelog/$id',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/changelog.$id.lazy').then((d) => d.Route))
+
+const AccessTokensNewLazyRoute = AccessTokensNewLazyImport.update({
+  path: '/access-tokens/new',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/access-tokens.new.lazy').then((d) => d.Route),
+)
 
 const PageIdIndexLazyRoute = PageIdIndexLazyImport.update({
   path: '/',
@@ -130,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/access-tokens/new': {
+      id: '/access-tokens/new'
+      path: '/access-tokens/new'
+      fullPath: '/access-tokens/new'
+      preLoaderRoute: typeof AccessTokensNewLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/changelog/$id': {
       id: '/changelog/$id'
       path: '/changelog/$id'
@@ -156,6 +179,13 @@ declare module '@tanstack/react-router' {
       path: '/page/create'
       fullPath: '/page/create'
       preLoaderRoute: typeof PageCreateLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/access-tokens/': {
+      id: '/access-tokens/'
+      path: '/access-tokens'
+      fullPath: '/access-tokens'
+      preLoaderRoute: typeof AccessTokensIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/changelog/': {
@@ -260,10 +290,12 @@ const PageIdLazyRouteWithChildren = PageIdLazyRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/access-tokens/new': typeof AccessTokensNewLazyRoute
   '/changelog/$id': typeof ChangelogIdLazyRouteWithChildren
   '/changelog/create': typeof ChangelogCreateLazyRoute
   '/page/$id': typeof PageIdLazyRouteWithChildren
   '/page/create': typeof PageCreateLazyRoute
+  '/access-tokens': typeof AccessTokensIndexLazyRoute
   '/changelog': typeof ChangelogIndexLazyRoute
   '/page': typeof PageIndexLazyRoute
   '/user': typeof UserIndexLazyRoute
@@ -277,8 +309,10 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/access-tokens/new': typeof AccessTokensNewLazyRoute
   '/changelog/create': typeof ChangelogCreateLazyRoute
   '/page/create': typeof PageCreateLazyRoute
+  '/access-tokens': typeof AccessTokensIndexLazyRoute
   '/changelog': typeof ChangelogIndexLazyRoute
   '/page': typeof PageIndexLazyRoute
   '/user': typeof UserIndexLazyRoute
@@ -293,10 +327,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/access-tokens/new': typeof AccessTokensNewLazyRoute
   '/changelog/$id': typeof ChangelogIdLazyRouteWithChildren
   '/changelog/create': typeof ChangelogCreateLazyRoute
   '/page/$id': typeof PageIdLazyRouteWithChildren
   '/page/create': typeof PageCreateLazyRoute
+  '/access-tokens/': typeof AccessTokensIndexLazyRoute
   '/changelog/': typeof ChangelogIndexLazyRoute
   '/page/': typeof PageIndexLazyRoute
   '/user/': typeof UserIndexLazyRoute
@@ -312,10 +348,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/access-tokens/new'
     | '/changelog/$id'
     | '/changelog/create'
     | '/page/$id'
     | '/page/create'
+    | '/access-tokens'
     | '/changelog'
     | '/page'
     | '/user'
@@ -328,8 +366,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/access-tokens/new'
     | '/changelog/create'
     | '/page/create'
+    | '/access-tokens'
     | '/changelog'
     | '/page'
     | '/user'
@@ -342,10 +382,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/access-tokens/new'
     | '/changelog/$id'
     | '/changelog/create'
     | '/page/$id'
     | '/page/create'
+    | '/access-tokens/'
     | '/changelog/'
     | '/page/'
     | '/user/'
@@ -360,10 +402,12 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  AccessTokensNewLazyRoute: typeof AccessTokensNewLazyRoute
   ChangelogIdLazyRoute: typeof ChangelogIdLazyRouteWithChildren
   ChangelogCreateLazyRoute: typeof ChangelogCreateLazyRoute
   PageIdLazyRoute: typeof PageIdLazyRouteWithChildren
   PageCreateLazyRoute: typeof PageCreateLazyRoute
+  AccessTokensIndexLazyRoute: typeof AccessTokensIndexLazyRoute
   ChangelogIndexLazyRoute: typeof ChangelogIndexLazyRoute
   PageIndexLazyRoute: typeof PageIndexLazyRoute
   UserIndexLazyRoute: typeof UserIndexLazyRoute
@@ -371,10 +415,12 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  AccessTokensNewLazyRoute: AccessTokensNewLazyRoute,
   ChangelogIdLazyRoute: ChangelogIdLazyRouteWithChildren,
   ChangelogCreateLazyRoute: ChangelogCreateLazyRoute,
   PageIdLazyRoute: PageIdLazyRouteWithChildren,
   PageCreateLazyRoute: PageCreateLazyRoute,
+  AccessTokensIndexLazyRoute: AccessTokensIndexLazyRoute,
   ChangelogIndexLazyRoute: ChangelogIndexLazyRoute,
   PageIndexLazyRoute: PageIndexLazyRoute,
   UserIndexLazyRoute: UserIndexLazyRoute,
@@ -393,10 +439,12 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/access-tokens/new",
         "/changelog/$id",
         "/changelog/create",
         "/page/$id",
         "/page/create",
+        "/access-tokens/",
         "/changelog/",
         "/page/",
         "/user/"
@@ -404,6 +452,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/access-tokens/new": {
+      "filePath": "access-tokens.new.lazy.tsx"
     },
     "/changelog/$id": {
       "filePath": "changelog.$id.lazy.tsx",
@@ -426,6 +477,9 @@ export const routeTree = rootRoute
     },
     "/page/create": {
       "filePath": "page.create.lazy.tsx"
+    },
+    "/access-tokens/": {
+      "filePath": "access-tokens.index.lazy.tsx"
     },
     "/changelog/": {
       "filePath": "changelog.index.lazy.tsx"
