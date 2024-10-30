@@ -52,6 +52,16 @@ jobs:
       #     environment: production
       #     sourcemaps: ./build/app/
 
+      - name: Upload CLI to R2
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.R2_ACCESS_ID }}
+          aws_secret_access_key: ${{ secrets.R2_ACCESS_SECRET }}
+          aws_bucket: ${{ secrets.R2_BUCKET }}
+          endpoint: ${{ secrets.R2_URL }}
+          source_dir: "build/cli"
+          destination_dir: "cli"
+
 
       - name: Set docker chmod (temp solution)
         run: sudo chmod 666 /var/run/docker.sock

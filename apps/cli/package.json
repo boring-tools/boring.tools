@@ -2,6 +2,13 @@
   "name": "@boring.tools/cli",
   "module": "src/index.ts",
   "type": "module",
+  "scripts": {
+    "build:linux": "bun build --compile --target=bun-linux-x64-modern ./src/index.ts --outfile ../../build/cli/linux/bt",
+    "build:mac:arm": "bun build --compile --target=bun-darwin-arm64 ./src/index.ts --outfile ../../build/cli/mac-arm/bt",
+    "build:mac:intel": "bun build --compile --target=bun-darwin-x64 ./src/index.ts --outfile ../../build/cli/mac-intel/bt",
+    "build:win": "bun build --compile --target=bun-windows-x64-modern ./src/index.ts --outfile ../../build/cli/windows/bt",
+    "build": "bun run build:linux && bun run build:mac:arm && bun run build:mac:intel && bun run build:win"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
