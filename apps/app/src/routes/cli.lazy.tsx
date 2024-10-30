@@ -1,12 +1,5 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@boring.tools/ui'
+import { Card, CardContent, CardHeader } from '@boring.tools/ui'
 import { Link, createLazyFileRoute } from '@tanstack/react-router'
-import { CopyIcon } from 'lucide-react'
 import { PageWrapper } from '../components/PageWrapper'
 
 const Platforms = [
