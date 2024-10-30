@@ -49,7 +49,7 @@ export const AccessTokenDelete = ({ id }: { id: string }) => {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete your
-              changelog and remove your data from our servers.
+              access token and remove your data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
