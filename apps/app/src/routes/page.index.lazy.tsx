@@ -17,7 +17,8 @@ const Component = () => {
         },
       ]}
     >
-      <div className="flex gap-10 w-full">
+      <h1 className="text-3xl">Page</h1>
+      <div className="flex gap-10 w-full flex-wrap">
         {!isPending &&
           data &&
           data.map((page) => {
@@ -32,10 +33,10 @@ const Component = () => {
             )
           })}
 
-        <Link to="/changelog/create">
+        <Link to="/page/create">
           <Card className="max-w-56 min-w-56 w-full h-36 hover:border-emerald-700 transition">
             <CardHeader className="flex items-center justify-center">
-              <CardTitle>New Changelog</CardTitle>
+              <CardTitle>New page</CardTitle>
             </CardHeader>
             <CardContent className="flex items-center justify-center">
               <PlusCircleIcon strokeWidth={1.5} className="w-10 h-10" />

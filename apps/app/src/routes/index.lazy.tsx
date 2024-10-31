@@ -33,7 +33,7 @@ const Component = () => {
           </CardHeader>
           <CardContent className="text-3xl font-bold">
             {data?.changelog.versions.total}
-            <div className="text-xs text-muted-foreground tracking-normal flex gap-3">
+            <div className="text-xs text-muted-foreground tracking-normal flex gap-3 flex-wrap">
               <span>{data?.changelog.versions.published} Published</span>
               <span>{data?.changelog.versions.review} Review</span>
               <span>{data?.changelog.versions.draft} Draft</span>
@@ -47,7 +47,7 @@ const Component = () => {
           </CardHeader>
           <CardContent className="text-3xl font-bold">
             {data?.changelog.commits.total}
-            <div className="text-xs text-muted-foreground tracking-normal flex gap-3">
+            <div className="text-xs text-muted-foreground tracking-normal flex gap-3 flex-wrap">
               <span>{data?.changelog.commits.assigned} Assigned</span>
               <span>{data?.changelog.commits.unassigned} Unassigned</span>
             </div>

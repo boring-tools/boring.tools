@@ -36,14 +36,14 @@ const Platforms = [
 const Component = () => {
   return (
     <PageWrapper breadcrumbs={[{ name: 'CLI', to: '/cli' }]}>
-      <div className="flex flex-col gap-5 w-full max-w-screen-lg">
+      <div className="flex flex-col gap-5 w-full md:max-w-screen-lg">
         <h1 className="text-3xl">CLI</h1>
         <p className="text-muted-foreground">
           With our CLI you can upload your commits for your changelog in just a
           few seconds.
         </p>
         <h2 className="text-xl">Download</h2>
-        <div className="grid grid-cols-4 gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           {Platforms.map((platform) => {
             return (
               <a
@@ -56,7 +56,7 @@ const Component = () => {
                     <img
                       src={platform.svg}
                       alt={platform.name}
-                      className="h-20"
+                      className="h-10 md:h-20"
                     />
                   </CardHeader>
                   <CardContent className="text-center">
@@ -69,7 +69,7 @@ const Component = () => {
         </div>
 
         <h2 className="text-xl">Usage</h2>
-        <pre className="bg-muted text-xl p-3 rounded text-center flex justify-between items-center">
+        <pre className="bg-muted text-xs md:text-xl p-3 rounded text-center flex justify-between items-center">
           bt --changelogId=... --token=bt_...
         </pre>
 
@@ -77,7 +77,7 @@ const Component = () => {
           Alternatively, you can use an .env file:
         </p>
 
-        <pre className="bg-muted text-xl p-3 rounded text-center flex justify-between items-center">
+        <pre className="bg-muted text-xs md:text-xl p-3 rounded text-center flex justify-between items-center">
           BT_CHANGELOG_ID=...
           <br />
           BT_AUTH_TOKEN=bt_...

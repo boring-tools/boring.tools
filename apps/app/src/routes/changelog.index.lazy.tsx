@@ -29,7 +29,7 @@ const Component = () => {
       <div className="flex flex-col gap-5">
         <h1 className="text-3xl">Changelog</h1>
 
-        <div className="flex gap-10 w-full">
+        <div className="flex gap-10 w-full flex-wrap">
           {!isPending &&
             data &&
             data.map((changelog) => {

@@ -17,7 +17,7 @@ const Component = () => {
         },
       ]}
     >
-      <div className="flex w-full gap-5 justify-between items-center">
+      <div className="flex w-full gap-5 justify-between items-start md:items-center flex-col md:flex-row">
         <h1 className="text-3xl">Access Tokens</h1>
 
         <Button asChild>

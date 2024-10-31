@@ -88,8 +88,8 @@ const Component = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
         <h1 className="text-2xl">New version</h1>
-        <div className="grid grid-cols-6 gap-5 w-full max-w-screen-xl">
-          <Card className="col-span-4">
+        <div className="grid md:grid-cols-6 gap-5 w-full md:max-w-screen-xl grid-flow-row grid-cols-1">
+          <Card className="md:col-span-4 col-span-1">
             <CardHeader>
               <CardTitle>Details</CardTitle>
             </CardHeader>
@@ -108,7 +108,7 @@ const Component = () => {
                 )}
               />
 
-              <div className="flex gap-5 items-center">
+              <div className="flex gap-5 md:items-center flex-col md:flex-row">
                 <FormField
                   control={form.control}
                   name="status"
@@ -229,7 +229,7 @@ const Component = () => {
             </CardContent>
           </Card>
 
-          <Card className="col-span-2">
+          <Card className="md:col-span-2 col-span-1">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Associated commits</CardTitle>
@@ -291,7 +291,7 @@ const Component = () => {
               </ScrollArea>
             </CardContent>
           </Card>
-          <div className="flex gap-5 mt-5 w-full justify-end items-end col-span-6">
+          <div className="flex gap-5 mt-5 w-full justify-end items-end md:col-span-6">
             <Button
               type="button"
               variant={'ghost'}
