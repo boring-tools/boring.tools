@@ -238,6 +238,7 @@ const Component = () => {
                   variant={'ghost'}
                   size={'sm'}
                   onClick={selectAllCommits}
+                  type="button"
                 >
                   Add all commits
                 </Button>
