@@ -6,7 +6,7 @@ const getLastCommitHash = async (args: Arguments) => {
   const result = await fetchAPI(
     `/v1/changelog/commit?changelogId=${args.changelogId}&limit=1`,
     {},
-    args.token,
+    args.accessToken,
   )
 
   if (!result) {
@@ -44,6 +44,6 @@ export const upload_commits = async (arguemnts: Arguments) => {
       method: 'POST',
       body: JSON.stringify(mappedCommits),
     },
-    arguemnts.token,
+    arguemnts.accessToken,
   )
 }

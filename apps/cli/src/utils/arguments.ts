@@ -1,42 +1,8 @@
-import { parseArgs } from 'node:util'
 import { z } from 'zod'
 
-const ENV_ID = Bun.env.BT_CHANGELOG_ID
-const ENV_TOKEN = Bun.env.BT_AUTH_TOKEN
-
 const schema = z.object({
-  token: z.string(),
+  accessToken: z.string().startsWith('bt_'),
   changelogId: z.string(),
 })
+
 export type Arguments = z.infer<typeof schema>
-
-const { values } = parseArgs({
-  args: Bun.argv,
-  options: {
-    token: {
-      type: 'string',
-    },
-    changelogId: {
-      type: 'string',
-    },
-  },
-  strict: true,
-  allowPositionals: true,
-})
-
-const mappedArguments = {
-  ...values,
-  token: values.token || ENV_TOKEN,
-  changelogId: values.changelogId || ENV_ID,
-}
-
-export const args = schema.safeParse(mappedArguments)
-
-if (!args.success) {
-  console.error(
-    `boring.tools CLI: Missing arguemnts: ${args.error.errors
-      .map((error) => error.path[0])
-      .join(', ')}`,
-  )
-  process.exit(1)
-}
