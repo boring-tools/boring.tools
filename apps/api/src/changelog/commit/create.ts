@@ -38,7 +38,6 @@ export const registerCommitCreate = (api: typeof changelogCommitApi) => {
     const userId = verifyAuthentication(c)
 
     const data: z.infer<typeof CommitCreateInput> = await c.req.json()
-
     const changelogResult = await db.query.changelog.findFirst({
       where: and(
         eq(changelog.id, data[0].changelogId),
@@ -54,9 +53,11 @@ export const registerCommitCreate = (api: typeof changelogCommitApi) => {
       ...entry,
       createdAt: new Date(entry.author.date),
     }))
+
     const [result] = await db
       .insert(changelog_commit)
       .values(mappedData)
+      .onConflictDoNothing()
       .returning()
 
     if (!result) {
