@@ -1,4 +1,9 @@
-import { changelog, changelog_version, db } from '@boring.tools/database'
+import {
+  changelog,
+  changelog_commit,
+  changelog_version,
+  db,
+} from '@boring.tools/database'
 import { GeneralOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
@@ -56,6 +61,11 @@ export const removeFunc = async ({
       message: 'Version not found',
     })
   }
+
+  await db
+    .update(changelog_commit)
+    .set({ versionId: null })
+    .where(eq(changelog_commit.versionId, id))
 
   return db
     .delete(changelog_version)

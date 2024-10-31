@@ -102,7 +102,7 @@ export const changelog_commit = pgTable(
       onDelete: 'cascade',
     }),
     versionId: uuid('versionId').references(() => changelog_version.id, {
-      onDelete: 'cascade',
+      onUpdate: 'set null',
     }),
 
     commit: varchar('commit', { length: 8 }).notNull(),

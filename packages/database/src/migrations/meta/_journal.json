@@ -29,6 +29,20 @@
       "when": 1730403108797,
       "tag": "0003_messy_big_bertha",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1730405808764,
+      "tag": "0004_parallel_epoch",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1730406390071,
+      "tag": "0005_brief_polaris",
+      "breakpoints": true
     }
   ]
 }
