@@ -9,6 +9,7 @@ import user from './user'
 
 import { accessTokenApi } from './access-token'
 import pageApi from './page'
+import statisticApi from './statistic'
 import { authentication } from './utils/authentication'
 import { handleError, handleZodError } from './utils/errors'
 import { startup } from './utils/startup'
@@ -37,6 +38,7 @@ app.route('/v1/user', user)
 app.route('/v1/changelog', changelog)
 app.route('/v1/page', pageApi)
 app.route('/v1/access-token', accessTokenApi)
+app.route('/v1/statistic', statisticApi)
 
 app.doc('/openapi.json', {
   openapi: '3.0.0',
