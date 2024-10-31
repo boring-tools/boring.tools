@@ -1,5 +1,6 @@
 const GITFORMAT =
   '--pretty=format:{"commit": "%h", "parent": "%p", "refs": "%D", "subject": "%s", "author": { "name": "%aN", "email": "%aE", "date": "%ad" }, "commiter": { "name": "%cN", "email": "%cE", "date": "%cd" }},'
+
 export const git_log = async (
   from: string | undefined,
   to = 'HEAD',

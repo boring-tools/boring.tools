@@ -34,7 +34,7 @@ export const args = schema.safeParse(mappedArguments)
 
 if (!args.success) {
   console.error(
-    `@changelog/cli: Missing arguemnts: ${args.error.errors
+    `boring.tools CLI: Missing arguemnts: ${args.error.errors
       .map((error) => error.path[0])
       .join(', ')}`,
   )
