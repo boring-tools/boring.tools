@@ -1,0 +1,22 @@
+meta {
+  name: Create Auto
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{API_URL}}/v1/changelog/version/auto
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+body:json {
+  {
+    "changelogId": "d83fe688-3331-4e64-9af6-318f82e511d4",
+    "commitIds": ["01cc79df-6d16-4496-b9ba-b238d686efc4"]
+  }
+}

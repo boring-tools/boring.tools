@@ -14,3 +14,12 @@ export const VersionCreateInput = z
   .openapi({
     required: ['changelogId', 'version', 'markdown', 'releasedAt'],
   })
+
+export const VersionCreateAutoInput = z
+  .object({
+    version: z.string().optional().nullable(),
+    changelogId: z.string().uuid(),
+  })
+  .openapi({
+    required: ['changelogId'],
+  })

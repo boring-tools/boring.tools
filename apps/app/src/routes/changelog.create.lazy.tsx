@@ -29,6 +29,7 @@ const Component = () => {
       title: '',
       description: '',
       isSemver: true,
+      isConventional: true,
     },
   })
 
@@ -109,6 +110,33 @@ const Component = () => {
                         className="text-emerald-700"
                       >
                         semantic versioning?
+                      </a>
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isConventional"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md ">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Using Conventional Commits</FormLabel>
+                    <FormDescription>
+                      If this changelog is using{' '}
+                      <a
+                        href="https://www.conventionalcommits.org/en/v1.0.0/"
+                        className="text-emerald-700"
+                      >
+                        conventional commits
                       </a>
                     </FormDescription>
                   </div>

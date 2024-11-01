@@ -7,6 +7,7 @@ export const ChangelogCreateInput = z
     title: z.string().min(3, 'Title must contain at least 3 charachters.'),
     description: z.string(),
     isSemver: z.boolean().default(true),
+    isConventional: z.boolean().default(true),
   })
   .openapi({
     required: ['title', 'userId'],

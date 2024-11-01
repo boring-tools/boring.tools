@@ -3,6 +3,7 @@ import type {
   ChangelogOutput,
   ChangelogUpdateInput,
   CommitOutput,
+  VersionCreateAutoInput,
   VersionCreateInput,
   VersionOutput,
   VersionUpdateInput,
@@ -18,6 +19,7 @@ type ChangelogUpdate = z.infer<typeof ChangelogUpdateInput>
 
 type Version = z.infer<typeof VersionOutput>
 type VersionCreate = z.infer<typeof VersionCreateInput>
+type VersionCreateAuto = z.infer<typeof VersionCreateAutoInput>
 type VersionUpdate = z.infer<typeof VersionUpdateInput>
 
 type Commit = z.infer<typeof CommitOutput>
@@ -142,6 +144,29 @@ export const useChangelogVersionCreate = () => {
     mutationFn: async (payload: VersionCreate): Promise<Readonly<Version>> =>
       await queryFetch({
         path: 'changelog/version',
+        data: payload,
+        method: 'post',
+        token: await getToken(),
+      }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['changelogList'] })
+      queryClient.invalidateQueries({
+        queryKey: ['changelogById', data.changelogId],
+      })
+    },
+  })
+}
+
+export const useChangelogVersionCreateAuto = () => {
+  const { getToken } = useAuth()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (
+      payload: VersionCreateAuto,
+    ): Promise<Readonly<Version>> =>
+      await queryFetch({
+        path: 'changelog/version/auto',
         data: payload,
         method: 'post',
         token: await getToken(),
