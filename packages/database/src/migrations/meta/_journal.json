@@ -43,6 +43,13 @@
       "when": 1730406390071,
       "tag": "0005_brief_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1730465968252,
+      "tag": "0006_pretty_maginty",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "changelog" ADD COLUMN "isConventional" boolean DEFAULT true;

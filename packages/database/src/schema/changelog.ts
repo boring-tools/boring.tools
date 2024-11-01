@@ -28,6 +28,7 @@ export const changelog = pgTable('changelog', {
   title: varchar('title', { length: 256 }),
   description: text('description'),
   isSemver: boolean('isSemver').default(true),
+  isConventional: boolean('isConventional').default(true),
 })
 
 export const changelogs_to_pages = pgTable(
