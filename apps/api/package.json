@@ -13,6 +13,7 @@
     "@hono/sentry": "^1.2.0",
     "@hono/zod-openapi": "^0.16.2",
     "@scalar/hono-api-reference": "^0.5.149",
+    "convert-gitmoji": "^0.1.5",
     "hono": "^4.6.3",
     "semver": "^7.6.3",
     "svix": "^1.36.0",

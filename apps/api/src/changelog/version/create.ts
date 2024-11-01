@@ -44,39 +44,39 @@ export const createFunc = async ({
   userId: string
   payload: z.infer<typeof VersionCreateInput>
 }) => {
-  const formattedVersion = semver.coerce(payload.version)
-  const validVersion = semver.valid(formattedVersion)
-
   const changelogResult = await db.query.changelog.findFirst({
     where: and(
       eq(changelog.userId, userId),
       eq(changelog.id, payload.changelogId),
     ),
+    with: {
+      versions: {
+        where: and(
+          eq(changelog_version.changelogId, payload.changelogId),
+          eq(changelog_version.version, payload.version),
+        ),
+      },
+    },
   })
 
   if (!changelogResult) {
     throw new HTTPException(404, {
-      message: 'changelog not found',
+      message: 'Changelog not found',
     })
   }
+
+  if (changelogResult.versions.length) {
+    throw new HTTPException(409, {
+      message: 'Version exists already',
+    })
+  }
+
+  const formattedVersion = semver.coerce(payload.version)
+  const validVersion = semver.valid(formattedVersion)
 
   if (validVersion === null) {
     throw new HTTPException(409, {
       message: 'Version is not semver compatible',
-    })
-  }
-
-  // Check if a version with the same version already exists
-  const versionResult = await db.query.changelog_version.findFirst({
-    where: and(
-      eq(changelog_version.changelogId, payload.changelogId),
-      eq(changelog_version.version, validVersion),
-    ),
-  })
-
-  if (versionResult) {
-    throw new HTTPException(409, {
-      message: 'Version exists already',
     })
   }
 

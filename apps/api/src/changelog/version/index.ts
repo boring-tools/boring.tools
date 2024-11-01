@@ -4,17 +4,20 @@ import { verifyAuthentication } from '../../utils/authentication'
 import { type ContextModule, captureSentry } from '../../utils/sentry'
 import { byId, byIdFunc } from './byId'
 import { create, createFunc } from './create'
+import { registerVersionCreateAuto } from './createAuto'
 import { remove, removeFunc } from './delete'
 import { update, updateFunc } from './update'
 
-const app = new OpenAPIHono<{ Variables: Variables }>()
+export const changelogVersionApi = new OpenAPIHono<{ Variables: Variables }>()
 
 const module: ContextModule = {
   name: 'changelog',
   sub_module: 'version',
 }
 
-app.openapi(create, async (c) => {
+registerVersionCreateAuto(changelogVersionApi)
+
+changelogVersionApi.openapi(create, async (c) => {
   const userId = verifyAuthentication(c)
   try {
     const payload = await c.req.json()
@@ -37,7 +40,7 @@ app.openapi(create, async (c) => {
   }
 })
 
-app.openapi(byId, async (c) => {
+changelogVersionApi.openapi(byId, async (c) => {
   const userId = verifyAuthentication(c)
   try {
     const id = c.req.param('id')
@@ -72,7 +75,7 @@ app.openapi(byId, async (c) => {
   }
 })
 
-app.openapi(update, async (c) => {
+changelogVersionApi.openapi(update, async (c) => {
   const userId = verifyAuthentication(c)
   try {
     const id = c.req.param('id')
@@ -100,7 +103,7 @@ app.openapi(update, async (c) => {
   }
 })
 
-app.openapi(remove, async (c) => {
+changelogVersionApi.openapi(remove, async (c) => {
   const userId = verifyAuthentication(c)
   try {
     const id = c.req.param('id')
@@ -123,4 +126,4 @@ app.openapi(remove, async (c) => {
   }
 })
 
-export default app
+export default changelogVersionApi
