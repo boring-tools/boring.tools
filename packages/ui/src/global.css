@@ -85,4 +85,12 @@
       "rlig" 1,
       "calt" 1;
   }
+
+  .page h3 {
+    @apply text-2xl my-2;
+  }
+
+  .page ul {
+    @apply list-disc ml-6;
+  }
 }

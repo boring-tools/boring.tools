@@ -3,6 +3,7 @@ import type { PageByIdOutput } from '@boring.tools/schema'
 import { Separator } from '@boring.tools/ui'
 import type { z } from 'astro/zod'
 import { format } from 'date-fns'
+import { marked } from 'marked'
 
 type PageById = z.infer<typeof PageByIdOutput>
 const url = import.meta.env.DEV
@@ -55,9 +56,7 @@ const data: PageById = await response.json()
 											}
 										</div>
 
-										<p>
-											{version.markdown}
-										</p>
+											<div set:html={marked.parse(version.markdown ?? "")} />
 									</div>
 								)
 							})}
@@ -89,10 +88,7 @@ const data: PageById = await response.json()
 											</p>
 											}
 										</div>
-
-										<p>
-											{version.markdown}
-										</p>
+										<div class="page" set:html={marked.parse(version.markdown ?? "")} />
 									</div>
 								)
 							})}
