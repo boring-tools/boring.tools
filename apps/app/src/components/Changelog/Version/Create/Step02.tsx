@@ -25,7 +25,7 @@ export const ChangelogVersionCreateStep02 = () => {
     resolver: zodResolver(VersionCreateAutoInput),
     defaultValues: {
       changelogId: id,
-      version: null,
+      version: '',
     },
   })
 

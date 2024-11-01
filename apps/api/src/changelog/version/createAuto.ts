@@ -44,6 +44,15 @@ export const route = createRoute({
   },
 })
 
+const getVersion = (version: string) => {
+  const isValid = semver.valid(semver.coerce(version))
+
+  if (isValid) {
+    return isValid
+  }
+  return format(new Date(), 'dd.MM.yy')
+}
+
 const getNextVersion = ({
   version,
   isSemver,
@@ -52,11 +61,15 @@ const getNextVersion = ({
     if (version === '') {
       return '1.0.0'
     }
-    const nextVersion = semver.inc(version, 'patch')
-    if (!nextVersion) {
-      throw new Error('Incorrect semver')
+    const isValid = semver.valid(semver.coerce(version))
+
+    if (isValid) {
+      const nextVersion = semver.inc(isValid, 'patch')
+      if (!nextVersion) {
+        throw new Error('Incorrect semver')
+      }
+      return nextVersion
     }
-    return nextVersion
   }
   return format(new Date(), 'dd.MM.yy')
 }
@@ -64,7 +77,6 @@ const getNextVersion = ({
 export const registerVersionCreateAuto = (api: typeof changelogVersionApi) => {
   return api.openapi(route, async (c) => {
     const userId = verifyAuthentication(c)
-
     const data: z.infer<typeof VersionCreateAutoInput> = await c.req.json()
     const changelogResult = await db.query.changelog.findFirst({
       where: and(
@@ -136,10 +148,12 @@ export const registerVersionCreateAuto = (api: typeof changelogVersionApi) => {
       .insert(changelog_version)
       .values({
         changelogId: changelogResult.id,
-        version: getNextVersion({
-          version: data.version ?? changelogResult.versions[0].version,
-          isSemver: changelogResult.isSemver ?? true,
-        }),
+        version: data.version
+          ? getVersion(data.version)
+          : getNextVersion({
+              version: changelogResult.versions[0].version,
+              isSemver: changelogResult.isSemver ?? true,
+            }),
         status: 'draft',
         markdown,
       })

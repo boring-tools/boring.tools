@@ -17,7 +17,7 @@ export const VersionCreateInput = z
 
 export const VersionCreateAutoInput = z
   .object({
-    version: z.string().optional().nullable(),
+    version: z.string().optional(),
     changelogId: z.string().uuid(),
   })
   .openapi({

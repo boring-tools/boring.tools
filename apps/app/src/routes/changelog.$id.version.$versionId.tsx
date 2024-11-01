@@ -43,7 +43,7 @@ import {
 import '@mdxeditor/editor/style.css'
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { ChangelogVersionDelete } from '../components/Changelog/VersionDelete'
 import { VersionStatus } from '../components/Changelog/VersionStatus'
 
@@ -55,7 +55,6 @@ const Component = () => {
   const { data, error, isPending, refetch } = useChangelogVersionById({
     id: versionId,
   })
-  const [editorValue, setEditorValue] = useState('')
   const form = useForm<z.infer<typeof VersionUpdateInput>>({
     resolver: zodResolver(VersionUpdateInput),
     defaultValues: data,
