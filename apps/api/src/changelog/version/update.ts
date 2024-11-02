@@ -62,6 +62,7 @@ export const updateFunc = async ({
   const [versionUpdateResult] = await db
     .update(changelog_version)
     .set({
+      version: payload.version,
       status: payload.status,
       markdown: payload.markdown,
       releasedAt: payload.releasedAt ? new Date(payload.releasedAt) : null,

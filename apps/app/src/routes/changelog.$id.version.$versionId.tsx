@@ -8,6 +8,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -55,6 +56,7 @@ const Component = () => {
   const { data, error, isPending, refetch } = useChangelogVersionById({
     id: versionId,
   })
+
   const form = useForm<z.infer<typeof VersionUpdateInput>>({
     resolver: zodResolver(VersionUpdateInput),
     defaultValues: data,
@@ -93,12 +95,25 @@ const Component = () => {
       <Separator />
       {!isPending && data && (
         <div>
-          <h1 className="text-xl mb-2">Version: {data.version}</h1>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 max-w-screen-md"
             >
+              <FormField
+                control={form.control}
+                name="version"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Version</FormLabel>
+                    <FormControl>
+                      <Input placeholder="v1.0.1" {...field} />
+                    </FormControl>{' '}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="markdown"
