@@ -12,18 +12,23 @@ import { eq } from 'drizzle-orm'
 import { fetch } from '../utils/testing/fetch'
 
 describe('Changelog', () => {
-  let testAccessToken: AccessTokenOutput
+  let testAccessToken: z.infer<typeof AccessTokenOutput>
   let testChangelog: z.infer<typeof ChangelogOutput>
 
   beforeAll(async () => {
-    await db
+    const createdUser = await db
       .insert(user)
-      .values({ email: 'changelog@test.local', id: 'test_000' })
+      .values({ email: 'changelog@test.local', providerId: 'test_000' })
+      .returning()
     const tAccessToken = await db
       .insert(access_token)
-      .values({ token: 'test123', userId: 'test_000', name: 'testtoken' })
+      .values({
+        token: 'test123',
+        userId: createdUser[0].id,
+        name: 'testtoken',
+      })
       .returning()
-    testAccessToken = tAccessToken[0]
+    testAccessToken = tAccessToken[0] as z.infer<typeof AccessTokenOutput>
   })
 
   afterAll(async () => {
@@ -36,6 +41,7 @@ describe('Changelog', () => {
         title: 'changelog',
         description: 'description',
         isSemver: true,
+        isConventional: true,
       }
 
       const res = await fetch(
@@ -44,10 +50,10 @@ describe('Changelog', () => {
           method: 'POST',
           body: payload,
         },
-        testAccessToken.token,
+        testAccessToken.token as string,
       )
 
-      const json: z.infer<typeof ChangelogCreateOutput> = await res.json()
+      const json = (await res.json()) as z.infer<typeof ChangelogCreateOutput>
       testChangelog = json
 
       expect(res.status).toBe(201)
@@ -62,7 +68,7 @@ describe('Changelog', () => {
           path: `/v1/changelog/${testChangelog.id}`,
           method: 'GET',
         },
-        testAccessToken.token,
+        testAccessToken.token as string,
       )
 
       expect(res.status).toBe(200)
@@ -74,7 +80,7 @@ describe('Changelog', () => {
           path: '/v1/changelog/635f4aa7-79fc-4d6b-af7d-6731999cc8bb',
           method: 'GET',
         },
-        testAccessToken.token,
+        testAccessToken.token as string,
       )
 
       expect(res.status).toBe(500)
@@ -86,12 +92,12 @@ describe('Changelog', () => {
           path: '/v1/changelog/some',
           method: 'GET',
         },
-        testAccessToken.token,
+        testAccessToken.token as string,
       )
 
       expect(res.status).toBe(400)
 
-      const json = await res.json()
+      const json = (await res.json()) as { success: boolean }
       expect(json.success).toBeFalse()
     })
   })
@@ -103,12 +109,12 @@ describe('Changelog', () => {
           path: '/v1/changelog',
           method: 'GET',
         },
-        testAccessToken.token,
+        testAccessToken.token as string,
       )
 
       expect(res.status).toBe(200)
 
-      const json: z.infer<typeof ChangelogListOutput> = await res.json()
+      const json = (await res.json()) as z.infer<typeof ChangelogListOutput>
       expect(json).toHaveLength(1)
     })
   })
@@ -120,7 +126,7 @@ describe('Changelog', () => {
           path: `/v1/changelog/${testChangelog.id}`,
           method: 'DELETE',
         },
-        testAccessToken.token,
+        testAccessToken.token as string,
       )
 
       expect(res.status).toBe(200)
@@ -132,7 +138,7 @@ describe('Changelog', () => {
           path: `/v1/changelog/${testChangelog.id}`,
           method: 'DELETE',
         },
-        testAccessToken.token,
+        testAccessToken.token as string,
       )
 
       expect(res.status).toBe(404)

@@ -12,7 +12,7 @@ export const page = pgTable('page', {
   }),
 
   title: text().notNull(),
-  description: text().notNull(),
+  description: text(),
   icon: text().default(''),
 })
 
