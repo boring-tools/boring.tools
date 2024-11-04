@@ -25,8 +25,18 @@ export default defineConfig({
       favicon: '/favicon.svg',
       sidebar: [
         {
-          label: 'Guides',
-          items: [{ label: 'Getting started', slug: 'guides/getting-started' }],
+          label: 'Getting Started',
+          items: [
+            { label: 'Introduction', slug: 'docs' },
+            { label: 'Motivation', slug: 'docs/motivation' },
+          ],
+        },
+        {
+          label: 'Changelog',
+          items: [
+            { label: 'Getting started', slug: 'docs/changelog' },
+            { label: 'Features', slug: 'docs/changelog/features' },
+          ],
         },
         { label: 'API', link: 'https://api.boring.tools' },
         { label: 'Status', link: 'https://status.boring.tools' },
