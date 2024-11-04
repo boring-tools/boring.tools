@@ -1,4 +1,4 @@
-import { access_token, db } from '@boring.tools/database'
+import { access_token, db, user } from '@boring.tools/database'
 import { clerkMiddleware, getAuth } from '@hono/clerk-auth'
 import { eq } from 'drizzle-orm'
 import type { Context, Next } from 'hono'
@@ -36,7 +36,7 @@ const generatedToken = async (c: Context, next: Next) => {
 
 export const authentication = some(generatedToken, clerkMiddleware())
 
-export const verifyAuthentication = (c: Context) => {
+export const verifyAuthentication = async (c: Context) => {
   const auth = getAuth(c)
   if (!auth?.userId) {
     const accessTokenUser = c.get('user')
@@ -45,5 +45,15 @@ export const verifyAuthentication = (c: Context) => {
     }
     return accessTokenUser.id
   }
-  return auth.userId
+
+  const [userEntry] = await db
+    .select()
+    .from(user)
+    .where(eq(user.providerId, auth.userId))
+
+  if (!userEntry) {
+    throw new HTTPException(401, { message: 'Unauthorized' })
+  }
+  // console.log(userEntry)
+  return userEntry.id
 }

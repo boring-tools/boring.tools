@@ -39,7 +39,7 @@ const userCreate = async ({
   payload: z.infer<typeof UserWebhookInput>
 }) => {
   const data = {
-    id: payload.data.id,
+    providerId: payload.data.id,
     name: `${payload.data.first_name} ${payload.data.last_name}`,
     email: payload.data.email_addresses[0].email_address,
   }
@@ -50,7 +50,7 @@ const userCreate = async ({
         ...data,
       })
       .onConflictDoUpdate({
-        target: user.id,
+        target: user.providerId,
         set: data,
       })
 

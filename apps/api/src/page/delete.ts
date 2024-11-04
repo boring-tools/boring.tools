@@ -34,7 +34,7 @@ const route = createRoute({
 
 export const registerPageDelete = (api: typeof pageApi) => {
   return api.openapi(route, async (c) => {
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
     const { id } = c.req.valid('param')
     const result = await db
       .delete(page)

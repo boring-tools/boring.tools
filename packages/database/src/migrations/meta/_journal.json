@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1727807735760,
-      "tag": "0000_crazy_mindworm",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1728640705376,
-      "tag": "0001_daffy_rattler",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1729804659796,
-      "tag": "0002_fantastic_sleeper",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1730403108797,
-      "tag": "0003_messy_big_bertha",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1730405808764,
-      "tag": "0004_parallel_epoch",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1730406390071,
-      "tag": "0005_brief_polaris",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1730465968252,
-      "tag": "0006_pretty_maginty",
+      "when": 1730750779611,
+      "tag": "0000_dark_doomsday",
       "breakpoints": true
     }
   ]

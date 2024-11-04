@@ -35,7 +35,7 @@ export const route = createRoute({
 
 export const registerCommitCreate = (api: typeof changelogCommitApi) => {
   return api.openapi(route, async (c) => {
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
 
     const data: z.infer<typeof CommitCreateInput> = await c.req.json()
     const changelogResult = await db.query.changelog.findFirst({

@@ -27,7 +27,7 @@ const route = createRoute({
 
 export const registerStatisticGet = (api: typeof statisticApi) => {
   return api.openapi(route, async (c) => {
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
     const pageResult = await db.query.page.findMany({
       where: eq(page.userId, userId),
     })

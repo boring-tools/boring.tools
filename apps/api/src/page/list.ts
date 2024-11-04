@@ -32,7 +32,7 @@ const route = createRoute({
 
 export const registerPageList = (api: typeof pageApi) => {
   return api.openapi(route, async (c) => {
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
 
     const result = await db.query.page.findMany({
       where: and(eq(page.userId, userId)),

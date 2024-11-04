@@ -7,7 +7,7 @@ import { user } from './user'
 export const page = pgTable('page', {
   ..._basic_schema,
 
-  userId: varchar({ length: 32 }).references(() => user.id, {
+  userId: uuid().references(() => user.id, {
     onDelete: 'cascade',
   }),
 

@@ -1,10 +1,13 @@
 import { relations } from 'drizzle-orm'
-import { pgTable, text, varchar } from 'drizzle-orm/pg-core'
+import { pgTable, text, uuid, varchar } from 'drizzle-orm/pg-core'
 import { access_token } from '.'
+import { _basic_schema } from './_basic'
 import { changelog } from './changelog'
 
 export const user = pgTable('user', {
-  id: varchar({ length: 32 }).primaryKey(), // Clerk User Id
+  ..._basic_schema,
+
+  providerId: varchar({ length: 32 }).notNull().unique(), // Provider User Id
   name: text(),
   email: text().notNull().unique(),
 })

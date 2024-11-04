@@ -35,7 +35,7 @@ export const route = createRoute({
 
 export const registerAccessTokenCreate = (api: typeof accessTokenApi) => {
   return api.openapi(route, async (c) => {
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
 
     const data: z.infer<typeof AccessTokenCreateInput> = await c.req.json()
     const token = crypto.randomBytes(20).toString('hex')

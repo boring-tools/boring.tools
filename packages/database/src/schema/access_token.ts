@@ -6,7 +6,7 @@ import { _basic_schema } from './_basic'
 export const access_token = pgTable('access_token', {
   ..._basic_schema,
 
-  userId: varchar({ length: 32 }).references(() => user.id, {
+  userId: uuid().references(() => user.id, {
     onDelete: 'cascade',
   }),
   token: text().notNull(),

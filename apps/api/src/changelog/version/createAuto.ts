@@ -76,7 +76,7 @@ const getNextVersion = ({
 
 export const registerVersionCreateAuto = (api: typeof changelogVersionApi) => {
   return api.openapi(route, async (c) => {
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
     const data: z.infer<typeof VersionCreateAutoInput> = await c.req.json()
     const changelogResult = await db.query.changelog.findFirst({
       where: and(

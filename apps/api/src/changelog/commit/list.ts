@@ -34,7 +34,7 @@ const route = createRoute({
 
 export const registerCommitList = (api: typeof changelogCommitApi) => {
   return api.openapi(route, async (c) => {
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
     const { changelogId, limit, offset, hasVersion } = c.req.valid('query')
     const result = await db.query.changelog.findFirst({
       where: and(eq(changelog.userId, userId), eq(changelog.id, changelogId)),

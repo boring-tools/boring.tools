@@ -18,7 +18,7 @@ const module: ContextModule = {
 registerVersionCreateAuto(changelogVersionApi)
 
 changelogVersionApi.openapi(create, async (c) => {
-  const userId = verifyAuthentication(c)
+  const userId = await verifyAuthentication(c)
   try {
     const payload = await c.req.json()
     const result = await createFunc({ userId, payload })
@@ -41,7 +41,7 @@ changelogVersionApi.openapi(create, async (c) => {
 })
 
 changelogVersionApi.openapi(byId, async (c) => {
-  const userId = verifyAuthentication(c)
+  const userId = await verifyAuthentication(c)
   try {
     const id = c.req.param('id')
     const result = await byIdFunc({ userId, id })
@@ -76,7 +76,7 @@ changelogVersionApi.openapi(byId, async (c) => {
 })
 
 changelogVersionApi.openapi(update, async (c) => {
-  const userId = verifyAuthentication(c)
+  const userId = await verifyAuthentication(c)
   try {
     const id = c.req.param('id')
 
@@ -104,7 +104,7 @@ changelogVersionApi.openapi(update, async (c) => {
 })
 
 changelogVersionApi.openapi(remove, async (c) => {
-  const userId = verifyAuthentication(c)
+  const userId = await verifyAuthentication(c)
   try {
     const id = c.req.param('id')
     const result = await removeFunc({ userId, id })

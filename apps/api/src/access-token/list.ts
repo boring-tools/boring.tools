@@ -30,7 +30,7 @@ const route = createRoute({
 
 export const registerAccessTokenList = (api: typeof accessTokenApi) => {
   return api.openapi(route, async (c) => {
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
     const result = await db.query.access_token.findMany({
       where: eq(changelog.userId, userId),
     })

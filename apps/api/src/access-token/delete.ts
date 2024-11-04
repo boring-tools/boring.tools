@@ -29,7 +29,7 @@ export const route = createRoute({
 export const registerAccessTokenDelete = (api: typeof accessTokenApi) => {
   return api.openapi(route, async (c) => {
     const id = c.req.param('id')
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
 
     const result = await db
       .delete(access_token)

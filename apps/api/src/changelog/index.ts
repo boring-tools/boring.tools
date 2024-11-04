@@ -18,7 +18,7 @@ const module: ContextModule = {
 app.route('/commit', changelogCommitApi)
 app.route('/version', version)
 app.openapi(ById.route, async (c) => {
-  const userId = verifyAuthentication(c)
+  const userId = await verifyAuthentication(c)
   try {
     const id = c.req.param('id')
     const result = await ById.func({ userId, id })
@@ -36,7 +36,7 @@ app.openapi(ById.route, async (c) => {
 })
 
 app.openapi(List.route, async (c) => {
-  const userId = verifyAuthentication(c)
+  const userId = await verifyAuthentication(c)
   try {
     const result = await List.func({ userId })
     return c.json(result, 200)
@@ -53,7 +53,7 @@ app.openapi(List.route, async (c) => {
 })
 
 app.openapi(Create.route, async (c) => {
-  const userId = verifyAuthentication(c)
+  const userId = await verifyAuthentication(c)
 
   try {
     const [result] = await Create.func({
@@ -74,7 +74,7 @@ app.openapi(Create.route, async (c) => {
 })
 
 app.openapi(Delete.route, async (c) => {
-  const userId = verifyAuthentication(c)
+  const userId = await verifyAuthentication(c)
 
   try {
     const id = c.req.param('id')
@@ -98,7 +98,7 @@ app.openapi(Delete.route, async (c) => {
 })
 
 app.openapi(Update.route, async (c) => {
-  const userId = verifyAuthentication(c)
+  const userId = await verifyAuthentication(c)
 
   try {
     const id = c.req.param('id')

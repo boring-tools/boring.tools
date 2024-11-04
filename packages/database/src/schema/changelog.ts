@@ -18,7 +18,7 @@ import { user } from './user'
 export const changelog = pgTable('changelog', {
   ..._basic_schema,
 
-  userId: varchar({ length: 32 }).references(() => user.id, {
+  userId: uuid().references(() => user.id, {
     onDelete: 'cascade',
   }),
 
@@ -76,9 +76,7 @@ export const changelog_version_status = pgEnum('status', [
 ])
 
 export const changelog_version = pgTable('changelog_version', {
-  id: uuid().primaryKey().defaultRandom(),
-  createdAt: timestamp().defaultNow(),
-  updatedAt: timestamp(),
+  ..._basic_schema,
   releasedAt: timestamp(),
 
   changelogId: uuid()
@@ -95,8 +93,7 @@ export const changelog_version = pgTable('changelog_version', {
 export const changelog_commit = pgTable(
   'changelog_commit',
   {
-    id: uuid().primaryKey().defaultRandom(),
-    createdAt: timestamp(),
+    ..._basic_schema,
 
     changelogId: uuid().references(() => changelog.id, {
       onDelete: 'cascade',

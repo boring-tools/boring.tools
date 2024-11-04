@@ -44,7 +44,7 @@ const route = createRoute({
 
 export const registerPageUpdate = (api: typeof pageApi) => {
   return api.openapi(route, async (c) => {
-    const userId = verifyAuthentication(c)
+    const userId = await verifyAuthentication(c)
     const { id } = c.req.valid('param')
 
     const { changelogIds, ...rest }: z.infer<typeof PageUpdateInput> =
