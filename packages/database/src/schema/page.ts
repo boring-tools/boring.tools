@@ -1,18 +1,19 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, text, uuid, varchar } from 'drizzle-orm/pg-core'
-import { changelog, changelogs_to_pages } from './changelog'
+import { _basic_schema } from './_basic'
+import { changelogs_to_pages } from './changelog'
 import { user } from './user'
 
 export const page = pgTable('page', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  ..._basic_schema,
 
-  userId: varchar('userId', { length: 32 }).references(() => user.id, {
+  userId: varchar({ length: 32 }).references(() => user.id, {
     onDelete: 'cascade',
   }),
 
-  title: text('title').notNull(),
-  description: text('description').notNull(),
-  icon: text('icon').default(''),
+  title: text().notNull(),
+  description: text().notNull(),
+  icon: text().default(''),
 })
 
 export const pageRelation = relations(page, ({ many }) => ({

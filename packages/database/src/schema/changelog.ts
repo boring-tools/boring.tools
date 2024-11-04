@@ -11,33 +11,32 @@ import {
 } from 'drizzle-orm/pg-core'
 import { json } from 'drizzle-orm/pg-core'
 import { uniqueIndex } from 'drizzle-orm/pg-core'
+import { _basic_schema } from './_basic'
 import { page } from './page'
 import { user } from './user'
 
 export const changelog = pgTable('changelog', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  createdAt: timestamp('createdAt').defaultNow(),
-  updatedAt: timestamp('updatedAt'),
+  ..._basic_schema,
 
-  userId: varchar('userId', { length: 32 }).references(() => user.id, {
+  userId: varchar({ length: 32 }).references(() => user.id, {
     onDelete: 'cascade',
   }),
 
-  pageId: uuid('pageId').references(() => page.id),
+  pageId: uuid().references(() => page.id),
 
-  title: varchar('title', { length: 256 }),
-  description: text('description'),
-  isSemver: boolean('isSemver').default(true),
-  isConventional: boolean('isConventional').default(true),
+  title: varchar({ length: 256 }),
+  description: text(),
+  isSemver: boolean().default(true),
+  isConventional: boolean().default(true),
 })
 
 export const changelogs_to_pages = pgTable(
   'changelogs_to_pages',
   {
-    changelogId: uuid('changelogId')
+    changelogId: uuid()
       .notNull()
       .references(() => changelog.id, { onDelete: 'cascade' }),
-    pageId: uuid('pageId')
+    pageId: uuid()
       .notNull()
       .references(() => page.id, { onDelete: 'cascade' }),
   },
@@ -77,50 +76,50 @@ export const changelog_version_status = pgEnum('status', [
 ])
 
 export const changelog_version = pgTable('changelog_version', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  createdAt: timestamp('createdAt').defaultNow(),
-  updatedAt: timestamp('updatedAt'),
-  releasedAt: timestamp('releasedAt'),
+  id: uuid().primaryKey().defaultRandom(),
+  createdAt: timestamp().defaultNow(),
+  updatedAt: timestamp(),
+  releasedAt: timestamp(),
 
-  changelogId: uuid('changelogId')
+  changelogId: uuid()
     .references(() => changelog.id, {
       onDelete: 'cascade',
     })
     .notNull(),
 
-  version: varchar('version', { length: 32 }).notNull(),
-  markdown: text('markdown').notNull(),
-  status: changelog_version_status('status').default('draft').notNull(),
+  version: varchar({ length: 32 }).notNull(),
+  markdown: text().notNull(),
+  status: changelog_version_status().default('draft').notNull(),
 })
 
 export const changelog_commit = pgTable(
   'changelog_commit',
   {
-    id: uuid('id').primaryKey().defaultRandom(),
-    createdAt: timestamp('createdAt'),
+    id: uuid().primaryKey().defaultRandom(),
+    createdAt: timestamp(),
 
-    changelogId: uuid('changelogId').references(() => changelog.id, {
+    changelogId: uuid().references(() => changelog.id, {
       onDelete: 'cascade',
     }),
-    versionId: uuid('versionId').references(() => changelog_version.id, {
+    versionId: uuid().references(() => changelog_version.id, {
       onUpdate: 'set null',
     }),
 
-    commit: varchar('commit', { length: 8 }).notNull(),
-    parent: varchar('parent', { length: 8 }),
-    subject: text('subject').notNull(),
-    author: json('author').$type<{
+    commit: varchar({ length: 8 }).notNull(),
+    parent: varchar({ length: 8 }),
+    subject: text().notNull(),
+    author: json().$type<{
       name: string
       email: string
       date: string
     }>(),
-    commiter: json('comitter').$type<{
+    commiter: json().$type<{
       name: string
       email: string
       date: string
     }>(),
 
-    body: text('body'),
+    body: text(),
   },
   (table) => ({
     unique: uniqueIndex('unique').on(table.changelogId, table.commit),

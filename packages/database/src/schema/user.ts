@@ -4,9 +4,9 @@ import { access_token } from '.'
 import { changelog } from './changelog'
 
 export const user = pgTable('user', {
-  id: varchar('id', { length: 32 }).primaryKey(), // Clerk User Id
-  name: text('name'),
-  email: text('email').notNull().unique(),
+  id: varchar({ length: 32 }).primaryKey(), // Clerk User Id
+  name: text(),
+  email: text().notNull().unique(),
 })
 
 export const userRelation = relations(user, ({ many }) => ({
