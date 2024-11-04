@@ -42,7 +42,6 @@ export const registerPageCreate = (api: typeof pageApi) => {
 
     const { changelogIds, ...rest }: z.infer<typeof PageCreateInput> =
       await c.req.json()
-
     const [result] = await db
       .insert(page)
       .values({
@@ -52,7 +51,7 @@ export const registerPageCreate = (api: typeof pageApi) => {
       .returning()
 
     // TODO: implement transaction
-    if (changelogIds) {
+    if (changelogIds.length > 0) {
       await db.insert(changelogs_to_pages).values(
         changelogIds.map((changelogId) => ({
           changelogId,
