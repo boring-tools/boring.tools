@@ -6,6 +6,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
+      redis:
+        image: redis:7.4.1-alpine
+        command: redis-server --save 20 1 --loglevel warning --requirepass development
       postgres:
         image: postgres:17-alpine
 
@@ -45,3 +48,5 @@ jobs:
         env:
           NODE_ENV: test
           POSTGRES_URL: postgres://postgres:postgres@postgres:5432/postgres
+          REDIS_URL: redis://redis:6379
+          REDIS_PASSWORD: development
