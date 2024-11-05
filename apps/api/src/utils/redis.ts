@@ -7,7 +7,9 @@ const getRedisOptions = () => {
       url: import.meta.env.REDIS_URL,
     }
   }
-  return {}
+  return {
+    url: import.meta.env.REDIS_URL,
+  }
 }
 export const redis = createClient(getRedisOptions())
 
