@@ -1,4 +1,5 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { cors } from 'hono/cors'
 import type { Variables } from '..'
 import { verifyAuthentication } from '../utils/authentication'
 import { type ContextModule, captureSentry } from '../utils/sentry'
@@ -15,6 +16,7 @@ const app = new OpenAPIHono<{ Variables: Variables }>()
 const module: ContextModule = {
   name: 'changelog',
 }
+app.use('*', cors())
 app.route('/commit', changelogCommitApi)
 app.route('/version', version)
 app.openapi(ById.route, async (c) => {
