@@ -1,7 +1,7 @@
 import { createClient } from 'redis'
 
 const getRedisOptions = () => {
-  if (import.meta.env.NODE_ENV !== 'production') {
+  if (import.meta.env.NODE_ENV === 'production') {
     return {
       password: import.meta.env.REDIS_PASSWORD,
       url: import.meta.env.REDIS_URL,
