@@ -6,6 +6,7 @@ import {
 import { createRoute, type z } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
+import { redis } from '../utils/redis'
 
 export const route = createRoute({
   method: 'put',
@@ -55,6 +56,9 @@ export const func = async ({
     throw new HTTPException(404, { message: 'Not found' })
   }
 
+  if (result.pageId) {
+    redis.del(result.pageId)
+  }
   return result
 }
 

@@ -1,4 +1,5 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { timing } from 'hono/timing'
 import type { Variables } from '..'
 import type { ContextModule } from '../utils/sentry'
 import { registerPageById } from './byId'
@@ -9,7 +10,7 @@ import { registerPagePublic } from './public'
 import { registerPageUpdate } from './update'
 
 export const pageApi = new OpenAPIHono<{ Variables: Variables }>()
-
+pageApi.use('*', timing())
 const module: ContextModule = {
   name: 'page',
 }

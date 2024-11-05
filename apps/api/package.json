@@ -15,6 +15,7 @@
     "@scalar/hono-api-reference": "^0.5.149",
     "convert-gitmoji": "^0.1.5",
     "hono": "^4.6.3",
+    "redis": "^4.7.0",
     "semver": "^7.6.3",
     "svix": "^1.36.0",
     "ts-pattern": "^5.5.0"

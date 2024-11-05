@@ -8,6 +8,7 @@ import { GeneralOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
+import { redis } from '../../utils/redis'
 
 export const remove = createRoute({
   method: 'delete',
@@ -66,6 +67,10 @@ export const removeFunc = async ({
     .update(changelog_commit)
     .set({ versionId: null })
     .where(eq(changelog_commit.versionId, id))
+
+  if (findChangelog.pageId) {
+    redis.del(findChangelog.pageId)
+  }
 
   return db
     .delete(changelog_version)

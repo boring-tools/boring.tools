@@ -3,6 +3,7 @@ import { VersionUpdateInput, VersionUpdateOutput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
+import { redis } from '../../utils/redis'
 
 export const update = createRoute({
   method: 'put',
@@ -69,6 +70,10 @@ export const updateFunc = async ({
     })
     .where(and(eq(changelog_version.id, id)))
     .returning()
+
+  if (findChangelog.pageId) {
+    redis.del(findChangelog.pageId)
+  }
 
   return versionUpdateResult
 }

@@ -9,6 +9,7 @@ import { createRoute, type z } from '@hono/zod-openapi'
 import { and, eq, inArray } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 import semver from 'semver'
+import { redis } from '../../utils/redis'
 
 export const create = createRoute({
   method: 'post',
@@ -89,6 +90,10 @@ export const createFunc = async ({
       markdown: payload.markdown,
     })
     .returning()
+
+  if (changelogResult.pageId) {
+    redis.del(changelogResult.pageId)
+  }
 
   await db
     .update(changelog_commit)

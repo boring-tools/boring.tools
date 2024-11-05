@@ -9,6 +9,7 @@ import {
 import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 import { verifyAuthentication } from '../utils/authentication'
+import { redis } from '../utils/redis'
 import type { pageApi } from './index'
 
 const route = createRoute({
@@ -82,6 +83,8 @@ export const registerPageUpdate = (api: typeof pageApi) => {
     if (!result) {
       throw new HTTPException(404, { message: 'Not Found' })
     }
+
+    redis.del(id)
 
     return c.json(result, 200)
   })

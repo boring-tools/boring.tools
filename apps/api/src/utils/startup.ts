@@ -5,6 +5,8 @@ import { logger } from '@boring.tools/logger'
 declare module 'bun' {
   interface Env {
     POSTGRES_URL: string
+    REDIS_PASSWORD: string
+    REDIS_URL: string
     CLERK_WEBHOOK_SECRET: string
     CLERK_SECRET_KEY: string
     CLERK_PUBLISHABLE_KEY: string
@@ -12,7 +14,7 @@ declare module 'bun' {
   }
 }
 
-const TEST_VARIABLES = ['POSTGRES_URL']
+const TEST_VARIABLES = ['POSTGRES_URL', 'REDIS_URL', 'REDIS_PASSWORD']
 
 const DEVELOPMENT_VARIABLES = [
   ...TEST_VARIABLES,

@@ -16,6 +16,7 @@ import semver from 'semver'
 import type { changelogVersionApi } from '.'
 import { verifyAuthentication } from '../../utils/authentication'
 import { commitsToMarkdown } from '../../utils/git/commitsToMarkdown'
+import { redis } from '../../utils/redis'
 
 export const route = createRoute({
   method: 'post',
@@ -141,6 +142,10 @@ export const registerVersionCreateAuto = (api: typeof changelogVersionApi) => {
         .set({ versionId: versionCreateResult.id })
         .where(isNull(changelog_commit.versionId))
 
+      if (changelogResult.pageId) {
+        redis.del(changelogResult.pageId)
+      }
+
       return c.json(versionCreateResult, 201)
     }
 
@@ -163,6 +168,10 @@ export const registerVersionCreateAuto = (api: typeof changelogVersionApi) => {
       .update(changelog_commit)
       .set({ versionId: versionCreateResult.id })
       .where(isNull(changelog_commit.versionId))
+
+    if (changelogResult.pageId) {
+      redis.del(changelogResult.pageId)
+    }
 
     return c.json(versionCreateResult, 201)
   })
