@@ -8,7 +8,7 @@ jobs:
     services:
       redis:
         image: redis:7.4.1-alpine
-        command: redis-server --save 20 1 --loglevel warning --requirepass development
+        # command: redis-server --save 20 1 --loglevel warning --requirepass development
         ports:
           - 6379:6379
 
