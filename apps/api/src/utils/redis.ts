@@ -1,9 +1,15 @@
 import { createClient } from 'redis'
 
-export const redis = createClient({
-  password: import.meta.env.REDIS_PASSWORD,
-  url: import.meta.env.REDIS_URL,
-})
+const getRedisOptions = () => {
+  if (import.meta.env.NODE_ENV !== 'production') {
+    return {
+      password: import.meta.env.REDIS_PASSWORD,
+      url: import.meta.env.REDIS_URL,
+    }
+  }
+  return {}
+}
+export const redis = createClient(getRedisOptions())
 
 redis.on('error', (err) => console.log('Redis Client Error', err))
 await redis.connect()
