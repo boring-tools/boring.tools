@@ -44,9 +44,9 @@ const Component = () => {
                       <CardTitle>{changelog.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center justify-center flex-col">
-                      <span>Versions: {changelog.computed.versionCount}</span>
+                      <span>Versions: {changelog.computed?.versionCount}</span>
 
-                      <span>Commits: {changelog.computed.commitCount}</span>
+                      <span>Commits: {changelog.computed?.commitCount}</span>
                     </CardContent>
                   </Card>
                 </Link>
