@@ -3,6 +3,10 @@ import { ChangelogListOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { eq } from 'drizzle-orm'
 
+import type { changelogApi } from '.'
+import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
+
 export const route = createRoute({
   method: 'get',
   path: '/',
@@ -16,40 +20,37 @@ export const route = createRoute({
       },
       description: 'Return changelogs for current user',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
-export const func = async ({ userId }: { userId: string }) => {
-  const result = await db.query.changelog.findMany({
-    where: eq(changelog.userId, userId),
-    with: {
-      versions: true,
-      commits: {
-        columns: { id: true },
-      },
-    },
-    orderBy: (changelog, { asc }) => [asc(changelog.createdAt)],
-  })
+export const registerChangelogList = (api: typeof changelogApi) => {
+  return api.openapi(route, async (c) => {
+    const userId = await verifyAuthentication(c)
 
-  return result.map((changelog) => {
-    const { versions, commits, ...rest } = changelog
-    return {
-      ...rest,
-      computed: {
-        versionCount: versions.length,
-        commitCount: commits.length,
+    const result = await db.query.changelog.findMany({
+      where: eq(changelog.userId, userId),
+      with: {
+        versions: true,
+        commits: {
+          columns: { id: true },
+        },
       },
-    }
-  })
-}
+      orderBy: (changelog, { asc }) => [asc(changelog.createdAt)],
+    })
 
-export default {
-  route,
-  func,
+    const mappedData = result.map((changelog) => {
+      const { versions, commits, ...rest } = changelog
+      return {
+        ...rest,
+        computed: {
+          versionCount: versions.length,
+          commitCount: commits.length,
+        },
+      }
+    })
+
+    return c.json(ChangelogListOutput.parse(mappedData), 200)
+  })
 }

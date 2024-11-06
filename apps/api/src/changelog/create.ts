@@ -5,6 +5,10 @@ import {
 } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
 
+import type { changelogApi } from '.'
+import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
+
 export const route = createRoute({
   method: 'post',
   path: '/',
@@ -23,32 +27,24 @@ export const route = createRoute({
       },
       description: 'Return created changelog',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
-export const func = async ({
-  userId,
-  payload,
-}: {
-  userId: string
-  payload: z.infer<typeof ChangelogCreateInput>
-}) => {
-  return await db
-    .insert(changelog)
-    .values({
-      ...payload,
-      userId: userId,
-    })
-    .returning()
-}
+export const registerChangelogCreate = (api: typeof changelogApi) => {
+  return api.openapi(route, async (c) => {
+    const userId = await verifyAuthentication(c)
+    const payload: z.infer<typeof ChangelogCreateInput> = await c.req.json()
 
-export default {
-  route,
-  func,
+    const [result] = await db
+      .insert(changelog)
+      .values({
+        ...payload,
+        userId: userId,
+      })
+      .returning()
+
+    return c.json(ChangelogCreateOutput.parse(result), 201)
+  })
 }

@@ -13,6 +13,12 @@ export const ChangelogOutput = z
       example: 'This is a changelog',
     }),
     versions: z.array(VersionOutput).optional(),
+    isSemver: z.boolean().openapi({
+      example: true,
+    }),
+    isConventional: z.boolean().openapi({
+      example: true,
+    }),
     computed: z
       .object({
         versionCount: z.number().openapi({

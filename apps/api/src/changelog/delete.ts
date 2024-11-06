@@ -4,6 +4,10 @@ import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 
+import type { changelogApi } from '.'
+import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
+
 export const route = createRoute({
   method: 'delete',
   path: '/:id',
@@ -17,29 +21,25 @@ export const route = createRoute({
       },
       description: 'Removes a changelog by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
-export const func = async ({ userId, id }: { userId: string; id: string }) => {
-  const result = await db
-    .delete(changelog)
-    .where(and(eq(changelog.userId, userId), eq(changelog.id, id)))
-    .returning()
+export const registerChangelogDelete = async (api: typeof changelogApi) => {
+  return api.openapi(route, async (c) => {
+    const userId = await verifyAuthentication(c)
+    const id = c.req.param('id')
 
-  if (!result) {
-    throw new HTTPException(404, { message: 'Not found' })
-  }
+    const [result] = await db
+      .delete(changelog)
+      .where(and(eq(changelog.userId, userId), eq(changelog.id, id)))
+      .returning()
 
-  return result
-}
+    if (!result) {
+      throw new HTTPException(404, { message: 'Not found' })
+    }
 
-export default {
-  route,
-  func,
+    return c.json(GeneralOutput.parse(result), 200)
+  })
 }

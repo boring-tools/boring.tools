@@ -4,6 +4,10 @@ import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 
+import type { changelogApi } from '.'
+import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
+
 export const route = createRoute({
   method: 'get',
   path: '/:id',
@@ -20,39 +24,35 @@ export const route = createRoute({
       },
       description: 'Return changelog by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
-export const func = async ({ userId, id }: { userId: string; id: string }) => {
-  const result = await db.query.changelog.findFirst({
-    where: and(eq(changelog.userId, userId), eq(changelog.id, id)),
-    with: {
-      pages: {
-        with: {
-          page: true,
+export const registerChangelogById = (api: typeof changelogApi) => {
+  return api.openapi(route, async (c) => {
+    const userId = await verifyAuthentication(c)
+    const { id } = c.req.valid('param')
+
+    const result = await db.query.changelog.findFirst({
+      where: and(eq(changelog.userId, userId), eq(changelog.id, id)),
+      with: {
+        pages: {
+          with: {
+            page: true,
+          },
+        },
+        versions: {
+          orderBy: (changelog_version, { desc }) => [
+            desc(changelog_version.createdAt),
+          ],
         },
       },
-      versions: {
-        orderBy: (changelog_version, { desc }) => [
-          desc(changelog_version.createdAt),
-        ],
-      },
-    },
+    })
+
+    if (!result) {
+      throw new HTTPException(404, { message: 'Not found' })
+    }
+    return c.json(ChangelogOutput.parse(result), 200)
   })
-
-  if (!result) {
-    throw new HTTPException(404, { message: 'Not found' })
-  }
-  return result
-}
-
-export default {
-  route,
-  func,
 }
