@@ -2,8 +2,10 @@ import { changelog, db, page } from '@boring.tools/database'
 import { StatisticOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { eq } from 'drizzle-orm'
+
 import type { statisticApi } from '.'
 import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 
 const route = createRoute({
   method: 'get',
@@ -16,13 +18,9 @@ const route = createRoute({
       },
       description: 'Return user',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerStatisticGet = (api: typeof statisticApi) => {
@@ -108,6 +106,6 @@ export const registerStatisticGet = (api: typeof statisticApi) => {
       },
     }
 
-    return c.json(mappedData, 200)
+    return c.json(StatisticOutput.parse(mappedData), 200)
   })
 }

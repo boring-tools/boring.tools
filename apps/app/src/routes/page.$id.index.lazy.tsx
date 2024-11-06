@@ -31,12 +31,14 @@ const Component = () => {
           <Card className="w-full max-w-screen-sm">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Changelogs ({data.changelogs?.length})</CardTitle>
+                <CardTitle>
+                  Changelogs ({data.changelogs?.length ?? 0})
+                </CardTitle>
               </div>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-1">
-                {data.changelogs.map((changelog) => {
+                {data.changelogs?.map((changelog) => {
                   return (
                     <div className="flex gap-3" key={changelog.id}>
                       <Link

@@ -3,8 +3,10 @@ import { AccessTokenListOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
+
 import type { accessTokenApi } from '.'
 import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 
 const route = createRoute({
   method: 'get',
@@ -19,13 +21,9 @@ const route = createRoute({
       },
       description: 'Return version by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerAccessTokenList = (api: typeof accessTokenApi) => {
@@ -44,6 +42,6 @@ export const registerAccessTokenList = (api: typeof accessTokenApi) => {
       token: at.token.substring(0, 10),
     }))
 
-    return c.json(mappedData, 200)
+    return c.json(AccessTokenListOutput.parse(mappedData), 200)
   })
 }

@@ -3,8 +3,10 @@ import { CommitCreateInput, CommitCreateOutput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
+
 import type { changelogCommitApi } from '.'
 import { verifyAuthentication } from '../../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../../utils/openapi'
 
 export const route = createRoute({
   method: 'post',
@@ -24,13 +26,9 @@ export const route = createRoute({
       },
       description: 'Commits created',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerCommitCreate = (api: typeof changelogCommitApi) => {
@@ -64,6 +62,6 @@ export const registerCommitCreate = (api: typeof changelogCommitApi) => {
       throw new HTTPException(404, { message: 'Not Found' })
     }
 
-    return c.json(result, 200)
+    return c.json(CommitCreateOutput.parse(result), 201)
   })
 }

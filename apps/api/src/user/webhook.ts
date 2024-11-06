@@ -4,7 +4,9 @@ import { UserOutput, UserWebhookInput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
 import { Webhook } from 'svix'
+
 import type userApi from '.'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 
 const route = createRoute({
   method: 'post',
@@ -24,13 +26,9 @@ const route = createRoute({
       },
       description: 'Return success',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 const userCreate = async ({
@@ -72,7 +70,7 @@ export const registerUserWebhook = (api: typeof userApi) => {
       case 'user.created': {
         const result = await userCreate({ payload: verifiedPayload })
         logger.info('Clerk Webhook', result)
-        return c.json(result, 200)
+        return c.json(UserOutput.parse(result), 200)
       }
       default:
         throw new HTTPException(404, { message: 'Webhook type not supported' })

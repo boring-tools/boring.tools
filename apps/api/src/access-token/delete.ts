@@ -3,27 +3,25 @@ import { GeneralOutput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
+
 import type { accessTokenApi } from '.'
 import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 
 export const route = createRoute({
   method: 'delete',
   path: '/:id',
   tags: ['access-token'],
   responses: {
-    201: {
+    200: {
       content: {
         'application/json': { schema: GeneralOutput },
       },
       description: 'Removes a access token by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerAccessTokenDelete = (api: typeof accessTokenApi) => {
@@ -40,6 +38,6 @@ export const registerAccessTokenDelete = (api: typeof accessTokenApi) => {
       throw new HTTPException(404, { message: 'Not Found' })
     }
 
-    return c.json(result, 200)
+    return c.json(GeneralOutput.parse({ message: 'Access token deleted' }), 200)
   })
 }

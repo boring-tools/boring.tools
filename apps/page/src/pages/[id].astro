@@ -30,9 +30,9 @@ const data: PageById = await response.json()
 					<p class="prose text-sm">{data.description}</p>
 				</div>
 
-				{data.changelogs.length >= 2 && <div class="flex flex-col">
+				{data.changelogs?.length >= 2 && <div class="flex flex-col">
 					<h2 class="prose prose-xl">Changelogs</h2>
-					{data.changelogs.map((changelog) => {
+					{data.changelogs?.map((changelog) => {
 						if (changelog.versions && changelog.versions?.length < 1) {
 							return null
 						}
@@ -65,7 +65,7 @@ const data: PageById = await response.json()
 						</div>
 					})}
 					</div>}
-				{data.changelogs.length === 1 && <div>
+				{data.changelogs?.length === 1 && <div>
 <h2 class="uppercase text-sm prose tracking-widest">Changelog</h2>
 {data.changelogs.map((changelog) => {
 						if (changelog.versions && changelog.versions?.length < 1) {

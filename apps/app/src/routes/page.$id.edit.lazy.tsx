@@ -40,7 +40,7 @@ const Component = () => {
     resolver: zodResolver(PageUpdateInput),
     defaultValues: {
       ...page.data,
-      changelogIds: page.data?.changelogs.map((log) => log.id),
+      changelogIds: page.data?.changelogs?.map((log) => log.id),
     },
   })
   const onSubmit = (values: z.infer<typeof PageUpdateInput>) => {
@@ -138,6 +138,10 @@ const Component = () => {
                                 key={changelog.id}
                                 onSelect={() => {
                                   const getIds = () => {
+                                    if (!field.value) {
+                                      return [changelog.id]
+                                    }
+
                                     if (field.value?.includes(changelog.id)) {
                                       return field.value.filter(
                                         (id) => id !== changelog.id,

@@ -3,8 +3,10 @@ import { access_token, db } from '@boring.tools/database'
 import { AccessTokenCreateInput, AccessTokenOutput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
+
 import type { accessTokenApi } from '.'
 import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 
 export const route = createRoute({
   method: 'post',
@@ -24,13 +26,9 @@ export const route = createRoute({
       },
       description: 'Commits created',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerAccessTokenCreate = (api: typeof accessTokenApi) => {
@@ -53,6 +51,6 @@ export const registerAccessTokenCreate = (api: typeof accessTokenApi) => {
       throw new HTTPException(404, { message: 'Not Found' })
     }
 
-    return c.json(result, 200)
+    return c.json(AccessTokenOutput.parse(result), 201)
   })
 }

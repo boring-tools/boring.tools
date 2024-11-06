@@ -1,16 +1,17 @@
 import { db, page } from '@boring.tools/database'
+import { PageListOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
-
-import { PageListOutput } from '@boring.tools/schema'
 import { HTTPException } from 'hono/http-exception'
+
 import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 import type { pageApi } from './index'
 
 const route = createRoute({
   method: 'get',
   tags: ['page'],
-  description: 'Get a page list',
+  description: 'Get a list of pages',
   path: '/',
   responses: {
     200: {
@@ -21,13 +22,9 @@ const route = createRoute({
       },
       description: 'Return changelog by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerPageList = (api: typeof pageApi) => {
@@ -42,6 +39,6 @@ export const registerPageList = (api: typeof pageApi) => {
       throw new HTTPException(404, { message: 'Not Found' })
     }
 
-    return c.json(result, 200)
+    return c.json(PageListOutput.parse(result), 200)
   })
 }

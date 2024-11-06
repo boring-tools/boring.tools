@@ -13,13 +13,15 @@ export const ChangelogOutput = z
       example: 'This is a changelog',
     }),
     versions: z.array(VersionOutput).optional(),
-    computed: z.object({
-      versionCount: z.number().openapi({
-        example: 5,
-      }),
-      commitCount: z.number().openapi({
-        example: 10,
-      }),
-    }),
+    computed: z
+      .object({
+        versionCount: z.number().openapi({
+          example: 5,
+        }),
+        commitCount: z.number().openapi({
+          example: 10,
+        }),
+      })
+      .optional(),
   })
   .openapi('Changelog')

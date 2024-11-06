@@ -3,8 +3,10 @@ import { GeneralOutput, PageByIdParams } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
+
 import type { pageApi } from '.'
 import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 
 const route = createRoute({
   method: 'delete',
@@ -23,27 +25,25 @@ const route = createRoute({
       },
       description: 'Removes a changelog by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerPageDelete = (api: typeof pageApi) => {
   return api.openapi(route, async (c) => {
     const userId = await verifyAuthentication(c)
     const { id } = c.req.valid('param')
+
     const result = await db
       .delete(page)
       .where(and(eq(page.userId, userId), eq(page.id, id)))
       .returning()
+
     if (!result) {
       throw new HTTPException(404, { message: 'Not Found' })
     }
 
-    return c.json(result, 200)
+    return c.json({}, 200)
   })
 }

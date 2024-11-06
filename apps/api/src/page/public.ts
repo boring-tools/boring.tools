@@ -1,18 +1,18 @@
 import { changelog_version, db, page } from '@boring.tools/database'
+import { PagePublicOutput, PagePublicParams } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { eq } from 'drizzle-orm'
-import { endTime, setMetric, startTime } from 'hono/timing'
-
-import { PagePublicOutput, PagePublicParams } from '@boring.tools/schema'
 import { HTTPException } from 'hono/http-exception'
+import { endTime, startTime } from 'hono/timing'
 
+import { openApiErrorResponses } from '../utils/openapi'
 import { redis } from '../utils/redis'
 import type { pageApi } from './index'
 
 const route = createRoute({
   method: 'get',
   tags: ['page'],
-  description: 'Get a page',
+  description: 'Get a page by id for public view',
   path: '/:id/public',
   request: {
     params: PagePublicParams,
@@ -24,14 +24,9 @@ const route = createRoute({
           schema: PagePublicOutput,
         },
       },
-      description: 'Return changelog by id',
+      description: 'Get a page by id for public view',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
 })
 
@@ -96,6 +91,6 @@ export const registerPagePublic = (api: typeof pageApi) => {
     }
 
     redis.set(id, JSON.stringify(mappedResult), { EX: 60 })
-    return c.json(mappedResult, 200)
+    return c.json(PagePublicOutput.parse(mappedResult), 200)
   })
 }

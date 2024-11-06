@@ -2,7 +2,9 @@ import { db, user as userDb } from '@boring.tools/database'
 import { UserOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { eq } from 'drizzle-orm'
+
 import type { userApi } from '.'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 
 const route = createRoute({
   method: 'get',
@@ -15,13 +17,9 @@ const route = createRoute({
       },
       description: 'Return user',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerUserGet = (api: typeof userApi) => {
@@ -35,6 +33,6 @@ export const registerUserGet = (api: typeof userApi) => {
       throw new Error('User not found')
     }
 
-    return c.json(result, 200)
+    return c.json(UserOutput.parse(result), 200)
   })
 }

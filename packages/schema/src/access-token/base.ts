@@ -7,6 +7,6 @@ export const AccessTokenOutput = z
     }),
     token: z.string().optional(),
     name: z.string(),
-    lastUsedOn: z.string().or(z.date()),
+    lastUsedOn: z.string().or(z.date()).optional().nullable(),
   })
   .openapi('Access Token')

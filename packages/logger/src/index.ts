@@ -1,6 +1,7 @@
 import { Logtail } from '@logtail/node'
 import { LogtailTransport } from '@logtail/winston'
 import winston from 'winston'
+import LokiTransport from 'winston-loki'
 
 // Create a Winston logger - passing in the Logtail transport
 export const logger = winston.createLogger({
@@ -8,6 +9,14 @@ export const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({
       format: winston.format.json(),
+    }),
+    new LokiTransport({
+      host: 'http://localhost:9100',
+      labels: { app: 'api' },
+      json: true,
+      format: winston.format.json(),
+      replaceTimestamp: true,
+      onConnectionError: (err) => console.error(err),
     }),
   ],
 })

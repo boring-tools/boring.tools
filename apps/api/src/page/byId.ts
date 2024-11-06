@@ -5,6 +5,7 @@ import { and, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 
 import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 import type { pageApi } from './index'
 
 const route = createRoute({
@@ -24,13 +25,9 @@ const route = createRoute({
       },
       description: 'Return changelog by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerPageById = (api: typeof pageApi) => {
@@ -60,6 +57,6 @@ export const registerPageById = (api: typeof pageApi) => {
       changelogs: changelogs.map((log) => log.changelog),
     }
 
-    return c.json(mappedResult, 200)
+    return c.json(PageOutput.parse(mappedResult), 200)
   })
 }

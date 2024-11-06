@@ -22,6 +22,7 @@ export type Variables = {
 
 export const app = new OpenAPIHono<{ Variables: Variables }>({
   defaultHook: handleZodError,
+  strict: false,
 })
 
 // app.use(
@@ -33,6 +34,14 @@ export const app = new OpenAPIHono<{ Variables: Variables }>({
 app.onError(handleError)
 app.use('*', cors())
 app.use('/v1/*', authentication)
+app.openAPIRegistry.registerComponent('securitySchemes', 'AccessToken', {
+  type: 'http',
+  scheme: 'bearer',
+})
+app.openAPIRegistry.registerComponent('securitySchemes', 'Clerk', {
+  type: 'http',
+  scheme: 'bearer',
+})
 
 app.route('/v1/user', user)
 app.route('/v1/changelog', changelog)

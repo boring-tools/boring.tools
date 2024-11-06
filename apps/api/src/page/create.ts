@@ -4,6 +4,7 @@ import { createRoute, type z } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
 
 import { verifyAuthentication } from '../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 import type { pageApi } from './index'
 
 const route = createRoute({
@@ -27,13 +28,9 @@ const route = createRoute({
       },
       description: 'Return changelog by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerPageCreate = (api: typeof pageApi) => {
@@ -42,6 +39,7 @@ export const registerPageCreate = (api: typeof pageApi) => {
 
     const { changelogIds, ...rest }: z.infer<typeof PageCreateInput> =
       await c.req.json()
+
     const [result] = await db
       .insert(page)
       .values({
@@ -49,6 +47,10 @@ export const registerPageCreate = (api: typeof pageApi) => {
         userId: userId,
       })
       .returning()
+
+    if (!result) {
+      throw new HTTPException(404, { message: 'Not Found' })
+    }
 
     // TODO: implement transaction
     if (changelogIds.length > 0) {
@@ -59,10 +61,7 @@ export const registerPageCreate = (api: typeof pageApi) => {
         })),
       )
     }
-    if (!result) {
-      throw new HTTPException(404, { message: 'Not Found' })
-    }
 
-    return c.json(result, 200)
+    return c.json(PageOutput.parse(result), 200)
   })
 }

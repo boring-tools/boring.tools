@@ -4,8 +4,10 @@ import { createRoute } from '@hono/zod-openapi'
 import { and, eq, isNotNull, isNull } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 import { P, match } from 'ts-pattern'
+
 import type { changelogCommitApi } from '.'
 import { verifyAuthentication } from '../../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../../utils/openapi'
 
 const route = createRoute({
   method: 'get',
@@ -23,13 +25,9 @@ const route = createRoute({
       },
       description: 'Return version by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 export const registerCommitList = (api: typeof changelogCommitApi) => {
@@ -80,6 +78,6 @@ export const registerCommitList = (api: typeof changelogCommitApi) => {
       throw new HTTPException(404, { message: 'Not Found' })
     }
 
-    return c.json(commits, 200)
+    return c.json(CommitListOutput.parse(commits), 200)
   })
 }
