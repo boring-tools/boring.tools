@@ -14,7 +14,7 @@ export const VersionOutput = z
     markdown: z.string().openapi({
       example: '### Changelog\n\n- Added a new feature',
     }),
-    releasedAt: z.date().optional().openapi({
+    releasedAt: z.date().optional().nullable().openapi({
       example: '2024-01-01T00:00:00.000Z',
     }),
     status: z.enum(['draft', 'review', 'published']).default('draft').openapi({

@@ -6,7 +6,7 @@ export const VersionCreateInput = z
   .object({
     changelogId: z.string().uuid(),
     version: z.string(),
-    releasedAt: z.date().or(z.string()).optional(),
+    releasedAt: z.date().or(z.string()).optional().nullable(),
     status: z.enum(['draft', 'review', 'published']).default('draft'),
     markdown: z.string(),
     commitIds: z.array(z.string()),

@@ -13,9 +13,11 @@ import { format } from 'date-fns'
 import { and, eq, isNull } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 import semver from 'semver'
+
 import type { changelogVersionApi } from '.'
 import { verifyAuthentication } from '../../utils/authentication'
 import { commitsToMarkdown } from '../../utils/git/commitsToMarkdown'
+import { openApiErrorResponses, openApiSecurity } from '../../utils/openapi'
 import { redis } from '../../utils/redis'
 
 export const route = createRoute({
@@ -36,13 +38,9 @@ export const route = createRoute({
       },
       description: 'Commits created',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
 const getVersion = (version: string) => {
@@ -173,6 +171,6 @@ export const registerVersionCreateAuto = (api: typeof changelogVersionApi) => {
       redis.del(changelogResult.pageId)
     }
 
-    return c.json(versionCreateResult, 201)
+    return c.json(VersionCreateOutput.parse(versionCreateResult), 201)
   })
 }

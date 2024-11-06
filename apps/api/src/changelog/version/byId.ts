@@ -3,6 +3,11 @@ import { VersionByIdParams, VersionOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
 import { and, eq } from 'drizzle-orm'
 
+import { HTTPException } from 'hono/http-exception'
+import type changelogVersionApi from '.'
+import { verifyAuthentication } from '../../utils/authentication'
+import { openApiErrorResponses, openApiSecurity } from '../../utils/openapi'
+
 export const byId = createRoute({
   method: 'get',
   path: '/:id',
@@ -19,49 +24,41 @@ export const byId = createRoute({
       },
       description: 'Return version by id',
     },
-    400: {
-      description: 'Bad Request',
-    },
-    500: {
-      description: 'Internal Server Error',
-    },
+    ...openApiErrorResponses,
   },
+  ...openApiSecurity,
 })
 
-export const byIdFunc = async ({
-  userId,
-  id,
-}: {
-  userId: string
-  id: string
-}) => {
-  const versionResult = await db.query.changelog_version.findFirst({
-    where: eq(changelog_version.id, id),
-    with: {
-      commits: true,
-    },
+export const registerVersionById = (api: typeof changelogVersionApi) => {
+  return api.openapi(byId, async (c) => {
+    const userId = await verifyAuthentication(c)
+    const { id } = c.req.valid('param')
+
+    const versionResult = await db.query.changelog_version.findFirst({
+      where: eq(changelog_version.id, id),
+    })
+
+    if (!versionResult) {
+      throw new HTTPException(404, { message: 'Not Found' })
+    }
+
+    if (!versionResult.changelogId) {
+      throw new HTTPException(404, { message: 'Not Found' })
+    }
+
+    const changelogResult = await db.query.changelog.findMany({
+      where: and(eq(changelog.userId, userId)),
+      columns: {
+        id: true,
+      },
+    })
+
+    const changelogIds = changelogResult.map((cl) => cl.id)
+
+    if (!changelogIds.includes(versionResult.changelogId)) {
+      throw new HTTPException(404, { message: 'Not Found' })
+    }
+
+    return c.json(VersionOutput.parse(versionResult), 200)
   })
-
-  if (!versionResult) {
-    return null
-  }
-
-  if (!versionResult.changelogId) {
-    return null
-  }
-
-  const changelogResult = await db.query.changelog.findMany({
-    where: and(eq(changelog.userId, userId)),
-    columns: {
-      id: true,
-    },
-  })
-
-  const changelogIds = changelogResult.map((cl) => cl.id)
-
-  if (!changelogIds.includes(versionResult.changelogId)) {
-    return null
-  }
-
-  return versionResult
 }
