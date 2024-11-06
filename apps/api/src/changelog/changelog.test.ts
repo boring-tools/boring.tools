@@ -83,7 +83,7 @@ describe('Changelog', () => {
         testAccessToken.token as string,
       )
 
-      expect(res.status).toBe(500)
+      expect(res.status).toBe(404)
     })
 
     test('Invalid Id', async () => {
