@@ -1,7 +1,7 @@
 import { db, page } from '@boring.tools/database'
 import { PageListOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
-import { and, eq } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 
 import { verifyAuthentication } from '../utils/authentication'
@@ -33,6 +33,7 @@ export const registerPageList = (api: typeof pageApi) => {
 
     const result = await db.query.page.findMany({
       where: and(eq(page.userId, userId)),
+      orderBy: () => desc(page.createdAt),
     })
 
     if (!result) {

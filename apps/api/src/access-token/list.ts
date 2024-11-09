@@ -1,7 +1,7 @@
 import { changelog, db } from '@boring.tools/database'
 import { AccessTokenListOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
-import { eq } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 
 import type { accessTokenApi } from '.'
@@ -31,6 +31,7 @@ export const registerAccessTokenList = (api: typeof accessTokenApi) => {
     const userId = await verifyAuthentication(c)
     const result = await db.query.access_token.findMany({
       where: eq(changelog.userId, userId),
+      orderBy: () => desc(changelog.createdAt),
     })
 
     if (!result) {
