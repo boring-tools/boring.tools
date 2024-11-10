@@ -26,8 +26,6 @@ import {
   Separator,
   Tabs,
   TabsContent,
-  TabsList,
-  TabsTrigger,
   cn,
 } from '@boring.tools/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
