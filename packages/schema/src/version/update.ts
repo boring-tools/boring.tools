@@ -11,6 +11,7 @@ export const VersionUpdateInput = z
       .default('draft')
       .optional(),
     releasedAt: z.date().or(z.string()).optional().nullable(),
+    commitIds: z.array(z.string()).optional(),
   })
   .openapi({})
 export const VersionUpdateParams = z

@@ -1,7 +1,12 @@
-import { changelog, changelog_version, db } from '@boring.tools/database'
+import {
+  changelog,
+  changelog_commit,
+  changelog_version,
+  db,
+} from '@boring.tools/database'
 import { VersionUpdateInput, VersionUpdateOutput } from '@boring.tools/schema'
 import { createRoute, type z } from '@hono/zod-openapi'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, inArray, notInArray } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 
 import type changelogVersionApi from '.'
@@ -73,6 +78,18 @@ export const registerVersionUpdate = (api: typeof changelogVersionApi) => {
       })
       .where(and(eq(changelog_version.id, id)))
       .returning()
+
+    if (payload.commitIds) {
+      await db
+        .update(changelog_commit)
+        .set({ versionId: null })
+        .where(notInArray(changelog_commit.id, payload.commitIds))
+
+      await db
+        .update(changelog_commit)
+        .set({ versionId: versionUpdateResult.id })
+        .where(inArray(changelog_commit.id, payload.commitIds))
+    }
 
     if (findChangelog.pageId) {
       redis.del(findChangelog.pageId)

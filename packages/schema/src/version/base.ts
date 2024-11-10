@@ -1,4 +1,5 @@
 import { z } from '@hono/zod-openapi'
+import { CommitOutput } from '../commit'
 
 export const VersionOutput = z
   .object({
@@ -20,5 +21,6 @@ export const VersionOutput = z
     status: z.enum(['draft', 'review', 'published']).default('draft').openapi({
       example: 'draft',
     }),
+    commits: z.array(CommitOutput).optional(),
   })
   .openapi('Version')

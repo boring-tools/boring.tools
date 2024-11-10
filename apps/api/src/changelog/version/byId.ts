@@ -1,7 +1,12 @@
-import { changelog, changelog_version, db } from '@boring.tools/database'
+import {
+  changelog,
+  changelog_commit,
+  changelog_version,
+  db,
+} from '@boring.tools/database'
 import { VersionByIdParams, VersionOutput } from '@boring.tools/schema'
 import { createRoute } from '@hono/zod-openapi'
-import { and, eq } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 
 import { HTTPException } from 'hono/http-exception'
 import type changelogVersionApi from '.'
@@ -37,7 +42,9 @@ export const registerVersionById = (api: typeof changelogVersionApi) => {
     const versionResult = await db.query.changelog_version.findFirst({
       where: eq(changelog_version.id, id),
       with: {
-        commits: true,
+        commits: {
+          orderBy: () => desc(changelog_commit.createdAt),
+        },
       },
     })
 
