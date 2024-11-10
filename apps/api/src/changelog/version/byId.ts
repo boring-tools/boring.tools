@@ -36,6 +36,9 @@ export const registerVersionById = (api: typeof changelogVersionApi) => {
 
     const versionResult = await db.query.changelog_version.findFirst({
       where: eq(changelog_version.id, id),
+      with: {
+        commits: true,
+      },
     })
 
     if (!versionResult) {

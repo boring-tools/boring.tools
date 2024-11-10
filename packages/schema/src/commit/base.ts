@@ -25,6 +25,6 @@ export const CommitOutput = z
       email: z.string().email(),
       date: z.string(),
     }),
-    body: z.string().optional(),
+    body: z.string().optional().nullable(),
   })
   .openapi('Commit')
