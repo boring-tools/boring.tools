@@ -38,7 +38,7 @@ export const ChangelogVersionDelete = ({
     )
   }
   return (
-    <Alert className="mt-10 max-w-screen-md" variant={'destructive'}>
+    <Alert className="mt-10 w-full" variant={'destructive'}>
       <TriangleAlertIcon className="h-4 w-4" />
       <AlertTitle>Danger Zone</AlertTitle>
       <AlertDescription className="inline-flex flex-col gap-3">

@@ -55,11 +55,12 @@ import {
 import '@mdxeditor/editor/style.css'
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChangelogVersionDelete } from '../components/Changelog/VersionDelete'
 import { VersionStatus } from '../components/Changelog/VersionStatus'
 
 const Component = () => {
+  const [activeTab, setActiveTab] = useState('assigned')
   const { id, versionId } = Route.useParams()
   const mdxEditorRef = useRef<MDXEditorMethods>(null)
   const navigate = useNavigate({ from: `/changelog/${id}/versionCreate` })
@@ -113,183 +114,187 @@ const Component = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex gap-4 w-full"
+            className="flex gap-4 w-full flex-col max-w-screen-2xl"
           >
-            <Card className="w-full">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Details</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <FormField
-                  control={form.control}
-                  name="version"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Version</FormLabel>
-                      <FormControl>
-                        <Input placeholder="v1.0.1" {...field} />
-                      </FormControl>{' '}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="markdown"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Notes</FormLabel>
-                      <FormControl>
-                        <MDXEditor
-                          className="dark-theme"
-                          contentEditableClassName="prose dark:prose-invert max-w-none"
-                          markdown={''}
-                          ref={mdxEditorRef}
-                          onChange={field.onChange}
-                          onBlur={field.onBlur}
-                          plugins={[
-                            headingsPlugin(),
-                            listsPlugin(),
-                            thematicBreakPlugin(),
-                            quotePlugin(),
-
-                            toolbarPlugin({
-                              toolbarContents: () => (
-                                <>
-                                  <BlockTypeSelect />
-                                  <BoldItalicUnderlineToggles />
-                                  <ListsToggle />
-                                  <UndoRedo />
-                                </>
-                              ),
-                            }),
-                          ]}
-                        />
-                      </FormControl>{' '}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="flex gap-5 items-center">
+            <div className="flex gap-5 w-full">
+              <Card className="w-full h-[700px]">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Details</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="gap-3 flex flex-col">
                   <FormField
                     control={form.control}
-                    name="status"
+                    name="version"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Status</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select your version status" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="draft">
-                              <div className="flex gap-2 items-center">
-                                <VersionStatus status={'draft'} />
-                                <span>Draft</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="review">
-                              <div className="flex gap-2 items-center">
-                                <VersionStatus status={'review'} />
-                                <span>Review</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="published">
-                              <div className="flex gap-2 items-center">
-                                <VersionStatus status={'published'} />
-                                <span>Published</span>
-                              </div>
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <FormLabel>Version</FormLabel>
+                        <FormControl>
+                          <Input placeholder="v1.0.1" {...field} />
+                        </FormControl>{' '}
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
+                  <div className="flex gap-5 items-center">
+                    <FormField
+                      control={form.control}
+                      name="status"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Status</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            value={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select your version status" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="draft">
+                                <div className="flex gap-2 items-center">
+                                  <VersionStatus status={'draft'} />
+                                  <span>Draft</span>
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="review">
+                                <div className="flex gap-2 items-center">
+                                  <VersionStatus status={'review'} />
+                                  <span>Review</span>
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="published">
+                                <div className="flex gap-2 items-center">
+                                  <VersionStatus status={'published'} />
+                                  <span>Published</span>
+                                </div>
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="releasedAt"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel className="mb-2">Released at</FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={'outline'}
+                                  size={'lg'}
+                                  className={cn(
+                                    'w-[240px] pl-3 text-left font-normal',
+                                    !field.value && 'text-muted-foreground',
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, 'PPP')
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value as Date}
+                                onSelect={(date) => field.onChange(date)}
+                                weekStartsOn={1}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <FormField
                     control={form.control}
-                    name="releasedAt"
+                    name="markdown"
                     render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel className="mb-2">Released at</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={'outline'}
-                                size={'lg'}
-                                className={cn(
-                                  'w-[240px] pl-3 text-left font-normal',
-                                  !field.value && 'text-muted-foreground',
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, 'PPP')
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value as Date}
-                              onSelect={(date) => field.onChange(date)}
-                              weekStartsOn={1}
-                            />
-                          </PopoverContent>
-                        </Popover>
+                      <FormItem>
+                        <FormLabel>Notes</FormLabel>
+                        <FormControl>
+                          <MDXEditor
+                            className="dark-theme"
+                            contentEditableClassName="prose dark:prose-invert max-w-none max-h-[390px] overflow-scroll"
+                            markdown={''}
+                            ref={mdxEditorRef}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            plugins={[
+                              headingsPlugin(),
+                              listsPlugin(),
+                              thematicBreakPlugin(),
+                              quotePlugin(),
+
+                              toolbarPlugin({
+                                toolbarContents: () => (
+                                  <>
+                                    <BlockTypeSelect />
+                                    <BoldItalicUnderlineToggles />
+                                    <ListsToggle />
+                                    <UndoRedo />
+                                  </>
+                                ),
+                              }),
+                            ]}
+                          />
+                        </FormControl>{' '}
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
-
-                <div className="flex gap-5">
-                  <Button
-                    type="button"
-                    variant={'ghost'}
-                    onClick={() =>
-                      navigate({ to: '/changelog/$id', params: { id } })
-                    }
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit">Update</Button>
-                </div>
-
-                <ChangelogVersionDelete id={id} versionId={versionId} />
-              </CardContent>
-            </Card>
-
-            <div className="w-full">
-              <Card className="w-full max-w-screen-sm">
+                </CardContent>
+              </Card>
+              <Card className="w-full max-w-screen-sm h-[700px]">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle>Commits ({data.commits?.length})</CardTitle>
+
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant={activeTab === 'assigned' ? 'outline' : 'ghost'}
+                        size={'sm'}
+                        onClick={() => setActiveTab('assigned')}
+                      >
+                        Assigend
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={
+                          activeTab === 'unassigned' ? 'outline' : 'ghost'
+                        }
+                        size={'sm'}
+                        onClick={() => setActiveTab('unassigned')}
+                      >
+                        Unassigend
+                      </Button>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <Tabs defaultValue="assigned" className="w-full">
-                    <TabsList>
-                      <TabsTrigger value="assigned">Assigend</TabsTrigger>
-                      <TabsTrigger value="unassigned">Unassigned</TabsTrigger>
-                    </TabsList>
+                  <Tabs value={activeTab} className="w-full">
                     <TabsContent value="assigned">
-                      <ScrollArea className="w-full h-[350px]">
+                      <ScrollArea className="w-full h-[580px]">
                         <div className="flex flex-col gap-2">
                           {data?.commits?.map((commit) => {
                             return (
@@ -416,6 +421,20 @@ const Component = () => {
                 </CardContent>
               </Card>
             </div>
+            <div className="flex gap-5 w-full items-end justify-end">
+              <Button
+                type="button"
+                variant={'ghost'}
+                onClick={() =>
+                  navigate({ to: '/changelog/$id', params: { id } })
+                }
+              >
+                Cancel
+              </Button>
+              <Button type="submit">Update</Button>
+            </div>
+
+            <ChangelogVersionDelete id={id} versionId={versionId} />
           </form>
         </Form>
       )}

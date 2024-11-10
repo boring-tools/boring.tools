@@ -258,7 +258,6 @@ const Component = () => {
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md ">
                               <FormControl>
                                 <Checkbox
-                                  // checked={field.value}
                                   value={commit.id}
                                   checked={field.value?.includes(commit.id)}
                                   onCheckedChange={() => {
