@@ -76,8 +76,9 @@ const Component = () => {
   useEffect(() => {
     if (data) {
       mdxEditorRef.current?.setMarkdown(data.markdown)
+      form.reset(data)
     }
-  }, [data])
+  }, [data, form])
 
   if (error) {
     return (
