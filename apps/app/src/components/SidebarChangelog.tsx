@@ -19,7 +19,7 @@ import { useChangelogList } from '../hooks/useChangelog'
 export const SidebarChangelog = () => {
   const location = useLocation()
   const [value, setValue] = useLocalStorage('sidebar-changelog-open', false)
-  const { data, error } = useChangelogList()
+  const { data, error, isLoading } = useChangelogList()
 
   useEffect(() => {
     const firstElement = location.href.split('/')[1]
@@ -50,6 +50,16 @@ export const SidebarChangelog = () => {
           </CollapsibleTrigger>
           <CollapsibleContent>
             <SidebarMenuSub>
+              {isLoading && !data && (
+                <div className="flex flex-col gap-1 animate-pulse">
+                  <SidebarMenuSubItem>
+                    <div className="w-[100px] h-[20px] bg-border rounded" />
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <div className="w-[130px] h-[20px] bg-border rounded" />
+                  </SidebarMenuSubItem>
+                </div>
+              )}
               {!error &&
                 data?.map((changelog) => (
                   <SidebarMenuSubItem key={changelog.id}>
