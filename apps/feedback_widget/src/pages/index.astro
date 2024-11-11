@@ -1,0 +1,127 @@
+---
+import '../style.css'
+
+const payload = {
+  visitorId: '',
+  feedback: '',
+  feedbackId: '',
+}
+
+if (Astro.request.method === 'POST') {
+  try {
+    const data = await Astro.request.formData()
+    const feedback = data.get('feedback')
+    const visitorId = data.get('visitor-id')
+
+    console.log(feedback, visitorId, data)
+    // const validation = AccessTokenCreateInput.safeParse({ name })
+    // if (!validation.success) {
+    //   return
+    // }
+
+    // const response = await apiFetch({
+    //   path: 'accessToken',
+    //   method: 'post',
+    //   body: { name },
+    //   token: session.jwt,
+    // })
+
+    // if (response.status === 201) {
+    //   isCreating = true
+    //   token = response.json.token
+    // }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+	</head>
+	<body>
+
+		<!-- <div class="flex items-center justify-center w-full h-screen flex-col">
+			<h1 class="prose prose-2xl">boring.tools</h1>
+			<p class="prose prose-sm">CHANGELOG</p>
+			<div class="">
+<button popovertarget="my-popover" class="p-2 hover:bg-neutral-900 rounded hover:text-neutral-100 transition">
+	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-vote"><path d="m9 12 2 2 4-4"/><path d="M5 7c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v12H5V7Z"/><path d="M22 19H2"/></svg>
+</button>
+
+			<div popover id="my-popover" class="bg-transparent" >
+				<div class="border rounded-md shadow-md p-1 flex flex-col gap-2 bg-white">
+
+					<div class="flex flex-col gap-2 p-3">
+				<h2 class=" font-bold text-neutral-800">Your feedback matters!</h2>
+				<form method="POST" class="flex flex-col gap-5">
+
+				<textarea class="border rounded p-2" name="feedback" placeholder="Tell us your feedback ..." />
+				<input type="hidden" id="visitor-id" name="visitor-id" />
+				<button class="bg-neutral-900 hover:bg-neutral-800 text-white px-3 py-1 rounded">Submit</button>
+				</form>
+</div>
+				<div class="text-[10px] text-right">
+					powered by <a href="https://boring.tools" class="text-blue-500">boring.tools</a>
+				</div>
+				</div>
+			</div>
+	
+			</div >
+		
+
+		</div> -->
+	</body>
+</html>
+<script>
+// 1. get body element
+// 2. inject custom element absolute positioning
+// 3. add event listener to close on click outside
+const body = document.querySelector('body')
+console.log(body)
+	import print from "@fingerprintjs/fingerprintjs"
+    const visitorIdInput = document.querySelector("#visitor-id");
+
+if (body instanceof HTMLBodyElement) {
+
+	const btn = body.appendChild(document.createElement('div'))
+	const popover = body.appendChild(document.createElement('div'))
+	btn.innerHTML = `
+		<button popovertarget="my-popover" class="p-2 hover:bg-neutral-900 rounded hover:text-neutral-100 transition">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-vote"><path d="m9 12 2 2 4-4"/><path d="M5 7c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v12H5V7Z"/><path "M22 19H2"/></svg>
+		</button>`
+
+	popover.innerHTML = `<div popover id="my-popover" class="bg-transparent" >
+				<div class="border rounded-md shadow-md p-1 flex flex-col gap-2 bg-white">
+
+					<div class="flex flex-col gap-2 p-3">
+				<h2 class=" font-bold text-neutral-800">Your feedback matters!</h2>
+				<form method="POST" class="flex flex-col gap-5">
+
+				<textarea class="border rounded p-2" name="feedback" placeholder="Tell us your feedback ..." />
+				<input type="hidden" id="visitor-id" name="visitor-id" />
+				<button class="bg-neutral-900 hover:bg-neutral-800 text-white px-3 py-1 rounded">Submit</button>
+				</form>
+</div>`
+}
+	if (visitorIdInput instanceof HTMLInputElement) {
+	print.load()
+	  .then(fp => fp.get())
+	  .then(result => {
+		const visitorId = result.visitorId
+		visitorIdInput.setAttribute("value", visitorId)
+	  })
+
+	
+	}
+
+    
+  		
+  </script>

@@ -17,6 +17,10 @@ const Component = () => {
       ]}
     >
       <h1 className="text-3xl">Welcome back, {user.user?.fullName}</h1>
+      <iframe
+        src="http://localhost:4030"
+        title="W3Schools Free Online Web Tutorials"
+      />
       <div className="grid w-full max-w-screen-md gap-10 grid-cols-2">
         <Card>
           <CardHeader>
