@@ -91,6 +91,7 @@ export const registerPagePublic = (api: typeof pageApi) => {
     }
 
     redis.set(id, JSON.stringify(mappedResult), { EX: 60 })
-    return c.json(PagePublicOutput.parse(mappedResult), 200)
+    const asd = PagePublicOutput.parse(mappedResult)
+    return c.json(asd, 200)
   })
 }

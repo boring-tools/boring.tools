@@ -20,7 +20,7 @@ const route = createRoute({
     },
   },
   responses: {
-    200: {
+    201: {
       content: {
         'application/json': {
           schema: PageOutput,
@@ -62,6 +62,6 @@ export const registerPageCreate = (api: typeof pageApi) => {
       )
     }
 
-    return c.json(PageOutput.parse(result), 200)
+    return c.json(PageOutput.parse(result), 201)
   })
 }

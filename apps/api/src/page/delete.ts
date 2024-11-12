@@ -35,7 +35,7 @@ export const registerPageDelete = (api: typeof pageApi) => {
     const userId = await verifyAuthentication(c)
     const { id } = c.req.valid('param')
 
-    const result = await db
+    const [result] = await db
       .delete(page)
       .where(and(eq(page.userId, userId), eq(page.id, id)))
       .returning()

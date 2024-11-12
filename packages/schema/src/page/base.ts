@@ -7,8 +7,8 @@ export const PageOutput = z
       example: '',
     }),
     title: z.string(),
-    description: z.string().optional(),
-    icon: z.string(),
+    description: z.string().optional().nullable(),
+    icon: z.string().optional().nullable(),
     changelogs: z.array(ChangelogOutput).optional(),
   })
   .openapi('Page')
