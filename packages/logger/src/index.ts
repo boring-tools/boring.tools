@@ -1,20 +1,41 @@
 import { Logtail } from '@logtail/node'
 import { LogtailTransport } from '@logtail/winston'
-import winston from 'winston'
+import { createLogger, format, transports } from 'winston'
+import { consoleFormat } from 'winston-console-format'
 import LokiTransport from 'winston-loki'
 
 // Create a Winston logger - passing in the Logtail transport
-export const logger = winston.createLogger({
-  format: winston.format.json(),
+export const logger = createLogger({
+  format: format.combine(
+    format.timestamp(),
+    format.ms(),
+    format.errors({ stack: true }),
+    format.splat(),
+    format.json(),
+  ),
   transports: [
-    new winston.transports.Console({
-      format: winston.format.json(),
+    new transports.Console({
+      format: format.combine(
+        format.colorize({ all: true }),
+        format.padLevels(),
+        consoleFormat({
+          showMeta: true,
+          metaStrip: ['timestamp', 'service'],
+          inspectOptions: {
+            depth: Number.POSITIVE_INFINITY,
+            colors: true,
+            maxArrayLength: Number.POSITIVE_INFINITY,
+            breakLength: 120,
+            compact: Number.POSITIVE_INFINITY,
+          },
+        }),
+      ),
     }),
     new LokiTransport({
       host: 'http://localhost:9100',
-      labels: { app: 'api' },
       json: true,
-      format: winston.format.json(),
+      labels: { service: 'api' },
+      format: format.json(),
       replaceTimestamp: true,
       onConnectionError: (err) => console.error(err),
     }),

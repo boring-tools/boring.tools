@@ -1,17 +1,19 @@
 import type { UserOutput } from '@boring.tools/schema'
-import { sentry } from '@hono/sentry'
+// import { sentry } from '@hono/sentry'
 import { OpenAPIHono, type z } from '@hono/zod-openapi'
 import { apiReference } from '@scalar/hono-api-reference'
 import { cors } from 'hono/cors'
+import { requestId } from 'hono/request-id'
 
 import changelog from './changelog'
-import user from './user'
 
 import { accessTokenApi } from './access-token'
 import pageApi from './page'
 import statisticApi from './statistic'
+import userApi from './user'
 import { authentication } from './utils/authentication'
 import { handleError, handleZodError } from './utils/errors'
+import { logger } from './utils/logger'
 import { startup } from './utils/startup'
 
 type User = z.infer<typeof UserOutput>
@@ -31,9 +33,12 @@ export const app = new OpenAPIHono<{ Variables: Variables }>({
 //     dsn: 'https://1d7428bbab0a305078cf4aa380721aa2@o4508167321354240.ingest.de.sentry.io/4508167323648080',
 //   }),
 // )
+
 app.onError(handleError)
 app.use('*', cors())
 app.use('/v1/*', authentication)
+app.use('*', requestId())
+app.use(logger())
 app.openAPIRegistry.registerComponent('securitySchemes', 'AccessToken', {
   type: 'http',
   scheme: 'bearer',
@@ -43,7 +48,7 @@ app.openAPIRegistry.registerComponent('securitySchemes', 'Clerk', {
   scheme: 'bearer',
 })
 
-app.route('/v1/user', user)
+app.route('/v1/user', userApi)
 app.route('/v1/changelog', changelog)
 app.route('/v1/page', pageApi)
 app.route('/v1/access-token', accessTokenApi)
