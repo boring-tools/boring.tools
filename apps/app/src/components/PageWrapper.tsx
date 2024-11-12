@@ -8,7 +8,11 @@ import {
   Separator,
   SidebarTrigger,
 } from '@boring.tools/ui'
+import { useAuth } from '@clerk/clerk-react'
 import { Link } from '@tanstack/react-router'
+import { useEffect } from 'react'
+
+import { useUser } from '../hooks/useUser'
 
 type Breadcrumbs = {
   name: string
@@ -19,6 +23,15 @@ export const PageWrapper = ({
   children,
   breadcrumbs,
 }: { children: React.ReactNode; breadcrumbs?: Breadcrumbs[] }) => {
+  const { error } = useUser()
+  const { signOut } = useAuth()
+
+  useEffect(() => {
+    if (error) {
+      signOut()
+    }
+  }, [error, signOut])
+
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">

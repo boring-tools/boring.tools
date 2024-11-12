@@ -12,13 +12,17 @@ const url = import.meta.env.PROD
   : 'http://localhost:3000'
 
 export const queryFetch = async ({ path, method, data, token }: Fetch) => {
-  const response = await axios({
-    method,
-    url: `${url}/v1/${path}`,
-    data,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-  return response.data
+  try {
+    const response = await axios({
+      method,
+      url: `${url}/v1/${path}`,
+      data,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data
+  } catch (error) {
+    throw new Error('Somethind went wrong.')
+  }
 }
