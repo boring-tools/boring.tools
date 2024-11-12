@@ -19,7 +19,7 @@ export const logger = (): MiddlewareHandler => {
       direction: 'in',
       method,
       path,
-      userId: dbUser.id,
+      userId: dbUser?.id,
       requestId,
     })
 
@@ -31,7 +31,7 @@ export const logger = (): MiddlewareHandler => {
         method,
         path,
         status: c.res.status,
-        userId: dbUser.id,
+        userId: dbUser?.id,
         requestId,
       })
     }
@@ -42,6 +42,7 @@ export const logger = (): MiddlewareHandler => {
         method,
         path,
         status: c.res.status,
+        userId: dbUser?.id,
         requestId,
       })
     }
@@ -52,6 +53,7 @@ export const logger = (): MiddlewareHandler => {
         method,
         path,
         status: c.res.status,
+        userId: dbUser?.id,
         requestId,
       })
     }

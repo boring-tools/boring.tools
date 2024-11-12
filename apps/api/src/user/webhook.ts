@@ -20,10 +20,7 @@ const route = createRoute({
     },
   },
   responses: {
-    200: {
-      content: {
-        'application/json': { schema: UserOutput },
-      },
+    204: {
       description: 'Return success',
     },
     ...openApiErrorResponses,
