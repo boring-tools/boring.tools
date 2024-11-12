@@ -4,6 +4,7 @@ import { createRoute } from '@hono/zod-openapi'
 import { eq } from 'drizzle-orm'
 
 import type { userApi } from '.'
+import { verifyAuthentication } from '../utils/authentication'
 import { openApiErrorResponses, openApiSecurity } from '../utils/openapi'
 
 const route = createRoute({
@@ -24,9 +25,9 @@ const route = createRoute({
 
 export const registerUserGet = (api: typeof userApi) => {
   return api.openapi(route, async (c) => {
-    const user = c.get('user')
+    const userId = await verifyAuthentication(c)
     const result = await db.query.user.findFirst({
-      where: eq(userDb.id, user.id),
+      where: eq(userDb.id, userId),
     })
 
     if (!result) {

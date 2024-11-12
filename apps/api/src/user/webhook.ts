@@ -70,7 +70,11 @@ export const registerUserWebhook = (api: typeof userApi) => {
       case 'user.created': {
         const result = await userCreate({ payload: verifiedPayload })
         logger.info('Clerk Webhook', result)
-        return c.json(UserOutput.parse(result), 200)
+        if (result) {
+          return c.json({}, 204)
+        }
+
+        return c.json({}, 404)
       }
       default:
         throw new HTTPException(404, { message: 'Webhook type not supported' })
