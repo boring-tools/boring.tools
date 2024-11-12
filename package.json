@@ -8,6 +8,7 @@
     "dev": "bun --filter '*' dev",
     "dev:docker:up": "docker compose -f ci/development/docker-compose.yaml up -d",
     "dev:docker:down": "docker compose -f ci/development/docker-compose.yaml down",
+    "dev:docker:stop": "docker compose -f ci/development/docker-compose.yaml stop",
     "build": "bun --filter '*' build",
     "db:generate": "bun --filter '@boring.tools/database' db:generate",
     "db:migrate": "bun --filter '@boring.tools/database' db:migrate",
