@@ -29,7 +29,7 @@ export const registerAccessTokenDelete = (api: typeof accessTokenApi) => {
     const id = c.req.param('id')
     const userId = await verifyAuthentication(c)
 
-    const result = await db
+    const [result] = await db
       .delete(access_token)
       .where(and(eq(access_token.userId, userId), eq(access_token.id, id)))
       .returning()
