@@ -7,10 +7,10 @@ export const PageUpdateInput = z
     title: z.string().min(3).optional().openapi({
       example: 'My page',
     }),
-    description: z.string().optional().openapi({
+    description: z.string().nullable().optional().openapi({
       example: '',
     }),
-    icon: z.string().optional().openapi({
+    icon: z.string().optional().nullable().openapi({
       example: 'base64...',
     }),
     changelogIds: z.array(z.string().uuid()).optional(),
