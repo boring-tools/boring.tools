@@ -12,7 +12,6 @@ services:
   cache:
     container_name: boring_redis
     image: redis:7.4.1-alpine
-    restart: always
     ports:
       - '6379:6379'
     # command: redis-server --save 20 1 --loglevel warning --requirepass development
