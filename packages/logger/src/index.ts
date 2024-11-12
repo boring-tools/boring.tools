@@ -15,6 +15,7 @@ export const logger = createLogger({
   ),
   transports: [
     new transports.Console({
+      silent: import.meta.env.NODE_ENV === 'test',
       format: format.combine(
         format.colorize({ all: true }),
         format.padLevels(),
@@ -32,9 +33,10 @@ export const logger = createLogger({
       ),
     }),
     new LokiTransport({
+      silent: import.meta.env.NODE_ENV === 'test',
       host: 'http://localhost:9100',
       json: true,
-      labels: { service: 'api' },
+      labels: { service: import.meta.env.SERVICE_NAME ?? 'unknown' },
       format: format.json(),
       replaceTimestamp: true,
       onConnectionError: (err) => console.error(err),
