@@ -96,6 +96,7 @@ const Component = () => {
                           <Textarea
                             placeholder="Some details about the page..."
                             {...field}
+                            value={field.value ?? ''}
                           />
                         </FormControl>{' '}
                         <FormMessage />
