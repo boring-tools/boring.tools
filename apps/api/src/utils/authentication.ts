@@ -1,4 +1,5 @@
 import { access_token, db, user } from '@boring.tools/database'
+import { logger } from '@boring.tools/logger'
 import { clerkMiddleware, getAuth } from '@hono/clerk-auth'
 import { eq } from 'drizzle-orm'
 import type { Context, Next } from 'hono'
@@ -52,6 +53,7 @@ export const verifyAuthentication = async (c: Context) => {
     .where(eq(user.providerId, auth.userId))
 
   if (!userEntry) {
+    logger.error('User not found - Unauthorized', { providerId: auth.userId })
     throw new HTTPException(401, { message: 'Unauthorized' })
   }
 
