@@ -6,6 +6,8 @@
     "check:apps": "bunx biome check --write --config-path ./biome.json ./apps",
     "check:packages": "bunx biome check --write --config-path ./biome.json ./packages",
     "dev": "bun --filter '*' dev",
+    "dev:docker:up": "docker compose -f ci/development/docker-compose.yaml up -d",
+    "dev:docker:down": "docker compose -f ci/development/docker-compose.yaml down",
     "build": "bun --filter '*' build",
     "db:generate": "bun --filter '@boring.tools/database' db:generate",
     "db:migrate": "bun --filter '@boring.tools/database' db:migrate",
@@ -26,10 +28,7 @@
     "docker:page": "bun docker:page:build && bun docker:page:push"
   },
   "packageManager": "bun@1.1.29",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": ["apps/*", "packages/*"],
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "lefthook": "^1.7.15"

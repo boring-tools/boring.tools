@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:17-alpine
-    container_name: boring_postgres
+    container_name: boring_services_postgres
     ports:
       - 5432:5432
     environment:
@@ -10,25 +10,22 @@ services:
       - POSTGRES_DB=postgres
 
   cache:
-    container_name: boring_redis
+    container_name: boring_services_redis
     image: redis:7.4.1-alpine
     ports:
       - '6379:6379'
-    # command: redis-server --save 20 1 --loglevel warning --requirepass development
+    command: redis-server --save 20 1 --loglevel warning --requirepass development
     
   loki:
     image: grafana/loki:latest
+    container_name: boring_services_loki
     ports:
       - "9100:3100"
     command: -config.file=/etc/loki/local-config.yaml
 
-  promtail:
-    image: grafana/promtail:latest
-    volumes:
-      - /var/log:/var/log
-    command: -config.file=/etc/promtail/config.yml
-
   grafana:
+    image: grafana/grafana:latest
+    container_name: boring_services_grafana
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -52,6 +49,5 @@ services:
           editable: false
         EOF
         /run.sh
-    image: grafana/grafana:latest
     ports:
       - "9000:3000"
