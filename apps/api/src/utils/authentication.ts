@@ -54,6 +54,6 @@ export const verifyAuthentication = async (c: Context) => {
   if (!userEntry) {
     throw new HTTPException(401, { message: 'Unauthorized' })
   }
-  // console.log(userEntry)
+
   return userEntry.id
 }
